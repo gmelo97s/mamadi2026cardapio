@@ -20,7 +20,6 @@ interface CategoriesScreenProps {
   onSelectItem: (item: MenuItem) => void;
 }
 
-/** Posição inicial "espalhada" determinística para o efeito de imã. */
 function scatterFor(i: number) {
   const dir = i % 2 === 0 ? -1 : 1;
   const x = dir * (320 + ((i * 47) % 200));
@@ -87,10 +86,22 @@ function CategoryTile({
       }}
       className="rainbow-border relative aspect-square overflow-hidden rounded-2xl max-sm:h-full max-sm:w-auto max-sm:max-w-full max-sm:justify-self-center sm:rounded-3xl"
     >
-      <div
-        className={`absolute inset-0 bg-gradient-to-br ${cat.gradient}`}
-        style={{ boxShadow: `inset 0 0 70px ${cat.glow}55` }}
-      />
+      {cat.cardImage ? (
+        <>
+          <img
+            src={cat.cardImage}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20" />
+        </>
+      ) : (
+        <div
+          className={`absolute inset-0 bg-gradient-to-br ${cat.gradient}`}
+          style={{ boxShadow: `inset 0 0 70px ${cat.glow}55` }}
+        />
+      )}
       <div
         className="relative z-10 flex h-full flex-col items-center justify-center gap-0.5 p-2 sm:gap-2 sm:p-4"
         style={{ transformStyle: "preserve-3d" }}
@@ -141,7 +152,6 @@ export default function CategoriesScreen({
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-bg text-text">
-      {/* Blobs ambiente */}
       <motion.div
         aria-hidden
         className="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full opacity-30 blur-3xl"

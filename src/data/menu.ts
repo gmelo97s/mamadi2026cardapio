@@ -21,6 +21,7 @@ export interface Category {
   from: string; // hex inicial
   to: string; // hex final
   glow: string; // cor do glow
+  cardImage?: string;
 }
 
 // ─────────────────────────────────────────────────────────
@@ -33,7 +34,7 @@ export const drinks: MenuItem[] = [
     name: "GIN TÔNICA",
     description: "GIN Nacional, Água Tônica e Limão Taiti.",
     price: 25,
-    image: "https://picsum.photos/seed/gintonica/400/300",
+    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781812072/dr01-gin-tonica_rmpvzh.png",
     badge: "⭐ Destaque",
   },
   {
@@ -439,8 +440,8 @@ export const allMenuItems: MenuItem[] = [
 ];
 
 export const categories: Category[] = [
-  { id: "drinks", label: "DRINKS", emoji: "🍹", gradient: "from-red-600 to-pink-600", from: "#FF3B3B", to: "#FF4081", glow: "#FF3B3B" },
-  { id: "destilados", label: "DESTILADOS", emoji: "🥃", gradient: "from-orange-500 to-yellow-400", from: "#FF8C00", to: "#FFE500", glow: "#FF8C00" },
+  { id: "drinks", label: "DRINKS", emoji: "🍹", gradient: "from-red-600 to-pink-600", from: "#FF3B3B", to: "#FF4081", glow: "#FF3B3B", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813232/mamadicategoriasdrinks-card_obncis.png" },
+  { id: "destilados", label: "DESTILADOS", emoji: "🥃", gradient: "from-orange-500 to-yellow-400", from: "#FF8C00", to: "#FFE500", glow: "#FF8C00", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813557/destilados-card_fuifl2.png" },
   { id: "cervejas", label: "CERVEJAS", emoji: "🍺", gradient: "from-yellow-400 to-green-400", from: "#FFE500", to: "#00E676", glow: "#FFE500" },
   { id: "prontos", label: "PRONTOS & SOFTS", emoji: "🥤", gradient: "from-green-400 to-blue-500", from: "#00E676", to: "#2979FF", glow: "#00E676" },
   { id: "combos", label: "COMBOS & COPÃO", emoji: "🎉", gradient: "from-blue-500 to-purple-600", from: "#2979FF", to: "#AA00FF", glow: "#2979FF" },

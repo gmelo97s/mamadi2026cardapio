@@ -3,7 +3,13 @@ import { FaWhatsapp } from "react-icons/fa";
 import InstagramIcon from "./InstagramIcon";
 import { business } from "../data/menu";
 
-export default function FloatingButtons() {
+interface FloatingButtonsProps {
+  visible?: boolean;
+}
+
+export default function FloatingButtons({ visible = true }: FloatingButtonsProps) {
+  if (!visible) return null;
+
   return (
     <>
       <div style={{ position: "fixed", left: 24, bottom: 24, zIndex: 9999 }}>

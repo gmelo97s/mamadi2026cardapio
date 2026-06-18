@@ -159,7 +159,7 @@ export default function App() {
         </AnimatePresence>
       </div>
 
-      <FloatingButtons />
+      <FloatingButtons visible={screen !== "hero" && selected === null} />
       <ProductModal item={selected} onClose={() => setSelected(null)} />
     </div>
   );
