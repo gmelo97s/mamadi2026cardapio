@@ -1,0 +1,279 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Nunito:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #080808;
+  --color-surface: #141414;
+  --color-border: #2a2a2a;
+  --color-text: #f8f8f8;
+  --color-muted: #888888;
+  --color-price: #ffd700;
+
+  --color-pride-red: #ff3b3b;
+  --color-pride-orange: #ff8c00;
+  --color-pride-yellow: #ffe500;
+  --color-pride-green: #00e676;
+  --color-pride-blue: #2979ff;
+  --color-pride-purple: #aa00ff;
+  --color-pride-pink: #ff4081;
+
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-luxury: "Cinzel", "Times New Roman", serif;
+  --font-ifood: "Nunito", "Varela Round", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: #080808;
+  color: #f8f8f8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-ifood {
+  font-family: var(--font-ifood);
+}
+
+/* ── Pride rainbow gradient ─────────────────────────────── */
+.pride-gradient {
+  background: linear-gradient(
+    90deg,
+    #ff3b3b,
+    #ff8c00,
+    #ffe500,
+    #00e676,
+    #2979ff,
+    #aa00ff,
+    #ff4081
+  );
+}
+
+.pride-text {
+  background: linear-gradient(
+    90deg,
+    #ff3b3b,
+    #ff8c00,
+    #ffe500,
+    #00e676,
+    #2979ff,
+    #aa00ff,
+    #ff4081
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ── Animated CTA (LED neon flow) ──────────────────────── */
+@keyframes prideFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.cta-btn {
+  background: linear-gradient(
+    90deg,
+    #ff3b3b,
+    #ff8c00,
+    #ffe500,
+    #00e676,
+    #2979ff,
+    #aa00ff,
+    #ff4081,
+    #ff3b3b
+  );
+  background-size: 300% 300%;
+  animation: prideFlow 3s linear infinite;
+  color: #000;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+/* Logo MAMADI FOOD — LED diagonal + brilho suave */
+@keyframes mamadiShimmer {
+  0% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 12px rgba(255, 64, 129, 0.5));
+  }
+  33% {
+    background-position: 50% 100%;
+    filter: drop-shadow(0 0 18px rgba(41, 121, 255, 0.55));
+  }
+  66% {
+    background-position: 100% 0%;
+    filter: drop-shadow(0 0 16px rgba(0, 230, 118, 0.5));
+  }
+  100% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 12px rgba(255, 64, 129, 0.5));
+  }
+}
+
+.mamadi-logo {
+  background: linear-gradient(
+    135deg,
+    #ff3b3b,
+    #ff8c00,
+    #ffe500,
+    #00e676,
+    #2979ff,
+    #aa00ff,
+    #ff4081,
+    #ff3b3b
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: mamadiShimmer 5s ease-in-out infinite;
+}
+
+/* Hero — tipografia luxury atrás da garrafa */
+.mamadi-logo-luxury {
+  font-family: var(--font-luxury);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1;
+  white-space: nowrap;
+  background: linear-gradient(
+    120deg,
+    #ff3b3b 0%,
+    #ffd700 18%,
+    #00e676 36%,
+    #2979ff 54%,
+    #aa00ff 72%,
+    #ff4081 88%,
+    #ff3b3b 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: mamadiShimmer 6s ease-in-out infinite;
+  opacity: 0.92;
+  text-shadow: none;
+  filter: drop-shadow(0 0 28px rgba(255, 215, 0, 0.15));
+}
+
+.instagram-brand-btn {
+  background: linear-gradient(
+    45deg,
+    #f09433 0%,
+    #e6683c 25%,
+    #dc2743 50%,
+    #cc2366 75%,
+    #bc1888 100%
+  );
+  box-shadow: 0 0 20px rgba(225, 48, 108, 0.45);
+}
+
+/* Botão iFood */
+.ifood-header-btn {
+  background: linear-gradient(135deg, #ea1d2c 0%, #c4121f 100%);
+  box-shadow: 0 0 14px rgba(234, 29, 44, 0.4);
+}
+
+@keyframes ifoodArrowPulse {
+  0%,
+  100% {
+    transform: translateX(-2px);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateX(5px);
+    opacity: 1;
+  }
+}
+
+.ifood-cta-arrow {
+  color: #ffffff;
+  animation: ifoodArrowPulse 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
+  will-change: transform, opacity;
+}
+
+.ifood-btn {
+  background: linear-gradient(135deg, #ea1d2c 0%, #c4121f 100%);
+  box-shadow: 0 0 20px rgba(234, 29, 44, 0.45);
+}
+.ifood-btn:hover {
+  box-shadow: 0 0 28px rgba(234, 29, 44, 0.65);
+}
+
+/* ── Rainbow gradient border via pseudo-element ────────── */
+.rainbow-border {
+  position: relative;
+}
+.rainbow-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    #ff3b3b,
+    #ff8c00,
+    #ffe500,
+    #00e676,
+    #2979ff,
+    #aa00ff,
+    #ff4081
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Utilities ─────────────────────────────────────────── */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
