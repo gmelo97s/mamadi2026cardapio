@@ -7,17 +7,29 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export default function HeroTagline() {
+interface HeroTaglineProps {
+  introDelayMs?: number;
+}
+
+export default function HeroTagline({ introDelayMs = 0 }: HeroTaglineProps) {
   const reducedMotion = useReducedMotion();
-  const [visibleCount, setVisibleCount] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(reducedMotion ? TAGLINE.length : 0);
   const [fadeOut, setFadeOut] = useState(false);
+  const [loopReady, setLoopReady] = useState(Boolean(reducedMotion));
 
   useEffect(() => {
     if (reducedMotion) {
+      setLoopReady(true);
       setVisibleCount(TAGLINE.length);
-      setFadeOut(false);
       return;
     }
+
+    const readyTimer = window.setTimeout(() => setLoopReady(true), introDelayMs);
+    return () => window.clearTimeout(readyTimer);
+  }, [reducedMotion, introDelayMs]);
+
+  useEffect(() => {
+    if (!loopReady || reducedMotion) return;
 
     let cancelled = false;
 
@@ -25,18 +37,18 @@ export default function HeroTagline() {
       while (!cancelled) {
         setFadeOut(false);
         setVisibleCount(0);
-        await sleep(280);
+        await sleep(420);
 
         for (let i = 1; i <= TAGLINE.length; i++) {
           if (cancelled) return;
           setVisibleCount(i);
-          await sleep(36);
+          await sleep(40);
         }
 
-        await sleep(2600);
+        await sleep(3800);
 
         setFadeOut(true);
-        await sleep(700);
+        await sleep(900);
       }
     };
 
@@ -44,7 +56,7 @@ export default function HeroTagline() {
     return () => {
       cancelled = true;
     };
-  }, [reducedMotion]);
+  }, [loopReady, reducedMotion]);
 
   return (
     <p className="hero-cta-tagline" aria-label={TAGLINE}>

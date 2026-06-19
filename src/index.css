@@ -196,6 +196,13 @@ body {
   background: #000;
   padding-top: env(safe-area-inset-top, 0px);
   --hero-stack-h: 10.5rem;
+  perspective: 1600px;
+}
+
+.hero-piece-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
 }
 
 .hero-visual__wrap {
@@ -205,8 +212,9 @@ body {
   justify-content: flex-end;
   gap: 0;
   min-height: 0;
-  padding: 0 0.25rem 0;
+  padding: 0.75rem 0.25rem 0;
   pointer-events: none;
+  transform-style: preserve-3d;
 }
 
 .hero-visual__inner {
@@ -217,6 +225,12 @@ body {
   justify-content: center;
   width: 100%;
   height: 100%;
+  transform-style: preserve-3d;
+  perspective: 1400px;
+}
+
+.hero-piece-3d--art {
+  transform-origin: center bottom;
 }
 
 .hero-tagline-wrap {
@@ -230,15 +244,18 @@ body {
   margin-bottom: 0.25rem;
   padding: 0 0.25rem;
   z-index: 2;
+  transform-style: preserve-3d;
+  perspective: 1200px;
 }
 
 .hero-copa-headline {
+  position: relative;
   display: flex;
-  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
   width: 100%;
   max-width: 100%;
+  min-height: 1.2em;
   margin: 0;
   padding: 0 0.25rem;
   font-family: var(--font-display);
@@ -249,6 +266,22 @@ body {
   white-space: nowrap;
   text-transform: uppercase;
   overflow: hidden;
+  perspective: 900px;
+}
+
+.hero-copa-headline__phrase {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+}
+
+.hero-copa-headline__phrase--short {
+  font-size: clamp(1.1875rem, 5.6vw, 1.6875rem);
+  letter-spacing: 0.07em;
 }
 
 .hero-copa-headline__word {
@@ -281,13 +314,13 @@ body {
 
 .hero-visual__photo {
   display: block;
-  max-height: min(100%, calc(100svh - var(--hero-stack-h) - env(safe-area-inset-top, 0px)));
+  max-height: min(100%, calc(100svh - var(--hero-stack-h) - env(safe-area-inset-top, 0px) - 1.25rem));
   max-width: calc(100vw - 0.5rem);
   width: auto;
   height: auto;
   object-fit: contain;
   object-position: center bottom;
-  transform: scale(1.16) translateY(0.625rem);
+  transform: scale(1.1) translateY(1.375rem);
   transform-origin: center bottom;
   user-select: none;
   -webkit-user-drag: none;
@@ -322,6 +355,8 @@ body {
   gap: 0.375rem;
   padding: 1.375rem 1rem calc(env(safe-area-inset-bottom, 0px) + 0.625rem);
   z-index: 3;
+  transform-style: preserve-3d;
+  perspective: 1200px;
 }
 
 .hero-cta-wrap {
@@ -370,7 +405,7 @@ body {
 
   .hero-visual__photo {
     max-width: min(46vw, 520px);
-    transform: scale(1.18) translateY(0.75rem);
+    transform: scale(1.12) translateY(1.5rem);
   }
 
   .hero-bottom {
@@ -385,6 +420,20 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-section {
+    perspective: none;
+  }
+
+  .hero-visual__inner,
+  .hero-tagline-wrap,
+  .hero-bottom {
+    perspective: none;
+  }
+
+  .hero-piece-3d {
+    will-change: auto;
+  }
+
   .hero-copa-headline__word {
     animation: none !important;
     transition: none !important;
