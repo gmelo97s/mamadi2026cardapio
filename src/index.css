@@ -579,7 +579,8 @@ body {
   overflow: hidden;
   background: #000;
   color: #fff;
-  --category-nav-h: 68px;
+  --category-nav-h: 72px;
+  --category-nav-clearance: calc(env(safe-area-inset-bottom, 0px) + var(--category-nav-h) + 1.75rem);
 }
 
 .category-swipe-screen--deck {
@@ -762,7 +763,16 @@ body {
   touch-action: pan-y;
   padding-left: 0.85rem;
   padding-right: 0.85rem;
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--category-nav-h, 68px) + 0.75rem);
+  padding-bottom: 0;
+  scroll-padding-bottom: var(--category-nav-clearance);
+}
+
+.category-swipe-screen__panel-scroll::after {
+  content: "";
+  display: block;
+  height: var(--category-nav-clearance);
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
 .category-swipe-screen--panel-open .category-swipe-screen__main {
@@ -808,6 +818,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding-bottom: 0.25rem;
 }
 
 .menu-preview-section__title {
@@ -1767,8 +1778,6 @@ body {
 
 /* ── Rodapé — menu inferior ───────────────────────────── */
 .category-bottom-nav {
-  --category-nav-h: 68px;
-
   position: fixed;
   left: 0;
   right: 0;
@@ -1863,16 +1872,21 @@ body {
 }
 
 /* ── Explorar — grid estilo Tinder ─────────────────────── */
-.category-swipe-screen--explore {
-  --category-nav-h: 68px;
-}
-
 .category-swipe-screen__main--explore {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--category-nav-h, 68px) + 1rem);
+  padding-bottom: 0;
+  scroll-padding-bottom: var(--category-nav-clearance);
+}
+
+.category-swipe-screen__main--explore::after {
+  content: "";
+  display: block;
+  height: var(--category-nav-clearance);
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
 .explore-screen {
