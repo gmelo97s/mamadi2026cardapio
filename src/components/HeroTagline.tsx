@@ -14,49 +14,37 @@ interface HeroTaglineProps {
 export default function HeroTagline({ introDelayMs = 0 }: HeroTaglineProps) {
   const reducedMotion = useReducedMotion();
   const [visibleCount, setVisibleCount] = useState(reducedMotion ? TAGLINE.length : 0);
-  const [fadeOut, setFadeOut] = useState(false);
-  const [loopReady, setLoopReady] = useState(Boolean(reducedMotion));
+  const [introDone, setIntroDone] = useState(Boolean(reducedMotion));
 
   useEffect(() => {
     if (reducedMotion) {
-      setLoopReady(true);
       setVisibleCount(TAGLINE.length);
+      setIntroDone(true);
       return;
     }
 
-    const readyTimer = window.setTimeout(() => setLoopReady(true), introDelayMs);
-    return () => window.clearTimeout(readyTimer);
-  }, [reducedMotion, introDelayMs]);
-
-  useEffect(() => {
-    if (!loopReady || reducedMotion) return;
-
     let cancelled = false;
 
-    const loop = async () => {
-      while (!cancelled) {
-        setFadeOut(false);
-        setVisibleCount(0);
-        await sleep(420);
+    const runOnce = async () => {
+      await sleep(introDelayMs);
+      if (cancelled) return;
 
-        for (let i = 1; i <= TAGLINE.length; i++) {
-          if (cancelled) return;
-          setVisibleCount(i);
-          await sleep(40);
-        }
+      await sleep(420);
 
-        await sleep(3800);
-
-        setFadeOut(true);
-        await sleep(900);
+      for (let i = 1; i <= TAGLINE.length; i++) {
+        if (cancelled) return;
+        setVisibleCount(i);
+        await sleep(40);
       }
+
+      if (!cancelled) setIntroDone(true);
     };
 
-    loop();
+    runOnce();
     return () => {
       cancelled = true;
     };
-  }, [loopReady, reducedMotion]);
+  }, [reducedMotion, introDelayMs]);
 
   return (
     <p className="hero-cta-tagline" aria-label={TAGLINE}>
@@ -64,17 +52,13 @@ export default function HeroTagline({ introDelayMs = 0 }: HeroTaglineProps) {
         <motion.span
           key={`${char}-${i}`}
           className="hero-cta-tagline__char"
-          animate={{
-            opacity: fadeOut ? 0 : i < visibleCount ? 1 : 0,
-            x: fadeOut ? 10 : i < visibleCount ? 0 : -14,
-            filter: fadeOut
-              ? "blur(5px)"
-              : i < visibleCount
-                ? "blur(0px)"
-                : "blur(6px)",
-          }}
+          animate={
+            introDone || i < visibleCount
+              ? { opacity: 1, x: 0, filter: "blur(0px)" }
+              : { opacity: 0, x: -14, filter: "blur(6px)" }
+          }
           transition={{
-            duration: fadeOut ? 0.4 : 0.26,
+            duration: 0.26,
             ease: [0.22, 1, 0.36, 1],
           }}
         >
