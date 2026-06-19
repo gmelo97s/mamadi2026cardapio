@@ -184,89 +184,219 @@ body {
   filter: drop-shadow(0 0 28px rgba(255, 215, 0, 0.15));
 }
 
-/* ── Hero — neon LGBT nos sulcos da bola ──────────────── */
+/* ── Hero — arte + subheadline + CTA + rodapé ──────────── */
 .hero-section {
   isolation: isolate;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 100svh;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+  padding-top: env(safe-area-inset-top, 0px);
+  --hero-stack-h: 10.5rem;
 }
 
-.hero-visual {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+.hero-visual__wrap {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  gap: 0;
+  min-height: 0;
+  padding: 0 0.25rem 0;
   pointer-events: none;
 }
 
-.hero-visual__frame {
-  position: relative;
+.hero-visual__inner {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
   height: 100%;
-  max-height: 100%;
-  width: auto;
+}
+
+.hero-tagline-wrap {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3125rem;
+  width: 100%;
+  margin-top: -6.5rem;
+  margin-bottom: 0.25rem;
+  padding: 0 0.25rem;
+  z-index: 2;
+}
+
+.hero-copa-headline {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   max-width: 100%;
-  aspect-ratio: 800 / 1200;
+  margin: 0;
+  padding: 0 0.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.0625rem, 4.9vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+
+.hero-copa-headline__word {
+  display: inline-block;
+  background: linear-gradient(
+    105deg,
+    #ffe500 0%,
+    #c6ff00 28%,
+    #00e676 52%,
+    #ffe500 78%,
+    #00e676 100%
+  );
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: heroCopaNeonFlow 3.2s ease-in-out infinite;
+  will-change: transform, opacity, filter, background-position;
+}
+
+@keyframes heroCopaNeonFlow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .hero-visual__photo {
   display: block;
-  height: 100%;
-  width: 100%;
+  max-height: min(100%, calc(100svh - var(--hero-stack-h) - env(safe-area-inset-top, 0px)));
+  max-width: calc(100vw - 0.5rem);
+  width: auto;
+  height: auto;
   object-fit: contain;
-  object-position: center;
-  position: relative;
-  z-index: 2;
+  object-position: center bottom;
+  transform: scale(1.16) translateY(0.625rem);
+  transform-origin: center bottom;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-/* Overlay neon — somente nos traços internos da bola */
-.hero-ball-effect {
-  position: absolute;
-  left: 50%;
-  bottom: 4.2%;
-  transform: translateX(-50%);
-  width: 47%;
-  aspect-ratio: 400 / 280;
-  z-index: 3;
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
-
-.hero-ball-effect__svg {
+.hero-cta-tagline {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 0.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.6875rem, 3.1vw, 0.9375rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  text-shadow:
+    0 0 18px rgba(255, 255, 255, 0.2),
+    0 0 32px rgba(255, 255, 255, 0.08);
   overflow: hidden;
 }
 
-.hero-ball-race {
-  fill: none;
-  stroke: url(#heroNeonLgbt);
-  stroke-linecap: round;
-  stroke-dasharray: 0.1 0.9;
-  animation: heroBallRace 2.8s linear infinite;
+.hero-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 1.375rem 1rem calc(env(safe-area-inset-bottom, 0px) + 0.625rem);
+  z-index: 3;
 }
 
-.hero-ball-race--trail {
-  stroke-width: 4;
-  opacity: 0.35;
+.hero-cta-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0.25rem 0.25rem 0.25rem;
 }
 
-.hero-ball-race--core {
-  stroke-width: 1.6;
-  opacity: 1;
-  stroke-dasharray: 0.06 0.94;
+.hero-cta-tagline__char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
 }
 
-@keyframes heroBallRace {
-  to {
-    stroke-dashoffset: -1;
+.hero-cta-btn {
+  min-width: 250px;
+  max-width: 285px;
+  width: min(calc(100vw - 2.75rem), 285px);
+  padding: 0.8125rem 1.5rem;
+  font-size: 1.0625rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+  box-shadow:
+    0 0 28px rgba(255, 64, 129, 0.35),
+    0 4px 18px rgba(0, 0, 0, 0.38);
+}
+
+.hero-copyright {
+  text-align: center;
+  font-size: 0.625rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0 1rem;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .hero-section {
+    --hero-stack-h: 11rem;
+  }
+
+  .hero-tagline-wrap {
+    margin-top: -7rem;
+  }
+
+  .hero-visual__photo {
+    max-width: min(46vw, 520px);
+    transform: scale(1.18) translateY(0.75rem);
+  }
+
+  .hero-bottom {
+    gap: 0.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.75rem);
+  }
+
+  .hero-cta-wrap {
+    padding: 0.5rem 0 0.375rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-ball-race {
-    animation: none;
-    stroke-dasharray: none;
-    opacity: 0.6;
+  .hero-copa-headline__word {
+    animation: none !important;
+    transition: none !important;
+    filter: drop-shadow(0 0 10px rgba(0, 230, 118, 0.45)) !important;
+  }
+
+  .hero-cta-tagline__char {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 }
 

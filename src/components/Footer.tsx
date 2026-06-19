@@ -40,6 +40,9 @@ export default function Footer() {
       <p className="mt-4 text-xs font-semibold text-muted">
         Beba com moderação. Proibido para menores de 18 anos. 🔞
       </p>
+      <p className="mt-3 text-xs text-white/55">
+        © 2026 Mamadi Food. Todos os direitos reservados.
+      </p>
     </footer>
   );
 }
