@@ -12,6 +12,7 @@ import {
 } from "../../data/menu";
 import { getExploreSection } from "../../data/exploreSections";
 import { searchMenuItems } from "../../lib/menuSearch";
+import { preloadAdjacentDeckImages } from "../../lib/menuImage";
 import SearchBar from "../SearchBar";
 import CategorySwipeCard from "./CategorySwipeCard";
 import ItemProgressBars from "./ItemProgressBars";
@@ -61,6 +62,11 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   const savedIndex = deckCategoryId ? (itemIndexByCategory[deckCategoryId] ?? 0) : 0;
   const itemIndex = deckItems.length ? Math.min(savedIndex, deckItems.length - 1) : 0;
   const currentItem = deckItems[itemIndex] ?? null;
+
+  useEffect(() => {
+    if (mainTab !== "swipe" || !deckItems.length || !deckCategory) return;
+    preloadAdjacentDeckImages(deckItems, itemIndex, deckCategory);
+  }, [mainTab, deckItems, itemIndex, deckCategory]);
 
   const searchResult = useMemo(
     () => searchMenuItems(search, allMenuItems, categories),

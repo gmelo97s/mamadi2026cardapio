@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { SiIfood } from "react-icons/si";
+import { optimizeMenuImageUrl } from "../lib/menuImage";
 import type { MenuItem } from "../data/menu";
 import {
   business,
@@ -54,9 +55,10 @@ export default function ProductModal({ item, onClose }: ProductModalProps) {
 
             <div className="aspect-[4/3] w-full overflow-hidden">
               <img
-                src={item.image}
+                src={optimizeMenuImageUrl(item.image, "full") ?? item.image}
                 alt={item.name}
                 className="h-full w-full object-cover"
+                decoding="async"
               />
             </div>
 

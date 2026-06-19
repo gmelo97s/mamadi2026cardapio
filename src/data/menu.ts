@@ -321,7 +321,7 @@ export const cervejas: MenuItem[] = [
   { id: "ce06", category: "cervejas", name: "BRAHMA DUPLO MALTE Litrão", description: "Brahma Duplo Malte 1 litro.", price: 19, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895369/cervejasce06-brahma-duplo-malte-litrao.png_y0iayi.png" },
   { id: "ce07", category: "cervejas", name: "ORIGINAL Litrão", description: "Original 1 litro.", price: 22, image: "https://picsum.photos/seed/original/400/300" },
   { id: "ce08", category: "cervejas", name: "PETRA Litrão", description: "Petra 1 litro.", price: 13, image: "https://picsum.photos/seed/petra/400/300" },
-  { id: "ce09", category: "cervejas", name: "HEINEKEN 600ml", description: "Heineken garrafa verde 600ml.", price: 22, image: "https://picsum.photos/seed/heineken600/400/300", badge: "⭐ Destaque" },
+  { id: "ce09", category: "cervejas", name: "HEINEKEN 600ml", description: "Heineken garrafa verde 600ml.", price: 22, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/cervejasce09-heineken-600ml.png_hgjw0y.png", badge: "⭐ Destaque" },
   { id: "ce10", category: "cervejas", name: "STELLA 600ml", description: "Stella Artois garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/stella600/400/300" },
   { id: "ce11", category: "cervejas", name: "BECK'S 600ml", description: "Beck's garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/becks600/400/300" },
   { id: "ce12", category: "cervejas", name: "SPATEN 600ml", description: "Spaten garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/spaten600/400/300" },
@@ -362,11 +362,11 @@ export const prontos: MenuItem[] = [
 // 🎉 COMBOS & COPÃO
 // ─────────────────────────────────────────────────────────
 export const combos: MenuItem[] = [
-  { id: "co01", category: "combos", name: "3 CAIPIRINHA LIMÃO", description: "Somente de limão. Copo 300ml. Pack com 3 unidades.", price: 30, image: "https://picsum.photos/seed/3caipirinha/400/300", badge: "🌈 Especial Mamadi" },
-  { id: "co02", category: "combos", name: "2 COPÃO DE GIN", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 30, image: "https://picsum.photos/seed/2copaogin/400/300", badge: "🌈 Especial Mamadi" },
+  { id: "co01", category: "combos", name: "3 CAIPIRINHA LIMÃO", description: "Somente de limão. Copo 300ml. Pack com 3 unidades.", price: 30, image: "/menu-items/co01-3-caipirinha-limao.png", badge: "🌈 Especial Mamadi" },
+  { id: "co02", category: "combos", name: "2 COPÃO DE GIN", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 30, image: "/menu-items/co02-2-copao-gin.png", badge: "🌈 Especial Mamadi" },
   { id: "co03", category: "combos", name: "2 CHEVETTE", description: "Dois Chevettes: Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.", price: 35, image: "https://picsum.photos/seed/2chevette/400/300" },
   { id: "co04", category: "combos", name: "COPÃO DA SORRAH", description: "Dose de Dreher, limão, mel e energético.", price: 20, image: "https://picsum.photos/seed/sorrah/400/300" },
-  { id: "co05", category: "combos", name: "COPÃO VODKA C/ ENERGÉTICO", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 15, image: "https://picsum.photos/seed/copaovodka/400/300", badge: "🌈 Especial Mamadi" },
+  { id: "co05", category: "combos", name: "COPÃO VODKA C/ ENERGÉTICO", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 15, image: "/menu-items/co05-copao-vodka-energetico.png", badge: "🌈 Especial Mamadi" },
   { id: "co06", category: "combos", name: "3 EISENBAHN 600ml", description: "Pack com 3 garrafas Eisenbahn 600ml.", price: 40, image: "https://picsum.photos/seed/3eisenbahn/400/300" },
   { id: "co07", category: "combos", name: "3 ORIGINAL 600ml", description: "Pack com 3 garrafas Original 600ml.", price: 40, image: "https://picsum.photos/seed/3original/400/300" },
   { id: "co08", category: "combos", name: "3 HEINEKEN 600ml", description: "Pack com 3 garrafas Heineken 600ml.", price: 60, image: "https://picsum.photos/seed/3heineken/400/300", badge: "⭐ Destaque" },
@@ -408,7 +408,7 @@ export const superLikeItems: MenuItem[] = [
     name: "COPÃO VODKA C/ ENERGÉTICO",
     description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.",
     price: 15,
-    image: "https://picsum.photos/seed/copaovodka/400/300",
+    image: "/menu-items/co05-copao-vodka-energetico.png",
     badge: "🌈 Especial Mamadi",
   },
   {
@@ -417,7 +417,7 @@ export const superLikeItems: MenuItem[] = [
     name: "2 COPÃO DE GIN",
     description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.",
     price: 30,
-    image: "https://picsum.photos/seed/2copaogin/400/300",
+    image: "/menu-items/co02-2-copao-gin.png",
     badge: "🌈 Especial Mamadi",
   },
   {
@@ -426,7 +426,7 @@ export const superLikeItems: MenuItem[] = [
     name: "3 CAIPIRINHA LIMÃO",
     description: "Somente de limão. Copo 300ml. Pack com 3 unidades.",
     price: 30,
-    image: "https://picsum.photos/seed/3caipirinha/400/300",
+    image: "/menu-items/co01-3-caipirinha-limao.png",
     badge: "🌈 Especial Mamadi",
   },
   {
@@ -460,14 +460,13 @@ export const superLikeItems: MenuItem[] = [
 // 🍟 PORÇÕES
 // ─────────────────────────────────────────────────────────
 export const porcoes: MenuItem[] = [
-  { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/pasteis/400/300" },
-  { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/batatafrita/400/300", badge: "⭐ Destaque" },
-  { id: "po03", category: "porcoes", name: "BATATA FRITA C/ CHEDDAR E BACON", description: "Batata frita com cheddar derretido e bacon.", priceA: 35, priceB: 55, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/batatacheddar/400/300" },
+  { id: "po03", category: "porcoes", name: "BATATA FRITA C/ CHEDDAR E BACON", description: "Batata frita com cheddar derretido e bacon.", priceA: 35, priceB: 55, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png" },
+  { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo02-batata-frita-simples.png_xwi0dc.png", badge: "⭐ Destaque" },
+  { id: "po07", category: "porcoes", name: "COXINHA FRANGO", description: "4 unidades. Vegana: Brócolis, Cenoura e Batata.", priceA: 18, priceB: 18, labelA: "Frango", labelB: "Vegana", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900275/porcoespo07-coxinha-frango.png_wzu1vh.png" },
+  { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo01-mini-pasteis.png_md4qrg.png" },
   { id: "po04", category: "porcoes", name: "BATATA MAMADI", description: "Batata com Cheddar, Catupiry, Bacon e Parmesão Ralado.", priceA: 45, priceB: 60, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/batatamamadi/400/300", badge: "🌈 Especial Mamadi" },
   { id: "po05", category: "porcoes", name: "CALABRESA ACEBOLADA", description: "Calabresa grelhada com cebola.", priceA: 38.9, priceB: 79.9, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/calabresa/400/300" },
   { id: "po06", category: "porcoes", name: "MANDIOCA FRITA", description: "Mandioca frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/mandioca/400/300" },
-  { id: "po07", category: "porcoes", name: "COXINHA FRANGO", description: "4 unidades. Sabor Frango.", price: 18, image: "https://picsum.photos/seed/coxinhafrango/400/300" },
-  { id: "po08", category: "porcoes", name: "COXINHA VEGANA", description: "4 unidades. Sabor Vegana: Brócolis, Cenoura e Batata.", price: 18, image: "https://picsum.photos/seed/coxinhavegana/400/300", badge: "🌱 Vegano" },
   { id: "po09", category: "porcoes", name: "ESPETINHO", description: "1 unidade. Sabores: Carne, Frango, Linguiça, Queijo Coalho ou Pão de Alho.", price: 16, image: "https://picsum.photos/seed/espetinho/400/300" },
   { id: "po10", category: "porcoes", name: "COUVERT DA MAMADI", description: "Sardela, Caponata de Berinjela, Azeitonas, Queijo Temperado, Calabresa Curada e Pão da Casa.", price: 30, image: "https://picsum.photos/seed/couvert/400/300", badge: "🌈 Especial Mamadi" },
 ];

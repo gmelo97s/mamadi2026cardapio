@@ -114,6 +114,8 @@ export default function CategorySwipeCard({
                       : ""
                   }`}
                   draggable={false}
+                  decoding="async"
+                  fetchPriority="high"
                 />
               ) : (
                 <div className="category-swipe-card__media-black" aria-hidden />

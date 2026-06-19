@@ -3,6 +3,34 @@ import type { Category, MenuItem } from "../data/menu";
 /** URLs que ainda não foram trocadas por imagens reais do cliente. */
 const PLACEHOLDER_PATTERNS = [/picsum\.photos/i, /\/generated-menu\//i];
 
+export type MenuImageSize = "thumb" | "card" | "full";
+
+const IMAGE_WIDTH: Record<MenuImageSize, number> = {
+  thumb: 480,
+  card: 720,
+  full: 960,
+};
+
+/** Cloudinary: formato automático, qualidade adaptativa e largura máxima por contexto. */
+export function optimizeMenuImageUrl(
+  src: string | null | undefined,
+  size: MenuImageSize = "card",
+): string | null {
+  const trimmed = src?.trim();
+  if (!trimmed) return null;
+
+  if (
+    trimmed.includes("res.cloudinary.com") &&
+    trimmed.includes("/image/upload/") &&
+    !/f_auto|q_auto/.test(trimmed)
+  ) {
+    const width = IMAGE_WIDTH[size];
+    return trimmed.replace("/image/upload/", `/image/upload/f_auto,q_auto:good,w_${width}/`);
+  }
+
+  return trimmed;
+}
+
 export function isCustomMenuImage(src: string | undefined | null): src is string {
   if (!src?.trim()) return false;
   return !PLACEHOLDER_PATTERNS.some((pattern) => pattern.test(src));
@@ -14,13 +42,13 @@ export function resolveSwipeCardImage(
   category: Category,
 ): string | null {
   if (item?.image && isCustomMenuImage(item.image)) {
-    return item.image;
+    return optimizeMenuImageUrl(item.image, "card");
   }
 
   if (!item) {
     const fallback = category.cardImage ?? category.coverImage;
     if (fallback && isCustomMenuImage(fallback)) {
-      return fallback;
+      return optimizeMenuImageUrl(fallback, "card");
     }
   }
 
@@ -28,7 +56,8 @@ export function resolveSwipeCardImage(
 }
 
 export function resolveProductCardImage(item: MenuItem): string | null {
-  return isCustomMenuImage(item.image) ? item.image : null;
+  if (!isCustomMenuImage(item.image)) return null;
+  return optimizeMenuImageUrl(item.image, "thumb");
 }
 
 /** Placeholder por categoria — troque os PNGs em public/generated-menu/categories/ */
@@ -44,11 +73,42 @@ const EXPLORE_CATEGORY_IMAGES: Record<string, string> = {
 };
 
 export function resolveExploreCategoryImage(category: Category): string {
-  if (category.cardImage?.trim()) return category.cardImage;
+  if (category.cardImage?.trim()) {
+    return optimizeMenuImageUrl(category.cardImage, "thumb") ?? category.cardImage;
+  }
   return EXPLORE_CATEGORY_IMAGES[category.id] ?? "";
 }
 
 /** Imagem do card Explorar — inclui placeholders gerados para substituição futura. */
 export function resolveExploreItemImage(item: MenuItem): string | null {
-  return item.image?.trim() || null;
+  const src = item.image?.trim();
+  if (!src) return null;
+  if (isCustomMenuImage(src)) {
+    return optimizeMenuImageUrl(src, "thumb");
+  }
+  return src;
+}
+
+/** Pré-carrega imagens adjacentes no deck para troca instantânea. */
+export function preloadMenuImages(urls: Array<string | null | undefined>): void {
+  for (const url of urls) {
+    if (!url) continue;
+    const img = new Image();
+    img.decoding = "async";
+    img.src = url;
+  }
+}
+
+export function preloadAdjacentDeckImages(
+  items: MenuItem[],
+  index: number,
+  category: Category,
+): void {
+  const offsets = [1, 2, -1];
+  const urls = offsets
+    .map((offset) => items[index + offset])
+    .filter(Boolean)
+    .map((item) => resolveSwipeCardImage(item!, category));
+
+  preloadMenuImages(urls);
 }

@@ -27,6 +27,7 @@ export default function ExploreTileCard({
             alt=""
             className="explore-tile__image"
             loading="lazy"
+            decoding="async"
             onError={() => setImageFailed(true)}
           />
         ) : (

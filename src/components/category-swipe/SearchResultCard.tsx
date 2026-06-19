@@ -29,6 +29,7 @@ export default function SearchResultCard({ item, category, onClick }: SearchResu
               isCustomMenuImage(imageSrc) ? " search-result-card__image--product" : ""
             }`}
             loading="lazy"
+            decoding="async"
           />
         ) : (
           <div className="search-result-card__media-black" aria-hidden />

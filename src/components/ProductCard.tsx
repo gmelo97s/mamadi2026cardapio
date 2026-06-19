@@ -22,6 +22,7 @@ export default function ProductCard({ item, onClick }: ProductCardProps) {
             src={imageSrc}
             alt={item.name}
             loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
