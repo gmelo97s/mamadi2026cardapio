@@ -1019,6 +1019,17 @@ body {
   cursor: grabbing;
 }
 
+.category-swipe-card--secret .category-swipe-card__inner {
+  box-shadow:
+    0 0 0 1px rgba(255, 229, 0, 0.35),
+    0 0 28px rgba(170, 0, 255, 0.28),
+    0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
+.category-swipe-screen--superlike .swipe-actions__btn--super {
+  box-shadow: 0 0 18px rgba(255, 229, 0, 0.45);
+}
+
 .category-swipe-card__inner {
   position: relative;
   z-index: 1;
@@ -2187,6 +2198,12 @@ body {
   background: linear-gradient(135deg, #1e7ad4, #1557a8);
   color: #fff;
   box-shadow: 0 0 12px rgba(21, 87, 168, 0.45);
+}
+
+.verified-badge--gold {
+  background: linear-gradient(135deg, #f0d090 0%, #e5b582 45%, #c8944a 100%);
+  color: #3d2a0a;
+  box-shadow: 0 0 14px rgba(229, 181, 130, 0.55);
 }
 
 .category-controls-wrap {

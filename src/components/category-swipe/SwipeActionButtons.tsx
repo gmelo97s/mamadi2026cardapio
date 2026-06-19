@@ -7,7 +7,7 @@ interface SwipeActionButtonsProps {
   onSuperLike: () => void;
   canReject: boolean;
   canLike: boolean;
-  combosCount: number;
+  superLikeCount: number;
 }
 
 export default function SwipeActionButtons({
@@ -16,7 +16,7 @@ export default function SwipeActionButtons({
   onSuperLike,
   canReject,
   canLike,
-  combosCount,
+  superLikeCount,
 }: SwipeActionButtonsProps) {
   const reducedMotion = useReducedMotion();
 
@@ -43,7 +43,7 @@ export default function SwipeActionButtons({
           <div className="swipe-actions__super-wrap">
             <motion.button
               type="button"
-              aria-label="Ir para Combos e Copão"
+              aria-label="Abrir Super Like"
               onClick={onSuperLike}
               whileTap={reducedMotion ? undefined : { scale: 0.92 }}
               className="swipe-actions__btn swipe-actions__btn--super"
@@ -51,7 +51,7 @@ export default function SwipeActionButtons({
               <Star size={26} strokeWidth={3.2} fill="currentColor" />
             </motion.button>
             <span className="swipe-actions__badge" aria-hidden>
-              {combosCount}
+              {superLikeCount}
             </span>
           </div>
         </div>

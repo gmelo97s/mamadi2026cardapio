@@ -362,17 +362,98 @@ export const prontos: MenuItem[] = [
 // 🎉 COMBOS & COPÃO
 // ─────────────────────────────────────────────────────────
 export const combos: MenuItem[] = [
-  { id: "co01", category: "combos", name: "3 CAIPIRINHA LIMÃO", description: "Somente de limão. Copo 300ml. Pack com 3 unidades.", price: 40, image: "https://picsum.photos/seed/3caipirinha/400/300", badge: "🌈 Especial Mamadi" },
-  { id: "co02", category: "combos", name: "2 COPÃO DE GIN", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 40, image: "https://picsum.photos/seed/2copaogin/400/300", badge: "🌈 Especial Mamadi" },
+  { id: "co01", category: "combos", name: "3 CAIPIRINHA LIMÃO", description: "Somente de limão. Copo 300ml. Pack com 3 unidades.", price: 30, image: "https://picsum.photos/seed/3caipirinha/400/300", badge: "🌈 Especial Mamadi" },
+  { id: "co02", category: "combos", name: "2 COPÃO DE GIN", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 30, image: "https://picsum.photos/seed/2copaogin/400/300", badge: "🌈 Especial Mamadi" },
   { id: "co03", category: "combos", name: "2 CHEVETTE", description: "Dois Chevettes: Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.", price: 35, image: "https://picsum.photos/seed/2chevette/400/300" },
   { id: "co04", category: "combos", name: "COPÃO DA SORRAH", description: "Dose de Dreher, limão, mel e energético.", price: 20, image: "https://picsum.photos/seed/sorrah/400/300" },
-  { id: "co05", category: "combos", name: "COPÃO VODKA C/ ENERGÉTICO", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 20, image: "https://picsum.photos/seed/copaovodka/400/300", badge: "🌈 Especial Mamadi" },
+  { id: "co05", category: "combos", name: "COPÃO VODKA C/ ENERGÉTICO", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 15, image: "https://picsum.photos/seed/copaovodka/400/300", badge: "🌈 Especial Mamadi" },
   { id: "co06", category: "combos", name: "3 EISENBAHN 600ml", description: "Pack com 3 garrafas Eisenbahn 600ml.", price: 40, image: "https://picsum.photos/seed/3eisenbahn/400/300" },
   { id: "co07", category: "combos", name: "3 ORIGINAL 600ml", description: "Pack com 3 garrafas Original 600ml.", price: 40, image: "https://picsum.photos/seed/3original/400/300" },
   { id: "co08", category: "combos", name: "3 HEINEKEN 600ml", description: "Pack com 3 garrafas Heineken 600ml.", price: 60, image: "https://picsum.photos/seed/3heineken/400/300", badge: "⭐ Destaque" },
   { id: "co09", category: "combos", name: "3 LITRÃO BRAHMA Chopp", description: "Pack com 3 litrões Brahma Chopp.", price: 45, image: "https://picsum.photos/seed/3litraobrahma/400/300" },
   { id: "co10", category: "combos", name: "3 LITRÃO SKOL", description: "Pack com 3 litrões Skol.", price: 45, image: "https://picsum.photos/seed/3litraoskol/400/300" },
   { id: "co11", category: "combos", name: "3 LITRÃO ORIGINAL", description: "Pack com 3 litrões Original.", price: 60, image: "https://picsum.photos/seed/3litraooriginal/400/300" },
+];
+
+// ─────────────────────────────────────────────────────────
+// ⭐ SUPER LIKE — card secreto (somente via botão estrela)
+// ─────────────────────────────────────────────────────────
+export const SUPER_LIKE_CATEGORY_ID = "superlike";
+
+export const superLikeCategory: Category = {
+  id: SUPER_LIKE_CATEGORY_ID,
+  label: "SUPER LIKE",
+  emoji: "⭐",
+  gradient: "from-yellow-400 to-purple-600",
+  from: "#FFE500",
+  to: "#AA00FF",
+  glow: "#FFE500",
+  cardImage: "/generated-menu/categories/cat-combos-card.png",
+};
+
+export const superLikeItems: MenuItem[] = [
+  {
+    id: "sl01",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "CHURRASCO À VONTADE",
+    description: "Churrasco à Vontade (Individual). Acompanha: Arroz, Farofa e Vinagrete.",
+    price: 25,
+    image: "https://picsum.photos/seed/churrascomamadi/400/300",
+    badge: "⭐ Destaque",
+    obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs",
+  },
+  {
+    id: "sl02",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "COPÃO VODKA C/ ENERGÉTICO",
+    description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.",
+    price: 15,
+    image: "https://picsum.photos/seed/copaovodka/400/300",
+    badge: "🌈 Especial Mamadi",
+  },
+  {
+    id: "sl03",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "2 COPÃO DE GIN",
+    description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.",
+    price: 30,
+    image: "https://picsum.photos/seed/2copaogin/400/300",
+    badge: "🌈 Especial Mamadi",
+  },
+  {
+    id: "sl04",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "3 CAIPIRINHA LIMÃO",
+    description: "Somente de limão. Copo 300ml. Pack com 3 unidades.",
+    price: 30,
+    image: "https://picsum.photos/seed/3caipirinha/400/300",
+    badge: "🌈 Especial Mamadi",
+  },
+  {
+    id: "sl05",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "3 LITRÃO SKOL ou BRAHMA",
+    description: "Pack com 3 litrões Skol ou 3 litrões Brahma Chopp.",
+    price: 45,
+    image: "https://picsum.photos/seed/3litraoskol/400/300",
+  },
+  {
+    id: "sl06",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "3 HEINEKEN 600ml",
+    description: "Pack com 3 garrafas Heineken 600ml.",
+    price: 60,
+    image: "https://picsum.photos/seed/3heineken/400/300",
+    badge: "⭐ Destaque",
+  },
+  {
+    id: "sl07",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "3 LITRÃO ORIGINAL",
+    description: "Pack com 3 litrões Original.",
+    price: 60,
+    image: "https://picsum.photos/seed/3litraooriginal/400/300",
+  },
 ];
 
 // ─────────────────────────────────────────────────────────
@@ -441,14 +522,14 @@ export const allMenuItems: MenuItem[] = [
 ];
 
 export const categories: Category[] = [
-  { id: "drinks", label: "DRINKS", emoji: "🍹", gradient: "from-red-600 to-pink-600", from: "#FF3B3B", to: "#FF4081", glow: "#FF3B3B", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813232/mamadicategoriasdrinks-card_obncis.png" },
-  { id: "destilados", label: "DESTILADOS", emoji: "🥃", gradient: "from-orange-500 to-yellow-400", from: "#FF8C00", to: "#FFE500", glow: "#FF8C00", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813557/destilados-card_fuifl2.png" },
   { id: "cervejas", label: "CERVEJAS", emoji: "🍺", gradient: "from-yellow-400 to-green-400", from: "#FFE500", to: "#00E676", glow: "#FFE500" },
-  { id: "prontos", label: "PRONTOS & SOFTS", emoji: "🥤", gradient: "from-green-400 to-blue-500", from: "#00E676", to: "#2979FF", glow: "#00E676" },
-  { id: "combos", label: "COMBOS & COPÃO", emoji: "🎉", gradient: "from-blue-500 to-purple-600", from: "#2979FF", to: "#AA00FF", glow: "#2979FF" },
   { id: "porcoes", label: "PORÇÕES", emoji: "🍟", gradient: "from-purple-600 to-pink-500", from: "#AA00FF", to: "#FF4081", glow: "#AA00FF" },
-  { id: "lanches", label: "LANCHES & BURGERS", emoji: "🥪", gradient: "from-red-600 to-orange-500", from: "#FF3B3B", to: "#FF8C00", glow: "#FF3B3B", cardImage: "/categories/cat-lanches-card.png", coverImage: "/categories/cat-lanches-card.png" },
   { id: "menu", label: "MENU DA MAMADI", emoji: "🍽️", gradient: "from-orange-400 to-green-500", from: "#FF8C00", to: "#00E676", glow: "#FF8C00" },
+  { id: "drinks", label: "DRINKS", emoji: "🍹", gradient: "from-red-600 to-pink-600", from: "#FF3B3B", to: "#FF4081", glow: "#FF3B3B", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813232/mamadicategoriasdrinks-card_obncis.png" },
+  { id: "combos", label: "COMBOS & COPÃO", emoji: "🎉", gradient: "from-blue-500 to-purple-600", from: "#2979FF", to: "#AA00FF", glow: "#2979FF" },
+  { id: "prontos", label: "PRONTOS & SOFTS", emoji: "🥤", gradient: "from-green-400 to-blue-500", from: "#00E676", to: "#2979FF", glow: "#00E676" },
+  { id: "destilados", label: "DESTILADOS", emoji: "🥃", gradient: "from-orange-500 to-yellow-400", from: "#FF8C00", to: "#FFE500", glow: "#FF8C00", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813557/destilados-card_fuifl2.png" },
+  { id: "lanches", label: "LANCHES & BURGERS", emoji: "🥪", gradient: "from-red-600 to-orange-500", from: "#FF3B3B", to: "#FF8C00", glow: "#FF3B3B", cardImage: "/categories/cat-lanches-card.png", coverImage: "/categories/cat-lanches-card.png" },
 ];
 
 export const itemsByCategory: Record<string, MenuItem[]> = {

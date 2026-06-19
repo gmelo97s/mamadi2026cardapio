@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import type { Category, MenuItem } from "../../data/menu";
-import { formatPrice } from "../../data/menu";
+import { formatPrice, SUPER_LIKE_CATEGORY_ID } from "../../data/menu";
 import { isCustomMenuImage, resolveSwipeCardImage } from "../../lib/menuImage";
 import VerifiedBadge from "./VerifiedBadge";
 
@@ -76,9 +76,11 @@ export default function CategorySwipeCard({
     else onNextItem();
   };
 
+  const isSecretCard = category.id === SUPER_LIKE_CATEGORY_ID;
+
   return (
     <motion.div
-      className="category-swipe-card"
+      className={`category-swipe-card${isSecretCard ? " category-swipe-card--secret" : ""}`}
       style={{ x: dragX, rotate }}
       drag={reducedMotion ? false : "x"}
       dragConstraints={{ left: 0, right: 0 }}
@@ -184,7 +186,7 @@ export default function CategorySwipeCard({
                           </span>
                         ))}
                       </span>
-                      <VerifiedBadge size="md" />
+                      <VerifiedBadge size="md" variant={isSecretCard ? "gold" : "blue"} />
                     </p>
 
                     <p className="category-swipe-card__desc">{item.description}</p>

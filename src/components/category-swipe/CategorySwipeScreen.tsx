@@ -2,7 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Eye, Home } from "lucide-react";
 import type { MenuItem } from "../../data/menu";
-import { allMenuItems, categories, itemsByCategory } from "../../data/menu";
+import {
+  allMenuItems,
+  categories,
+  itemsByCategory,
+  superLikeCategory,
+  superLikeItems,
+  SUPER_LIKE_CATEGORY_ID,
+} from "../../data/menu";
 import { getExploreSection } from "../../data/exploreSections";
 import { searchMenuItems } from "../../lib/menuSearch";
 import SearchBar from "../SearchBar";
@@ -22,7 +29,7 @@ interface CategorySwipeScreenProps {
   onBack: () => void;
 }
 
-const COMBOS_CATEGORY_ID = "combos";
+const SUPER_LIKE_COUNT = superLikeItems.length;
 
 export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps) {
   const reducedMotion = useReducedMotion();
@@ -35,13 +42,25 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [itemIndexByCategory, setItemIndexByCategory] = useState<Record<string, number>>({});
   const [showOnboarding, setShowOnboarding] = useState(() => !hasSeenCategoryOnboarding());
+  const [superLikeActive, setSuperLikeActive] = useState(false);
+  const [returnCategoryIndex, setReturnCategoryIndex] = useState(0);
 
   const activeCategories = useMemo(() => {
     if (!categoryFilterIds) return categories;
     return categories.filter((category) => categoryFilterIds.includes(category.id));
   }, [categoryFilterIds]);
 
-  const combosCount = (itemsByCategory[COMBOS_CATEGORY_ID] ?? []).length;
+  const category = activeCategories[categoryIndex] ?? activeCategories[0];
+  const deckCategory = superLikeActive ? superLikeCategory : category;
+  const deckItems = superLikeActive
+    ? superLikeItems
+    : category
+      ? (itemsByCategory[category.id] ?? [])
+      : [];
+  const deckCategoryId = superLikeActive ? SUPER_LIKE_CATEGORY_ID : (category?.id ?? "");
+  const savedIndex = deckCategoryId ? (itemIndexByCategory[deckCategoryId] ?? 0) : 0;
+  const itemIndex = deckItems.length ? Math.min(savedIndex, deckItems.length - 1) : 0;
+  const currentItem = deckItems[itemIndex] ?? null;
 
   const searchResult = useMemo(
     () => searchMenuItems(search, allMenuItems, categories),
@@ -60,12 +79,6 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
     if (showOnboarding) dismissOnboarding();
   }, [showOnboarding, dismissOnboarding]);
 
-  const category = activeCategories[categoryIndex] ?? activeCategories[0];
-  const items = category ? itemsByCategory[category.id] ?? [] : [];
-  const savedIndex = category ? itemIndexByCategory[category.id] ?? 0 : 0;
-  const itemIndex = items.length ? Math.min(savedIndex, items.length - 1) : 0;
-  const currentItem = items[itemIndex] ?? null;
-
   const setItemIndex = useCallback((catId: string, index: number) => {
     setItemIndexByCategory((prev) => ({ ...prev, [catId]: index }));
   }, []);
@@ -82,6 +95,7 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
     setCategoryFilterIds(null);
     setCategoryIndex(0);
     setItemIndexByCategory({});
+    setSuperLikeActive(false);
     closeOverlays();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [closeOverlays]);
@@ -89,6 +103,7 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   const goToExplore = useCallback(() => {
     setMainTab("explore");
     setCategoryFilterIds(null);
+    setSuperLikeActive(false);
     closeOverlays();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [closeOverlays]);
@@ -125,34 +140,50 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
     setCategoryFilterIds(section.categoryIds);
     setCategoryIndex(0);
     setItemIndexByCategory({});
+    setSuperLikeActive(false);
     closeOverlays();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [closeOverlays]);
 
   const nextItem = useCallback(() => {
-    if (!category || items.length === 0) return;
-    setItemIndex(category.id, Math.min(itemIndex + 1, items.length - 1));
-  }, [category, itemIndex, items.length, setItemIndex]);
+    if (!deckCategoryId || deckItems.length === 0) return;
+    setItemIndex(deckCategoryId, Math.min(itemIndex + 1, deckItems.length - 1));
+  }, [deckCategoryId, deckItems.length, itemIndex, setItemIndex]);
 
   const prevItem = useCallback(() => {
-    if (!category || items.length === 0) return;
-    setItemIndex(category.id, Math.max(itemIndex - 1, 0));
-  }, [category, itemIndex, items.length, setItemIndex]);
+    if (!deckCategoryId || deckItems.length === 0) return;
+    setItemIndex(deckCategoryId, Math.max(itemIndex - 1, 0));
+  }, [deckCategoryId, itemIndex, deckItems.length, setItemIndex]);
 
   const nextCategory = useCallback(() => {
+    if (superLikeActive) {
+      setSuperLikeActive(false);
+      setCategoryIndex((index) =>
+        Math.min(returnCategoryIndex + 1, activeCategories.length - 1),
+      );
+      return;
+    }
     setCategoryIndex((index) => Math.min(index + 1, activeCategories.length - 1));
-  }, [activeCategories.length]);
+  }, [superLikeActive, returnCategoryIndex, activeCategories.length]);
 
   const prevCategory = useCallback(() => {
+    if (superLikeActive) {
+      setSuperLikeActive(false);
+      setCategoryIndex(returnCategoryIndex);
+      return;
+    }
     setCategoryIndex((index) => Math.max(index - 1, 0));
-  }, []);
+  }, [superLikeActive, returnCategoryIndex]);
 
-  const goToCombos = useCallback(() => {
-    const idx = activeCategories.findIndex((c) => c.id === COMBOS_CATEGORY_ID);
-    if (idx < 0) return;
-    setCategoryIndex(idx);
-    setItemIndex(COMBOS_CATEGORY_ID, 0);
-  }, [activeCategories, setItemIndex]);
+  const goToSuperLike = useCallback(() => {
+    setReturnCategoryIndex(categoryIndex);
+    setSearch("");
+    setPreviewSearch("");
+    setSearchOpen(false);
+    setMenuPreviewOpen(false);
+    setSuperLikeActive(true);
+    setItemIndex(SUPER_LIKE_CATEGORY_ID, 0);
+  }, [categoryIndex, setItemIndex]);
 
   const openItemInSwipe = useCallback((item: MenuItem) => {
     const catIdx = categories.findIndex((c) => c.id === item.category);
@@ -163,6 +194,7 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
 
     setMainTab("swipe");
     setCategoryFilterIds(null);
+    setSuperLikeActive(false);
     setCategoryIndex(catIdx);
     if (itemIdx >= 0) {
       setItemIndexByCategory((prev) => ({ ...prev, [item.category]: itemIdx }));
@@ -213,8 +245,8 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   const isSearching = searchOpen && searchResult.kind !== "idle";
   const isPanelOpen = isSearching || menuPreviewOpen;
   const isSwipeDeck =
-    mainTab === "swipe" && !isPanelOpen && category != null;
-  const onboardingActive = showOnboarding && isSwipeDeck;
+    mainTab === "swipe" && !isPanelOpen && (superLikeActive || category != null);
+  const onboardingActive = showOnboarding && isSwipeDeck && !superLikeActive;
 
   return (
     <div
@@ -222,7 +254,9 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
         mainTab === "explore" ? " category-swipe-screen--explore" : ""
       }${searchOpen ? " category-swipe-screen--search-open" : ""}${
         menuPreviewOpen ? " category-swipe-screen--menu-preview" : ""
-      }${isPanelOpen ? " category-swipe-screen--panel-open" : ""}`}
+      }${superLikeActive ? " category-swipe-screen--superlike" : ""}${
+        isPanelOpen ? " category-swipe-screen--panel-open" : ""
+      }`}
       onPointerDownCapture={onboardingActive ? handleOnboardingInteraction : undefined}
     >
       <button
@@ -272,11 +306,11 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
         )}
       </AnimatePresence>
 
-      {!searchOpen && !menuPreviewOpen && mainTab === "swipe" && isSwipeDeck && items.length > 0 && (
+      {!searchOpen && !menuPreviewOpen && mainTab === "swipe" && isSwipeDeck && deckItems.length > 0 && (
         <header className="category-swipe-screen__header category-swipe-screen__header--progress">
           <div className="category-swipe-screen__header-center">
             <div className="category-swipe-screen__progress">
-              <ItemProgressBars total={items.length} active={itemIndex} />
+              <ItemProgressBars total={deckItems.length} active={itemIndex} />
             </div>
           </div>
         </header>
@@ -371,15 +405,15 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
           </div>
         )}
 
-        {isSwipeDeck && category && (
+        {isSwipeDeck && deckCategory && (
           <div className="category-swipe-screen__deck">
             <div className="category-swipe-screen__card-wrap">
               <CategorySwipeCard
-                key={category.id}
-                category={category}
+                key={superLikeActive ? `${SUPER_LIKE_CATEGORY_ID}-${currentItem?.id}` : deckCategory.id}
+                category={deckCategory}
                 item={currentItem}
                 itemIndex={itemIndex}
-                itemTotal={items.length}
+                itemTotal={deckItems.length}
                 reducedMotion={reducedMotion}
                 onPrevItem={prevItem}
                 onNextItem={nextItem}
@@ -395,10 +429,14 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
         <SwipeActionButtons
           onReject={prevCategory}
           onLike={nextCategory}
-          onSuperLike={goToCombos}
-          canReject={categoryIndex > 0}
-          canLike={categoryIndex < activeCategories.length - 1}
-          combosCount={combosCount}
+          onSuperLike={goToSuperLike}
+          canReject={superLikeActive || categoryIndex > 0}
+          canLike={
+            superLikeActive
+              ? returnCategoryIndex < activeCategories.length - 1
+              : categoryIndex < activeCategories.length - 1
+          }
+          superLikeCount={SUPER_LIKE_COUNT}
         />
       )}
 
