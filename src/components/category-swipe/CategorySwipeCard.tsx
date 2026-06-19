@@ -167,10 +167,16 @@ export default function CategorySwipeCard({
                 {item ? (
                   <>
                     <h2 className="category-swipe-card__title">
-                      {item.name}
-                      {priceValue != null && (
-                        <span className="category-swipe-card__title-price">, {priceValue}</span>
-                      )}
+                      <span className="category-swipe-card__title-text">
+                        {item.name}
+                        {priceValue != null && (
+                          <span className="category-swipe-card__title-price">, {priceValue}</span>
+                        )}
+                      </span>
+                      <VerifiedBadge
+                        size="xs"
+                        variant={isSecretCard ? "gold" : "blue"}
+                      />
                     </h2>
 
                     <p className="category-swipe-card__brand">
@@ -186,7 +192,6 @@ export default function CategorySwipeCard({
                           </span>
                         ))}
                       </span>
-                      <VerifiedBadge size="md" variant={isSecretCard ? "gold" : "blue"} />
                     </p>
 
                     <p className="category-swipe-card__desc">{item.description}</p>

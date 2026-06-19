@@ -36,14 +36,16 @@ export default function SearchResultCard({ item, category, onClick }: SearchResu
         <div className="search-result-card__shade" aria-hidden />
         <div className="search-result-card__dock">
           <h3 className="search-result-card__title">
-            {item.name}
-            {priceValue != null && (
-              <span className="search-result-card__title-price">, {priceValue}</span>
-            )}
+            <span className="search-result-card__title-text">
+              {item.name}
+              {priceValue != null && (
+                <span className="search-result-card__title-price">, {priceValue}</span>
+              )}
+            </span>
+            <VerifiedBadge size="xs" />
           </h3>
           <p className="search-result-card__brand">
             <span className="search-result-card__brand-text">{category.label}</span>
-            <VerifiedBadge size="sm" />
           </p>
           <p className="search-result-card__desc">{item.description}</p>
         </div>

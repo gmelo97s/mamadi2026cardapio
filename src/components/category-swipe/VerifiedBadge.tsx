@@ -1,7 +1,7 @@
 import { BadgeCheck } from "lucide-react";
 
 interface VerifiedBadgeProps {
-  size?: "sm" | "md";
+  size?: "xs" | "sm" | "md";
   variant?: "blue" | "gold";
   className?: string;
 }
@@ -11,8 +11,10 @@ export default function VerifiedBadge({
   variant = "blue",
   className = "",
 }: VerifiedBadgeProps) {
-  const dim = size === "md" ? "h-6 w-6" : "h-5 w-5";
-  const icon = size === "md" ? "h-3.5 w-3.5" : "h-3 w-3";
+  const dim =
+    size === "md" ? "h-5 w-5" : size === "sm" ? "h-[1.125rem] w-[1.125rem]" : "h-4 w-4";
+  const icon =
+    size === "md" ? "h-3 w-3" : size === "sm" ? "h-3 w-3" : "h-2.5 w-2.5";
   const variantClass = variant === "gold" ? "verified-badge--gold" : "";
 
   return (

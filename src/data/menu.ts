@@ -313,12 +313,12 @@ export const destilados: MenuItem[] = [
 // 🍺 CERVEJAS
 // ─────────────────────────────────────────────────────────
 export const cervejas: MenuItem[] = [
-  { id: "ce01", category: "cervejas", name: "BRAHMA CHOPP Litrão", description: "Brahma Chopp 1 litro.", price: 16, image: "https://picsum.photos/seed/brahma/400/300" },
-  { id: "ce02", category: "cervejas", name: "SKOL PILSEN Litrão", description: "Skol Pilsen 1 litro.", price: 16, image: "https://picsum.photos/seed/skol/400/300" },
-  { id: "ce03", category: "cervejas", name: "AMSTEL Litrão", description: "Amstel 1 litro.", price: 18, image: "https://picsum.photos/seed/amstel/400/300" },
-  { id: "ce04", category: "cervejas", name: "ANTÁRTICA Litrão", description: "Antártica 1 litro.", price: 16, image: "https://picsum.photos/seed/antartica/400/300" },
-  { id: "ce05", category: "cervejas", name: "BUDWEISER Litrão", description: "Budweiser 1 litro.", price: 20, image: "https://picsum.photos/seed/budweiser/400/300" },
-  { id: "ce06", category: "cervejas", name: "BRAHMA DUPLO MALTE Litrão", description: "Brahma Duplo Malte 1 litro.", price: 19, image: "https://picsum.photos/seed/brahmadupl/400/300" },
+  { id: "ce01", category: "cervejas", name: "BRAHMA CHOPP Litrão", description: "Brahma Chopp 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781893643/cervejasce01-brahma-chopp-litrao.png_zyeftc.png" },
+  { id: "ce02", category: "cervejas", name: "SKOL PILSEN Litrão", description: "Skol Pilsen 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895374/cervejasce02-skol-litrao.png_fgorhw.png" },
+  { id: "ce03", category: "cervejas", name: "AMSTEL Litrão", description: "Amstel 1 litro.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce03-amstel-litrao.png_c2hwjg.png" },
+  { id: "ce04", category: "cervejas", name: "ANTÁRTICA Litrão", description: "Antártica 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce04-antartica-litrao.png_fx1u1a.png" },
+  { id: "ce05", category: "cervejas", name: "BUDWEISER Litrão", description: "Budweiser 1 litro.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895370/cervejasce05-budweiser-litrao.png_vrlzf5.png" },
+  { id: "ce06", category: "cervejas", name: "BRAHMA DUPLO MALTE Litrão", description: "Brahma Duplo Malte 1 litro.", price: 19, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895369/cervejasce06-brahma-duplo-malte-litrao.png_y0iayi.png" },
   { id: "ce07", category: "cervejas", name: "ORIGINAL Litrão", description: "Original 1 litro.", price: 22, image: "https://picsum.photos/seed/original/400/300" },
   { id: "ce08", category: "cervejas", name: "PETRA Litrão", description: "Petra 1 litro.", price: 13, image: "https://picsum.photos/seed/petra/400/300" },
   { id: "ce09", category: "cervejas", name: "HEINEKEN 600ml", description: "Heineken garrafa verde 600ml.", price: 22, image: "https://picsum.photos/seed/heineken600/400/300", badge: "⭐ Destaque" },
