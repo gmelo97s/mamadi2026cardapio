@@ -22,6 +22,7 @@ export interface Category {
   to: string; // hex final
   glow: string; // cor do glow
   cardImage?: string;
+  coverImage?: string;
 }
 
 // ─────────────────────────────────────────────────────────
@@ -446,7 +447,7 @@ export const categories: Category[] = [
   { id: "prontos", label: "PRONTOS & SOFTS", emoji: "🥤", gradient: "from-green-400 to-blue-500", from: "#00E676", to: "#2979FF", glow: "#00E676" },
   { id: "combos", label: "COMBOS & COPÃO", emoji: "🎉", gradient: "from-blue-500 to-purple-600", from: "#2979FF", to: "#AA00FF", glow: "#2979FF" },
   { id: "porcoes", label: "PORÇÕES", emoji: "🍟", gradient: "from-purple-600 to-pink-500", from: "#AA00FF", to: "#FF4081", glow: "#AA00FF" },
-  { id: "lanches", label: "LANCHES & BURGERS", emoji: "🥪", gradient: "from-red-600 to-orange-500", from: "#FF3B3B", to: "#FF8C00", glow: "#FF3B3B" },
+  { id: "lanches", label: "LANCHES & BURGERS", emoji: "🥪", gradient: "from-red-600 to-orange-500", from: "#FF3B3B", to: "#FF8C00", glow: "#FF3B3B", cardImage: "/categories/cat-lanches-card.png", coverImage: "/categories/cat-lanches-card.png" },
   { id: "menu", label: "MENU DA MAMADI", emoji: "🍽️", gradient: "from-orange-400 to-green-500", from: "#FF8C00", to: "#00E676", glow: "#FF8C00" },
 ];
 

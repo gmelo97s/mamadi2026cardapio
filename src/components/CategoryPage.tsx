@@ -24,6 +24,7 @@ export default function CategoryPage({
   const bannerScale = useTransform(scrollY, [0, 400], [1, 1.15]);
   const emojiY = useTransform(scrollY, [0, 400], [0, -40]);
   const bannerOpacity = useTransform(scrollY, [0, 320], [1, 0.15]);
+  const bannerImage = category.coverImage ?? category.cardImage;
 
   return (
     <div className="min-h-screen bg-bg text-text">
@@ -50,12 +51,22 @@ export default function CategoryPage({
         className="relative flex h-[38vh] items-center justify-center overflow-hidden"
         style={{ perspective: 1000 }}
       >
-        <motion.div
-          aria-hidden
-          className={`absolute inset-0 bg-gradient-to-br ${category.gradient}`}
-          style={{ y: bannerY, scale: bannerScale, opacity: bannerOpacity }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-bg" />
+        {bannerImage ? (
+          <motion.img
+            src={bannerImage}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            style={{ y: bannerY, scale: bannerScale, opacity: bannerOpacity }}
+          />
+        ) : (
+          <motion.div
+            aria-hidden
+            className={`absolute inset-0 bg-gradient-to-br ${category.gradient}`}
+            style={{ y: bannerY, scale: bannerScale, opacity: bannerOpacity }}
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-bg" />
 
         <motion.div
           className="relative z-10 flex flex-col items-center text-center"
