@@ -1,4 +1,4 @@
-import { Compass, Flame, Home } from "lucide-react";
+import { Compass, Flame, Search } from "lucide-react";
 import { SiIfood } from "react-icons/si";
 import { business } from "../../data/menu";
 
@@ -6,9 +6,10 @@ export type CategoryNavTab = "swipe" | "explore";
 
 interface CategoryBottomNavProps {
   activeTab: CategoryNavTab;
+  searchActive: boolean;
   onSwipe: () => void;
   onExplore: () => void;
-  onHome: () => void;
+  onSearch: () => void;
 }
 
 function InstagramNavIcon() {
@@ -45,12 +46,13 @@ function InstagramNavIcon() {
 
 export default function CategoryBottomNav({
   activeTab,
+  searchActive,
   onSwipe,
   onExplore,
-  onHome,
+  onSearch,
 }: CategoryBottomNavProps) {
-  const swipeActive = activeTab === "swipe";
-  const exploreActive = activeTab === "explore";
+  const swipeActive = activeTab === "swipe" && !searchActive;
+  const exploreActive = activeTab === "explore" && !searchActive;
 
   return (
     <nav className="category-bottom-nav" aria-label="Navegação principal">
@@ -84,11 +86,15 @@ export default function CategoryBottomNav({
 
       <button
         type="button"
-        className="category-bottom-nav__item category-bottom-nav__item--muted"
-        onClick={onHome}
+        className={`category-bottom-nav__item${
+          searchActive ? " category-bottom-nav__item--active" : " category-bottom-nav__item--muted"
+        }`}
+        onClick={onSearch}
+        aria-expanded={searchActive}
+        aria-label="Pesquisar"
       >
-        <Home size={26} strokeWidth={2} fill="none" />
-        <span>Home</span>
+        <Search size={24} strokeWidth={2.25} />
+        <span>Pesquisar</span>
       </button>
 
       <a
