@@ -37,12 +37,12 @@ export default function IfoodHeaderLink({
       href={business.ifoodUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Deu fome? Pedir no iFood"
-      className={`group inline-flex items-center gap-2 transition-opacity hover:opacity-90 ${className}`}
+      aria-label="Bateu a fome? Pedir no iFood"
+      className={`group inline-flex items-center gap-1.5 transition-opacity hover:opacity-90 ${className}`}
     >
-      <span className="flex flex-col items-end gap-0.5">
-        <span className="font-ifood text-sm font-extrabold tracking-tight text-white sm:text-base">
-          Deu fome?
+      <span className="hidden min-[380px]:flex flex-col items-end gap-0.5">
+        <span className="font-ifood text-xs font-extrabold tracking-tight text-white sm:text-sm">
+          Bateu a fome?
         </span>
         <IfoodStraightArrow />
       </span>

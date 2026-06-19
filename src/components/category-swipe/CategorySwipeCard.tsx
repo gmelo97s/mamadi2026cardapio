@@ -1,8 +1,10 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import type { Category, MenuItem } from "../../data/menu";
 import { formatPrice } from "../../data/menu";
+import CardMicroHint from "./CardMicroHint";
 import ItemProgressBars from "./ItemProgressBars";
+import NavigationOnboardingOverlay from "./NavigationOnboardingOverlay";
 import VerifiedBadge from "./VerifiedBadge";
 
 const SWIPE_THRESHOLD = 96;
@@ -13,8 +15,8 @@ interface CategorySwipeCardProps {
   item: MenuItem | null;
   itemIndex: number;
   itemTotal: number;
-  categoryIndex: number;
   reducedMotion: boolean | null;
+  showOnboarding: boolean;
   onPrevItem: () => void;
   onNextItem: () => void;
   onPrevCategory: () => void;
@@ -34,8 +36,8 @@ export default function CategorySwipeCard({
   item,
   itemIndex,
   itemTotal,
-  categoryIndex,
   reducedMotion,
+  showOnboarding,
   onPrevItem,
   onNextItem,
   onPrevCategory,
@@ -44,8 +46,16 @@ export default function CategorySwipeCard({
   const dragX = useMotionValue(0);
   const rotate = useTransform(dragX, [-180, 0, 180], reducedMotion ? [0, 0, 0] : [-10, 0, 10]);
   const dragOffset = useRef(0);
+  const [tapFlash, setTapFlash] = useState<"left" | "right" | null>(null);
 
   const imageSrc = item?.image ?? category.cardImage ?? category.coverImage;
+  const price = item ? priceLabel(item) : null;
+
+  const flashSide = (side: "left" | "right") => {
+    if (reducedMotion) return;
+    setTapFlash(side);
+    window.setTimeout(() => setTapFlash(null), 300);
+  };
 
   const handleDragEnd = (_: unknown, info: { offset: { x: number }; velocity: { x: number } }) => {
     dragOffset.current = info.offset.x;
@@ -63,6 +73,7 @@ export default function CategorySwipeCard({
 
   const tryTapZone = (side: "left" | "right") => {
     if (Math.abs(dragOffset.current) > TAP_DRAG_MAX) return;
+    flashSide(side);
     if (side === "left") onPrevItem();
     else onNextItem();
   };
@@ -85,12 +96,11 @@ export default function CategorySwipeCard({
       <div className="category-swipe-card__inner">
         <div className="category-swipe-card__top">
           <ItemProgressBars total={itemTotal} active={itemIndex} />
+          {!showOnboarding && <CardMicroHint reducedMotion={reducedMotion} />}
           <div className="category-swipe-card__pills">
             <span className="category-swipe-card__pill">
-              {category.emoji} {itemTotal} itens
-            </span>
-            <span className="category-swipe-card__pill category-swipe-card__pill--index">
-              {String(categoryIndex + 1).padStart(2, "0")}
+              {category.label.toUpperCase()} - {itemTotal}{" "}
+              {itemTotal === 1 ? "opção" : "opções"}
             </span>
           </div>
         </div>
@@ -100,21 +110,30 @@ export default function CategorySwipeCard({
             <motion.div
               key={item ? item.id : `cat-${category.id}`}
               className="category-swipe-card__media-layer"
-              initial={reducedMotion ? false : { opacity: 0, scale: 1.04 }}
+              initial={reducedMotion ? false : { opacity: 0, scale: 1.03 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={reducedMotion ? undefined : { opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             >
               {imageSrc ? (
-                <img
-                  src={imageSrc}
-                  alt={item?.name ?? category.label}
-                  className="h-full w-full object-cover"
-                  draggable={false}
-                />
+                <>
+                  <img
+                    src={imageSrc}
+                    alt=""
+                    aria-hidden
+                    className="category-swipe-card__media-bg"
+                    draggable={false}
+                  />
+                  <img
+                    src={imageSrc}
+                    alt={item?.name ?? category.label}
+                    className="category-swipe-card__media-fg"
+                    draggable={false}
+                  />
+                </>
               ) : (
                 <div
-                  className={`h-full w-full bg-gradient-to-br ${category.gradient}`}
+                  className={`category-swipe-card__media-fallback h-full w-full bg-gradient-to-br ${category.gradient}`}
                   style={{ boxShadow: `inset 0 0 80px ${category.glow}44` }}
                 />
               )}
@@ -134,35 +153,55 @@ export default function CategorySwipeCard({
             aria-label="Próximo item"
             onClick={() => tryTapZone("right")}
           />
+
+          <AnimatePresence>
+            {tapFlash && (
+              <motion.div
+                key={tapFlash}
+                className={`tap-flash tap-flash--${tapFlash}`}
+                initial={{ opacity: 0, scale: 0.65 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.2 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                aria-hidden
+              >
+                <span className="tap-flash__ring" />
+                <span className="tap-flash__glyph">
+                  {tapFlash === "right" ? "›" : "‹"}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {showOnboarding && (
+              <NavigationOnboardingOverlay reducedMotion={reducedMotion} />
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="category-swipe-card__dock">
-          <div className="category-swipe-card__dock-head">
-            <p className="category-swipe-card__brand">
-              Mamadi Food
-              <VerifiedBadge />
-            </p>
-            <h2 className="category-swipe-card__category">{category.label}</h2>
-          </div>
+          <p className="category-swipe-card__brand">
+            <span className="category-swipe-card__brand-led mamadi-logo">MAMADI FOOD</span>
+            <VerifiedBadge />
+          </p>
+
+          <h2 className="category-swipe-card__category">{category.label}</h2>
 
           <AnimatePresence mode="wait">
             <motion.div
               key={item?.id ?? "empty"}
-              initial={reducedMotion ? false : { opacity: 0, y: 10 }}
+              className="category-swipe-card__item-block"
+              initial={reducedMotion ? false : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={reducedMotion ? undefined : { opacity: 0, y: -8 }}
+              exit={reducedMotion ? undefined : { opacity: 0, y: -6 }}
               transition={{ duration: 0.28 }}
             >
               {item ? (
                 <>
                   <h3 className="category-swipe-card__item">{item.name}</h3>
                   <p className="category-swipe-card__desc">{item.description}</p>
-                  {priceLabel(item) && (
-                    <p className="category-swipe-card__price">{priceLabel(item)}</p>
-                  )}
-                  {item.badge && (
-                    <span className="category-swipe-card__badge">{item.badge}</span>
-                  )}
+                  {price && <p className="category-swipe-card__price">{price}</p>}
                 </>
               ) : (
                 <p className="category-swipe-card__desc">Nenhum item nesta categoria.</p>

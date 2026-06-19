@@ -1,0 +1,721 @@
+{
+  "generatedAt": "2026-06-19T04:09:02.998Z",
+  "total": 122,
+  "files": [
+    {
+      "file": "hero/hero-neon.png",
+      "name": "Hero Mamadi",
+      "size": "1200x1600"
+    },
+    {
+      "file": "categories/cat-drinks-card.png",
+      "name": "DRINKS",
+      "size": "1200x1200"
+    },
+    {
+      "file": "categories/cat-drinks-capa.png",
+      "name": "DRINKS capa",
+      "size": "1920x1080"
+    },
+    {
+      "file": "categories/cat-destilados-card.png",
+      "name": "DESTILADOS",
+      "size": "1200x1200"
+    },
+    {
+      "file": "categories/cat-destilados-capa.png",
+      "name": "DESTILADOS capa",
+      "size": "1920x1080"
+    },
+    {
+      "file": "categories/cat-cervejas-card.png",
+      "name": "CERVEJAS",
+      "size": "1200x1200"
+    },
+    {
+      "file": "categories/cat-cervejas-capa.png",
+      "name": "CERVEJAS capa",
+      "size": "1920x1080"
+    },
+    {
+      "file": "categories/cat-prontos-card.png",
+      "name": "PRONTOS",
+      "size": "1200x1200"
+    },
+    {
+      "file": "categories/cat-prontos-capa.png",
+      "name": "PRONTOS capa",
+      "size": "1920x1080"
+    },
+    {
+      "file": "categories/cat-combos-card.png",
+      "name": "COMBOS",
+      "size": "1200x1200"
+    },
+    {
+      "file": "categories/cat-combos-capa.png",
+      "name": "COMBOS capa",
+      "size": "1920x1080"
+    },
+    {
+      "file": "categories/cat-porcoes-card.png",
+      "name": "PORÇÕES",
+      "size": "1200x1200"
+    },
+    {
+      "file": "categories/cat-porcoes-capa.png",
+      "name": "PORÇÕES capa",
+      "size": "1920x1080"
+    },
+    {
+      "file": "categories/cat-lanches-card.png",
+      "name": "LANCHES",
+      "size": "1200x1200"
+    },
+    {
+      "file": "categories/cat-lanches-capa.png",
+      "name": "LANCHES capa",
+      "size": "1920x1080"
+    },
+    {
+      "file": "categories/cat-menu-card.png",
+      "name": "MENU",
+      "size": "1200x1200"
+    },
+    {
+      "file": "categories/cat-menu-capa.png",
+      "name": "MENU capa",
+      "size": "1920x1080"
+    },
+    {
+      "file": "items/dr01-gin-tonica.png",
+      "name": "GIN TÔNICA",
+      "size": "1200x900",
+      "id": "dr01"
+    },
+    {
+      "file": "items/dr02-caipirinha-limao.png",
+      "name": "CAIPIRINHA LIMÃO copo 300ml",
+      "size": "1200x900",
+      "id": "dr02"
+    },
+    {
+      "file": "items/dr03-caipilula-copo-300ml.png",
+      "name": "CAIPILULA copo 300ml",
+      "size": "1200x900",
+      "id": "dr03"
+    },
+    {
+      "file": "items/dr04-caipiroska-limao.png",
+      "name": "CAIPIROSKA LIMÃO copo 300ml",
+      "size": "1200x900",
+      "id": "dr04"
+    },
+    {
+      "file": "items/dr05-caipirinha-sabores.png",
+      "name": "CAIPIRINHA SABORES copo 550ml",
+      "size": "1200x900",
+      "id": "dr05"
+    },
+    {
+      "file": "items/dr06-chevette.png",
+      "name": "CHEVETTE",
+      "size": "1200x900",
+      "id": "dr06"
+    },
+    {
+      "file": "items/dr07-gin-sabores.png",
+      "name": "GIN SABORES",
+      "size": "1200x900",
+      "id": "dr07"
+    },
+    {
+      "file": "items/dr08-batidao-tropical.png",
+      "name": "BATIDÃO TROPICAL",
+      "size": "1200x900",
+      "id": "dr08"
+    },
+    {
+      "file": "items/dr09-mojito.png",
+      "name": "MOJITO",
+      "size": "1200x900",
+      "id": "dr09"
+    },
+    {
+      "file": "items/dr10-cuba-libre.png",
+      "name": "CUBA LIBRE",
+      "size": "1200x900",
+      "id": "dr10"
+    },
+    {
+      "file": "items/dr11-caipirinha-mamadi.png",
+      "name": "CAIPIRINHA DA MAMADI",
+      "size": "1200x900",
+      "id": "dr11"
+    },
+    {
+      "file": "items/de01-jambu.png",
+      "name": "JAMBU",
+      "size": "1200x900",
+      "id": "de01"
+    },
+    {
+      "file": "items/de02-cachaca-51-velho-barreiro.png",
+      "name": "51 / VELHO BARREIRO",
+      "size": "1200x900",
+      "id": "de02"
+    },
+    {
+      "file": "items/de03-gengibre-com-mel.png",
+      "name": "GENGIBRE COM MEL",
+      "size": "1200x900",
+      "id": "de03"
+    },
+    {
+      "file": "items/de04-bananinha-canelinha.png",
+      "name": "BANANINHA / CANELINHA",
+      "size": "1200x900",
+      "id": "de04"
+    },
+    {
+      "file": "items/de05-kariri-mel-limao.png",
+      "name": "KARIRI MEL E LIMÃO",
+      "size": "1200x900",
+      "id": "de05"
+    },
+    {
+      "file": "items/de06-dreher.png",
+      "name": "DREHER",
+      "size": "1200x900",
+      "id": "de06"
+    },
+    {
+      "file": "items/de07-dreher-mel-limao.png",
+      "name": "DREHER MEL E LIMÃO",
+      "size": "1200x900",
+      "id": "de07"
+    },
+    {
+      "file": "items/de08-tequila-ouro-jose-cuervo.png",
+      "name": "TEQUILA OURO José Cuervo",
+      "size": "1200x900",
+      "id": "de08"
+    },
+    {
+      "file": "items/de09-tequila-prata-jose-cuervo.png",
+      "name": "TEQUILA PRATA José Cuervo",
+      "size": "1200x900",
+      "id": "de09"
+    },
+    {
+      "file": "items/de10-campari-aperol.png",
+      "name": "CAMPARI / APEROL",
+      "size": "1200x900",
+      "id": "de10"
+    },
+    {
+      "file": "items/de11-tanqueray-dose.png",
+      "name": "TANQUERAY (DOSE)",
+      "size": "1200x900",
+      "id": "de11"
+    },
+    {
+      "file": "items/de12-master-gold-chanceler.png",
+      "name": "MASTER GOLD / CHANCELER",
+      "size": "1200x900",
+      "id": "de12"
+    },
+    {
+      "file": "items/de13-cavalo-branco-passport.png",
+      "name": "CAVALO BRANCO / PASSPORT",
+      "size": "1200x900",
+      "id": "de13"
+    },
+    {
+      "file": "items/de14-red-label.png",
+      "name": "RED LABEL",
+      "size": "1200x900",
+      "id": "de14"
+    },
+    {
+      "file": "items/de15-jack-daniel-s.png",
+      "name": "JACK DANIEL'S",
+      "size": "1200x900",
+      "id": "de15"
+    },
+    {
+      "file": "items/de16-balalaika.png",
+      "name": "BALALAIKA",
+      "size": "1200x900",
+      "id": "de16"
+    },
+    {
+      "file": "items/de17-absolut.png",
+      "name": "ABSOLUT",
+      "size": "1200x900",
+      "id": "de17"
+    },
+    {
+      "file": "items/de18-smirnoff.png",
+      "name": "SMIRNOFF",
+      "size": "1200x900",
+      "id": "de18"
+    },
+    {
+      "file": "items/de19-vinho-tinto.png",
+      "name": "VINHO TINTO",
+      "size": "1200x900",
+      "id": "de19"
+    },
+    {
+      "file": "items/de20-vinho-rose.png",
+      "name": "VINHO ROSÉ",
+      "size": "1200x900",
+      "id": "de20"
+    },
+    {
+      "file": "items/ce01-brahma-chopp-litrao.png",
+      "name": "BRAHMA CHOPP Litrão",
+      "size": "1200x900",
+      "id": "ce01"
+    },
+    {
+      "file": "items/ce02-skol-pilsen-litrao.png",
+      "name": "SKOL PILSEN Litrão",
+      "size": "1200x900",
+      "id": "ce02"
+    },
+    {
+      "file": "items/ce03-amstel-litrao.png",
+      "name": "AMSTEL Litrão",
+      "size": "1200x900",
+      "id": "ce03"
+    },
+    {
+      "file": "items/ce04-antartica-litrao.png",
+      "name": "ANTÁRTICA Litrão",
+      "size": "1200x900",
+      "id": "ce04"
+    },
+    {
+      "file": "items/ce05-budweiser-litrao.png",
+      "name": "BUDWEISER Litrão",
+      "size": "1200x900",
+      "id": "ce05"
+    },
+    {
+      "file": "items/ce06-brahma-duplo-malte-litrao.png",
+      "name": "BRAHMA DUPLO MALTE Litrão",
+      "size": "1200x900",
+      "id": "ce06"
+    },
+    {
+      "file": "items/ce07-original-litrao.png",
+      "name": "ORIGINAL Litrão",
+      "size": "1200x900",
+      "id": "ce07"
+    },
+    {
+      "file": "items/ce08-petra-litrao.png",
+      "name": "PETRA Litrão",
+      "size": "1200x900",
+      "id": "ce08"
+    },
+    {
+      "file": "items/ce09-heineken-600ml.png",
+      "name": "HEINEKEN 600ml",
+      "size": "1200x900",
+      "id": "ce09"
+    },
+    {
+      "file": "items/ce10-stella-600ml.png",
+      "name": "STELLA 600ml",
+      "size": "1200x900",
+      "id": "ce10"
+    },
+    {
+      "file": "items/ce11-beck-s-600ml.png",
+      "name": "BECK'S 600ml",
+      "size": "1200x900",
+      "id": "ce11"
+    },
+    {
+      "file": "items/ce12-spaten-600ml.png",
+      "name": "SPATEN 600ml",
+      "size": "1200x900",
+      "id": "ce12"
+    },
+    {
+      "file": "items/ce13-amstel-600ml.png",
+      "name": "AMSTEL 600ml",
+      "size": "1200x900",
+      "id": "ce13"
+    },
+    {
+      "file": "items/ce14-eisenbahn-600ml.png",
+      "name": "EISENBAHN 600ml",
+      "size": "1200x900",
+      "id": "ce14"
+    },
+    {
+      "file": "items/ce15-original-600ml.png",
+      "name": "ORIGINAL 600ml",
+      "size": "1200x900",
+      "id": "ce15"
+    },
+    {
+      "file": "items/ce16-heineken-330ml.png",
+      "name": "HEINEKEN 330ml",
+      "size": "1200x900",
+      "id": "ce16"
+    },
+    {
+      "file": "items/ce17-budweiser-330ml.png",
+      "name": "BUDWEISER 330ml",
+      "size": "1200x900",
+      "id": "ce17"
+    },
+    {
+      "file": "items/ce18-stella-330ml.png",
+      "name": "STELLA 330ml",
+      "size": "1200x900",
+      "id": "ce18"
+    },
+    {
+      "file": "items/ce19-corona-330ml.png",
+      "name": "CORONA 330ml",
+      "size": "1200x900",
+      "id": "ce19"
+    },
+    {
+      "file": "items/ce20-heineken-zero-330ml.png",
+      "name": "HEINEKEN ZERO 330ml",
+      "size": "1200x900",
+      "id": "ce20"
+    },
+    {
+      "file": "items/ce21-budweiser-zero-330ml.png",
+      "name": "BUDWEISER ZERO 330ml",
+      "size": "1200x900",
+      "id": "ce21"
+    },
+    {
+      "file": "items/pr01-skol-beats.png",
+      "name": "SKOL BEATS",
+      "size": "1200x900",
+      "id": "pr01"
+    },
+    {
+      "file": "items/pr02-51-ice.png",
+      "name": "51 ICE",
+      "size": "1200x900",
+      "id": "pr02"
+    },
+    {
+      "file": "items/pr03-xeque-mate.png",
+      "name": "XEQUE MATE",
+      "size": "1200x900",
+      "id": "pr03"
+    },
+    {
+      "file": "items/pr04-draft.png",
+      "name": "DRAFT",
+      "size": "1200x900",
+      "id": "pr04"
+    },
+    {
+      "file": "items/pr05-vibes.png",
+      "name": "VIBES",
+      "size": "1200x900",
+      "id": "pr05"
+    },
+    {
+      "file": "items/pr06-cerveja-lata-350ml.png",
+      "name": "CERVEJA LATA 350ml",
+      "size": "1200x900",
+      "id": "pr06"
+    },
+    {
+      "file": "items/pr07-smirnoff-ice.png",
+      "name": "SMIRNOFF ICE",
+      "size": "1200x900",
+      "id": "pr07"
+    },
+    {
+      "file": "items/pr08-red-bull-lata-250ml.png",
+      "name": "RED BULL lata 250ml",
+      "size": "1200x900",
+      "id": "pr08"
+    },
+    {
+      "file": "items/pr09-monster-latao.png",
+      "name": "MONSTER LATÃO",
+      "size": "1200x900",
+      "id": "pr09"
+    },
+    {
+      "file": "items/pr10-copo-energetico-300ml.png",
+      "name": "COPO ENERGÉTICO 300ml",
+      "size": "1200x900",
+      "id": "pr10"
+    },
+    {
+      "file": "items/pr11-soda-italiana.png",
+      "name": "SODA ITALIANA",
+      "size": "1200x900",
+      "id": "pr11"
+    },
+    {
+      "file": "items/pr12-refrigerante.png",
+      "name": "REFRIGERANTE",
+      "size": "1200x900",
+      "id": "pr12"
+    },
+    {
+      "file": "items/pr13-suco-lata.png",
+      "name": "SUCO LATA",
+      "size": "1200x900",
+      "id": "pr13"
+    },
+    {
+      "file": "items/pr14-agua-ou-agua-com-gas.png",
+      "name": "ÁGUA ou ÁGUA COM GÁS",
+      "size": "1200x900",
+      "id": "pr14"
+    },
+    {
+      "file": "items/pr15-agua-tonica.png",
+      "name": "ÁGUA TÔNICA",
+      "size": "1200x900",
+      "id": "pr15"
+    },
+    {
+      "file": "items/pr16-gelo-sabores.png",
+      "name": "GELO SABORES",
+      "size": "1200x900",
+      "id": "pr16"
+    },
+    {
+      "file": "items/co01-3-caipirinha-limao.png",
+      "name": "3 CAIPIRINHA LIMÃO",
+      "size": "1200x900",
+      "id": "co01"
+    },
+    {
+      "file": "items/co02-2-copao-de-gin.png",
+      "name": "2 COPÃO DE GIN",
+      "size": "1200x900",
+      "id": "co02"
+    },
+    {
+      "file": "items/co03-2-chevette.png",
+      "name": "2 CHEVETTE",
+      "size": "1200x900",
+      "id": "co03"
+    },
+    {
+      "file": "items/co04-copao-da-sorrah.png",
+      "name": "COPÃO DA SORRAH",
+      "size": "1200x900",
+      "id": "co04"
+    },
+    {
+      "file": "items/co05-copao-vodka-c-energetico.png",
+      "name": "COPÃO VODKA C/ ENERGÉTICO",
+      "size": "1200x900",
+      "id": "co05"
+    },
+    {
+      "file": "items/co06-3-eisenbahn-600ml.png",
+      "name": "3 EISENBAHN 600ml",
+      "size": "1200x900",
+      "id": "co06"
+    },
+    {
+      "file": "items/co07-3-original-600ml.png",
+      "name": "3 ORIGINAL 600ml",
+      "size": "1200x900",
+      "id": "co07"
+    },
+    {
+      "file": "items/co08-3-heineken-600ml.png",
+      "name": "3 HEINEKEN 600ml",
+      "size": "1200x900",
+      "id": "co08"
+    },
+    {
+      "file": "items/co09-3-litrao-brahma-chopp.png",
+      "name": "3 LITRÃO BRAHMA Chopp",
+      "size": "1200x900",
+      "id": "co09"
+    },
+    {
+      "file": "items/co10-3-litrao-skol.png",
+      "name": "3 LITRÃO SKOL",
+      "size": "1200x900",
+      "id": "co10"
+    },
+    {
+      "file": "items/co11-3-litrao-original.png",
+      "name": "3 LITRÃO ORIGINAL",
+      "size": "1200x900",
+      "id": "co11"
+    },
+    {
+      "file": "items/po01-mini-pasteis.png",
+      "name": "MINI PASTÉIS",
+      "size": "1200x900",
+      "id": "po01"
+    },
+    {
+      "file": "items/po02-batata-frita-simples.png",
+      "name": "BATATA FRITA SIMPLES",
+      "size": "1200x900",
+      "id": "po02"
+    },
+    {
+      "file": "items/po03-batata-frita-c-cheddar-e-bacon.png",
+      "name": "BATATA FRITA C/ CHEDDAR E BACON",
+      "size": "1200x900",
+      "id": "po03"
+    },
+    {
+      "file": "items/po04-batata-mamadi.png",
+      "name": "BATATA MAMADI",
+      "size": "1200x900",
+      "id": "po04"
+    },
+    {
+      "file": "items/po05-calabresa-acebolada.png",
+      "name": "CALABRESA ACEBOLADA",
+      "size": "1200x900",
+      "id": "po05"
+    },
+    {
+      "file": "items/po06-mandioca-frita.png",
+      "name": "MANDIOCA FRITA",
+      "size": "1200x900",
+      "id": "po06"
+    },
+    {
+      "file": "items/po07-coxinha-frango.png",
+      "name": "COXINHA FRANGO",
+      "size": "1200x900",
+      "id": "po07"
+    },
+    {
+      "file": "items/po08-coxinha-vegana.png",
+      "name": "COXINHA VEGANA",
+      "size": "1200x900",
+      "id": "po08"
+    },
+    {
+      "file": "items/po09-espetinho.png",
+      "name": "ESPETINHO",
+      "size": "1200x900",
+      "id": "po09"
+    },
+    {
+      "file": "items/po10-couvert-da-mamadi.png",
+      "name": "COUVERT DA MAMADI",
+      "size": "1200x900",
+      "id": "po10"
+    },
+    {
+      "file": "items/ta01-tabua-de-espetinhos.png",
+      "name": "TÁBUA DE ESPETINHOS",
+      "size": "1200x900",
+      "id": "ta01"
+    },
+    {
+      "file": "items/ta02-tabua-mista.png",
+      "name": "TÁBUA MISTA",
+      "size": "1200x900",
+      "id": "ta02"
+    },
+    {
+      "file": "items/ta03-tabua-dupla-1.png",
+      "name": "TÁBUA DUPLA 1",
+      "size": "1200x900",
+      "id": "ta03"
+    },
+    {
+      "file": "items/ta04-tabua-dupla-2.png",
+      "name": "TÁBUA DUPLA 2",
+      "size": "1200x900",
+      "id": "ta04"
+    },
+    {
+      "file": "items/la01-lanche-de-calabresa.png",
+      "name": "LANCHE DE CALABRESA",
+      "size": "1200x900",
+      "id": "la01"
+    },
+    {
+      "file": "items/la02-lanche-de-carne-louca.png",
+      "name": "LANCHE DE CARNE LOUCA",
+      "size": "1200x900",
+      "id": "la02"
+    },
+    {
+      "file": "items/la03-lanche-de-pernil.png",
+      "name": "LANCHE DE PERNIL",
+      "size": "1200x900",
+      "id": "la03"
+    },
+    {
+      "file": "items/la04-lanche-vegano.png",
+      "name": "LANCHE VEGANO",
+      "size": "1200x900",
+      "id": "la04"
+    },
+    {
+      "file": "items/bu01-mamadi-original.png",
+      "name": "MAMADI ORIGINAL",
+      "size": "1200x900",
+      "id": "bu01"
+    },
+    {
+      "file": "items/bu02-mamadi-bacon.png",
+      "name": "MAMADI BACON",
+      "size": "1200x900",
+      "id": "bu02"
+    },
+    {
+      "file": "items/bu03-mamadi-classico.png",
+      "name": "MAMADI CLÁSSICO",
+      "size": "1200x900",
+      "id": "bu03"
+    },
+    {
+      "file": "items/me01-cafe-da-mamadi.png",
+      "name": "CAFÉ DA MAMADI",
+      "size": "1200x900",
+      "id": "me01"
+    },
+    {
+      "file": "items/me02-churrasco-da-mamadi.png",
+      "name": "CHURRASCO DA MAMADI",
+      "size": "1200x900",
+      "id": "me02"
+    },
+    {
+      "file": "items/me03-prato-executivo-espetinhos.png",
+      "name": "PRATO EXECUTIVO c/ 2 Espetinhos",
+      "size": "1200x900",
+      "id": "me03"
+    },
+    {
+      "file": "items/me04-baiao-de-dois.png",
+      "name": "BAIÃO DE DOIS — Prato de Domingo",
+      "size": "1200x900",
+      "id": "me04"
+    },
+    {
+      "file": "items/me05-berinjela-refogada-vegano.png",
+      "name": "BERINJELA REFOGADA (Vegano)",
+      "size": "1200x900",
+      "id": "me05"
+    }
+  ]
+}

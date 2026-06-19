@@ -2,9 +2,6 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Hero from "./components/Hero";
 import CategoriesScreen from "./components/CategoriesScreen";
-import ProductModal from "./components/ProductModal";
-import FloatingButtons from "./components/FloatingButtons";
-import type { MenuItem } from "./data/menu";
 
 const easeSmooth = [0.22, 1, 0.36, 1] as const;
 
@@ -59,7 +56,6 @@ type Screen = "hero" | "categories";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("hero");
-  const [selected, setSelected] = useState<MenuItem | null>(null);
   const [direction, setDirection] = useState(1);
 
   const jumpTop = () => window.scrollTo({ top: 0, behavior: "auto" });
@@ -109,17 +105,11 @@ export default function App() {
               transition={{ duration: 0.7, ease: easeSmooth }}
               style={{ transformOrigin: "center", transformStyle: "preserve-3d" }}
             >
-              <CategoriesScreen
-                onBack={backToHero}
-                onSelectItem={setSelected}
-              />
+              <CategoriesScreen onBack={backToHero} />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-
-      <FloatingButtons visible={screen !== "hero" && selected === null} />
-      <ProductModal item={selected} onClose={() => setSelected(null)} />
     </div>
   );
 }

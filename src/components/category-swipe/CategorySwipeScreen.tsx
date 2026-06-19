@@ -1,36 +1,44 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
+import { Home } from "lucide-react";
 import type { MenuItem } from "../../data/menu";
 import { allMenuItems, categories, itemsByCategory } from "../../data/menu";
+import { searchMenuItems } from "../../lib/menuSearch";
 import SearchBar from "../SearchBar";
 import ProductCard from "../ProductCard";
-import MamadiLogo from "../MamadiLogo";
-import IfoodHeaderLink from "../IfoodIcon";
 import CategorySwipeCard from "./CategorySwipeCard";
 import CategoryControls from "./CategoryControls";
+import CategoryFooterLinks from "./CategoryFooterLinks";
+import { ONBOARDING_KEY } from "./NavigationOnboardingOverlay";
 
 interface CategorySwipeScreenProps {
   onBack: () => void;
-  onSelectItem: (item: MenuItem) => void;
 }
 
-export default function CategorySwipeScreen({
-  onBack,
-  onSelectItem,
-}: CategorySwipeScreenProps) {
+export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps) {
   const reducedMotion = useReducedMotion();
   const [search, setSearch] = useState("");
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [itemIndexByCategory, setItemIndexByCategory] = useState<Record<string, number>>({});
-  const [showHint, setShowHint] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(
+    () => typeof window !== "undefined" && !localStorage.getItem(ONBOARDING_KEY)
+  );
 
-  const term = search.trim().toLowerCase();
+  const searchResult = useMemo(
+    () => searchMenuItems(search, allMenuItems, categories),
+    [search]
+  );
+
+  const dismissOnboarding = useCallback(() => {
+    setShowOnboarding(false);
+    localStorage.setItem(ONBOARDING_KEY, "1");
+  }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setShowHint(false), 7000);
+    if (!showOnboarding) return;
+    const timer = window.setTimeout(dismissOnboarding, 2800);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [showOnboarding, dismissOnboarding]);
 
   const category = categories[categoryIndex];
   const items = itemsByCategory[category.id] ?? [];
@@ -62,7 +70,7 @@ export default function CategorySwipeScreen({
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (term) return;
+      if (searchResult.kind !== "idle") return;
       const shift = e.shiftKey;
       if (e.key === "ArrowRight") {
         e.preventDefault();
@@ -77,20 +85,24 @@ export default function CategorySwipeScreen({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [term, nextCategory, prevCategory, nextItem, prevItem]);
+  }, [searchResult.kind, nextCategory, prevCategory, nextItem, prevItem]);
 
-  const results = useMemo(() => {
-    if (!term) return null;
-    return allMenuItems.filter((item) => {
-      const catLabel =
-        categories.find((c) => c.id === item.category)?.label.toLowerCase() ?? "";
-      return (
-        item.name.toLowerCase().includes(term) ||
-        item.description.toLowerCase().includes(term) ||
-        catLabel.includes(term)
-      );
-    });
-  }, [term]);
+  const selectItemFromSearch = useCallback((item: MenuItem) => {
+    const catIdx = categories.findIndex((c) => c.id === item.category);
+    if (catIdx < 0) return;
+
+    const categoryItems = itemsByCategory[item.category] ?? [];
+    const itemIdx = categoryItems.findIndex((i) => i.id === item.id);
+
+    setCategoryIndex(catIdx);
+    if (itemIdx >= 0) {
+      setItemIndexByCategory((prev) => ({ ...prev, [item.category]: itemIdx }));
+    }
+    setSearch("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const isSearching = searchResult.kind !== "idle";
 
   return (
     <div className="category-swipe-screen">
@@ -99,49 +111,68 @@ export default function CategorySwipeScreen({
           type="button"
           onClick={onBack}
           className="category-swipe-screen__back"
+          aria-label="Início"
         >
-          <ArrowLeft className="h-4 w-4" />
-          Início
+          <Home className="h-4 w-4" strokeWidth={2.25} />
         </button>
-        <MamadiLogo variant="header" />
-        <IfoodHeaderLink size={22} />
+
+        <div className="category-swipe-screen__search-header">
+          <SearchBar variant="header" value={search} onChange={setSearch} />
+        </div>
+
+        <span className="category-swipe-screen__header-spacer" aria-hidden />
       </header>
 
-      <main className="category-swipe-screen__main">
-        <div className="category-swipe-screen__intro">
-          <h1 className="category-swipe-screen__title">Escolha sua vibe</h1>
-          <p className="category-swipe-screen__subtitle">
-            Toque para ver os itens ou deslize para trocar de categoria
-          </p>
-        </div>
-
-        <div className="category-swipe-screen__search">
-          <SearchBar value={search} onChange={setSearch} />
-        </div>
-
-        {results ? (
+      <main
+        className={`category-swipe-screen__main${isSearching ? " category-swipe-screen__main--search" : ""}`}
+      >
+        {searchResult.kind === "matches" && (
           <section className="category-swipe-screen__results">
             <h2 className="mb-4 font-display text-lg font-bold">
-              Resultados ({results.length})
+              Resultados ({searchResult.items.length})
             </h2>
-            {results.length > 0 ? (
-              <div className="grid grid-cols-2 gap-3">
-                {results.map((item) => (
-                  <ProductCard
-                    key={item.id}
-                    item={item}
-                    onClick={() => onSelectItem(item)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <p className="py-12 text-center text-white/45">
-                Nenhum item para &ldquo;{search}&rdquo;.
-              </p>
-            )}
+            <div className="grid grid-cols-2 gap-3">
+              {searchResult.items.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  item={item}
+                  onClick={() => selectItemFromSearch(item)}
+                />
+              ))}
+            </div>
           </section>
-        ) : (
-          <>
+        )}
+
+        {searchResult.kind === "suggestions" && (
+          <section className="category-swipe-screen__results">
+            <p className="mb-2 text-center text-sm text-white/55">
+              Nenhum item com esse nome exato.
+            </p>
+            <h2 className="mb-4 text-center font-display text-lg font-bold">
+              Você quis dizer...?
+            </h2>
+            <div className="grid grid-cols-2 gap-3">
+              {searchResult.items.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  item={item}
+                  onClick={() => selectItemFromSearch(item)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {searchResult.kind === "empty" && (
+          <section className="category-swipe-screen__results">
+            <p className="py-12 text-center text-white/45">
+              Nenhum item para &ldquo;{searchResult.query}&rdquo;.
+            </p>
+          </section>
+        )}
+
+        {searchResult.kind === "idle" && (
+          <div className="category-swipe-screen__deck">
             <div className="category-swipe-screen__card-wrap">
               <CategorySwipeCard
                 key={category.id}
@@ -149,8 +180,8 @@ export default function CategorySwipeScreen({
                 item={currentItem}
                 itemIndex={itemIndex}
                 itemTotal={items.length}
-                categoryIndex={categoryIndex}
                 reducedMotion={reducedMotion}
+                showOnboarding={showOnboarding}
                 onPrevItem={prevItem}
                 onNextItem={nextItem}
                 onPrevCategory={prevCategory}
@@ -161,10 +192,8 @@ export default function CategorySwipeScreen({
             <CategoryControls
               onPrevCategory={prevCategory}
               onNextCategory={nextCategory}
-              onItemDetails={() => currentItem && onSelectItem(currentItem)}
               canPrev={categoryIndex > 0}
               canNext={categoryIndex < categories.length - 1}
-              hasItem={Boolean(currentItem)}
             />
 
             <div className="category-swipe-screen__cat-dots" aria-hidden>
@@ -179,14 +208,8 @@ export default function CategorySwipeScreen({
               ))}
             </div>
 
-            <motion.p
-              className="category-swipe-screen__hint"
-              animate={{ opacity: showHint ? 1 : 0.35, scale: showHint ? 1 : 0.98 }}
-              transition={{ duration: 0.5 }}
-            >
-              Toque nas laterais para ver os itens · deslize para trocar a categoria
-            </motion.p>
-          </>
+            <CategoryFooterLinks />
+          </div>
         )}
       </main>
     </div>

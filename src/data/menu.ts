@@ -486,7 +486,8 @@ export function formatPrice(value: number): string {
   return `R$ ${value.toFixed(2).replace(".", ",")}`;
 }
 
-export function buildWhatsappOrderUrl(productName: string): string {
-  const text = `Olá! Gostaria de pedir: ${productName} 😊`;
+export function buildWhatsappOrderUrl(productName: string, price?: string): string {
+  const pricePart = price ? ` - ${price}` : "";
+  const text = `Olá, quero pedir: ${productName}${pricePart}`;
   return `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(text)}`;
 }

@@ -6,12 +6,6 @@ interface ProductCardProps {
   onClick?: () => void;
 }
 
-function badgeColor(badge: string): string {
-  if (badge.includes("Vegano")) return "#00E676";
-  if (badge.includes("Mamadi")) return "#AA00FF";
-  return "#FFD700";
-}
-
 export default function ProductCard({ item, onClick }: ProductCardProps) {
   const hasDouble = item.priceA != null && item.priceB != null;
 
@@ -27,14 +21,6 @@ export default function ProductCard({ item, onClick }: ProductCardProps) {
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {item.badge && (
-          <span
-            className="absolute left-2 top-2 rounded-full px-2 py-0.5 text-[11px] font-bold text-black shadow"
-            style={{ backgroundColor: badgeColor(item.badge) }}
-          >
-            {item.badge}
-          </span>
-        )}
       </div>
 
       <div className="flex flex-1 flex-col p-4">
