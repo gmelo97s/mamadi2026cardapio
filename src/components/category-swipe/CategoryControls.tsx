@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ChevronLeft,
@@ -33,6 +33,7 @@ interface CategoryControlsProps {
   onNextCategory: () => void;
   canPrev: boolean;
   canNext: boolean;
+  microHint?: ReactNode;
 }
 
 export default function CategoryControls({
@@ -40,13 +41,14 @@ export default function CategoryControls({
   onNextCategory,
   canPrev,
   canNext,
+  microHint,
 }: CategoryControlsProps) {
   const reducedMotion = useReducedMotion();
   const [showHelp, setShowHelp] = useState(false);
 
   return (
     <div className="category-controls-wrap">
-      <p className="category-controls__label">Categorias</p>
+      {microHint}
 
       <div className="category-controls">
         <motion.button

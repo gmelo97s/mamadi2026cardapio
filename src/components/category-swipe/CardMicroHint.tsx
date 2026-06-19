@@ -20,11 +20,14 @@ export default function CardMicroHint({ reducedMotion }: CardMicroHintProps) {
       animate={{ opacity: dimmed ? 0.78 : 1, y: 0 }}
       transition={{ duration: reducedMotion ? 0 : 0.5, ease: "easeOut" }}
       role="note"
-      aria-label="Toque nas laterais ou deslize para trocar a categoria."
+      aria-label="Toque nas laterais para próximo item. Deslize para trocar a categoria."
     >
       <p className="card-micro-hint">
-        <span className="card-micro-hint__text">
-          Toque nas laterais • Deslize para trocar a categoria
+        <span className="card-micro-hint__line">
+          Toque nas laterais para próximo item
+        </span>
+        <span className="card-micro-hint__line">
+          Deslize para trocar a categoria
         </span>
       </p>
     </motion.div>

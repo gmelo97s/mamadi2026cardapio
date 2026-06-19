@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { AnimatePresence, useReducedMotion } from "framer-motion";
 import { Home } from "lucide-react";
 import type { MenuItem } from "../../data/menu";
 import { allMenuItems, categories, itemsByCategory } from "../../data/menu";
@@ -9,7 +9,11 @@ import ProductCard from "../ProductCard";
 import CategorySwipeCard from "./CategorySwipeCard";
 import CategoryControls from "./CategoryControls";
 import CategoryFooterLinks from "./CategoryFooterLinks";
-import { ONBOARDING_KEY } from "./NavigationOnboardingOverlay";
+import CardMicroHint from "./CardMicroHint";
+import NavigationOnboardingOverlay, {
+  hasSeenCategoryOnboarding,
+  ONBOARDING_KEY,
+} from "./NavigationOnboardingOverlay";
 
 interface CategorySwipeScreenProps {
   onBack: () => void;
@@ -20,9 +24,7 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   const [search, setSearch] = useState("");
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [itemIndexByCategory, setItemIndexByCategory] = useState<Record<string, number>>({});
-  const [showOnboarding, setShowOnboarding] = useState(
-    () => typeof window !== "undefined" && !localStorage.getItem(ONBOARDING_KEY)
-  );
+  const [showOnboarding, setShowOnboarding] = useState(() => !hasSeenCategoryOnboarding());
 
   const searchResult = useMemo(
     () => searchMenuItems(search, allMenuItems, categories),
@@ -30,14 +32,15 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   );
 
   const dismissOnboarding = useCallback(() => {
-    setShowOnboarding(false);
-    localStorage.setItem(ONBOARDING_KEY, "1");
+    setShowOnboarding((current) => {
+      if (!current) return current;
+      localStorage.setItem(ONBOARDING_KEY, "1");
+      return false;
+    });
   }, []);
 
-  useEffect(() => {
-    if (!showOnboarding) return;
-    const timer = window.setTimeout(dismissOnboarding, 2800);
-    return () => window.clearTimeout(timer);
+  const handleOnboardingInteraction = useCallback(() => {
+    if (showOnboarding) dismissOnboarding();
   }, [showOnboarding, dismissOnboarding]);
 
   const category = categories[categoryIndex];
@@ -71,6 +74,7 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (searchResult.kind !== "idle") return;
+      if (showOnboarding) dismissOnboarding();
       const shift = e.shiftKey;
       if (e.key === "ArrowRight") {
         e.preventDefault();
@@ -85,7 +89,7 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [searchResult.kind, nextCategory, prevCategory, nextItem, prevItem]);
+  }, [searchResult.kind, showOnboarding, dismissOnboarding, nextCategory, prevCategory, nextItem, prevItem]);
 
   const selectItemFromSearch = useCallback((item: MenuItem) => {
     const catIdx = categories.findIndex((c) => c.id === item.category);
@@ -104,24 +108,32 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
 
   const isSearching = searchResult.kind !== "idle";
 
+  const onboardingActive = showOnboarding && searchResult.kind === "idle";
+
   return (
-    <div className="category-swipe-screen">
+    <div
+      className="category-swipe-screen"
+      onPointerDownCapture={onboardingActive ? handleOnboardingInteraction : undefined}
+    >
       <header className="category-swipe-screen__header">
-        <button
-          type="button"
-          onClick={onBack}
-          className="category-swipe-screen__back"
-          aria-label="Início"
-        >
-          <Home className="h-4 w-4" strokeWidth={2.25} />
-        </button>
-
         <div className="category-swipe-screen__search-header">
-          <SearchBar variant="header" value={search} onChange={setSearch} />
+          <SearchBar
+            variant="header"
+            value={search}
+            onChange={setSearch}
+            placeholder="Buscar..."
+          />
         </div>
-
-        <span className="category-swipe-screen__header-spacer" aria-hidden />
       </header>
+
+      <AnimatePresence>
+        {onboardingActive && (
+          <NavigationOnboardingOverlay
+            reducedMotion={reducedMotion}
+            onDismiss={dismissOnboarding}
+          />
+        )}
+      </AnimatePresence>
 
       <main
         className={`category-swipe-screen__main${isSearching ? " category-swipe-screen__main--search" : ""}`}
@@ -181,7 +193,6 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
                 itemIndex={itemIndex}
                 itemTotal={items.length}
                 reducedMotion={reducedMotion}
-                showOnboarding={showOnboarding}
                 onPrevItem={prevItem}
                 onNextItem={nextItem}
                 onPrevCategory={prevCategory}
@@ -194,6 +205,11 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
               onNextCategory={nextCategory}
               canPrev={categoryIndex > 0}
               canNext={categoryIndex < categories.length - 1}
+              microHint={
+                !showOnboarding ? (
+                  <CardMicroHint reducedMotion={reducedMotion} />
+                ) : null
+              }
             />
 
             <div className="category-swipe-screen__cat-dots" aria-hidden>
@@ -212,6 +228,15 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
           </div>
         )}
       </main>
+
+      <button
+        type="button"
+        onClick={onBack}
+        className="category-swipe-screen__back category-swipe-screen__back--floating"
+        aria-label="Início"
+      >
+        <Home className="h-4 w-4" strokeWidth={2.25} />
+      </button>
     </div>
   );
 }

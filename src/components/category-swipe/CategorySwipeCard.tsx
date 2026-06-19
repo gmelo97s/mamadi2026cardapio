@@ -2,9 +2,8 @@ import { useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import type { Category, MenuItem } from "../../data/menu";
 import { formatPrice } from "../../data/menu";
-import CardMicroHint from "./CardMicroHint";
+import { resolveSwipeCardImage } from "../../lib/menuImage";
 import ItemProgressBars from "./ItemProgressBars";
-import NavigationOnboardingOverlay from "./NavigationOnboardingOverlay";
 import VerifiedBadge from "./VerifiedBadge";
 
 const SWIPE_THRESHOLD = 96;
@@ -16,7 +15,6 @@ interface CategorySwipeCardProps {
   itemIndex: number;
   itemTotal: number;
   reducedMotion: boolean | null;
-  showOnboarding: boolean;
   onPrevItem: () => void;
   onNextItem: () => void;
   onPrevCategory: () => void;
@@ -37,7 +35,6 @@ export default function CategorySwipeCard({
   itemIndex,
   itemTotal,
   reducedMotion,
-  showOnboarding,
   onPrevItem,
   onNextItem,
   onPrevCategory,
@@ -48,7 +45,7 @@ export default function CategorySwipeCard({
   const dragOffset = useRef(0);
   const [tapFlash, setTapFlash] = useState<"left" | "right" | null>(null);
 
-  const imageSrc = item?.image ?? category.cardImage ?? category.coverImage;
+  const imageSrc = resolveSwipeCardImage(item, category);
   const price = item ? priceLabel(item) : null;
 
   const flashSide = (side: "left" | "right") => {
@@ -96,13 +93,6 @@ export default function CategorySwipeCard({
       <div className="category-swipe-card__inner">
         <div className="category-swipe-card__top">
           <ItemProgressBars total={itemTotal} active={itemIndex} />
-          {!showOnboarding && <CardMicroHint reducedMotion={reducedMotion} />}
-          <div className="category-swipe-card__pills">
-            <span className="category-swipe-card__pill">
-              {category.label.toUpperCase()} - {itemTotal}{" "}
-              {itemTotal === 1 ? "opção" : "opções"}
-            </span>
-          </div>
         </div>
 
         <div className="category-swipe-card__media">
@@ -132,10 +122,7 @@ export default function CategorySwipeCard({
                   />
                 </>
               ) : (
-                <div
-                  className={`category-swipe-card__media-fallback h-full w-full bg-gradient-to-br ${category.gradient}`}
-                  style={{ boxShadow: `inset 0 0 80px ${category.glow}44` }}
-                />
+                <div className="category-swipe-card__media-black" aria-hidden />
               )}
             </motion.div>
           </AnimatePresence>
@@ -173,41 +160,42 @@ export default function CategorySwipeCard({
             )}
           </AnimatePresence>
 
-          <AnimatePresence>
-            {showOnboarding && (
-              <NavigationOnboardingOverlay reducedMotion={reducedMotion} />
-            )}
-          </AnimatePresence>
-        </div>
+          <div className="category-swipe-card__dock">
+            <p className="category-swipe-card__brand">
+              <span className="category-swipe-card__brand-led mamadi-logo">MAMADI FOOD</span>
+              <VerifiedBadge />
+            </p>
 
-        <div className="category-swipe-card__dock">
-          <p className="category-swipe-card__brand">
-            <span className="category-swipe-card__brand-led mamadi-logo">MAMADI FOOD</span>
-            <VerifiedBadge />
-          </p>
+            <h2 className="category-swipe-card__category">{category.label}</h2>
 
-          <h2 className="category-swipe-card__category">{category.label}</h2>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={item?.id ?? "empty"}
+                className="category-swipe-card__item-block"
+                initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reducedMotion ? undefined : { opacity: 0, y: -6 }}
+                transition={{ duration: 0.28 }}
+              >
+                {item ? (
+                  <>
+                    <h3 className="category-swipe-card__item">{item.name}</h3>
+                    <p className="category-swipe-card__desc">{item.description}</p>
+                    {price && <p className="category-swipe-card__price">{price}</p>}
+                  </>
+                ) : (
+                  <p className="category-swipe-card__desc">Nenhum item nesta categoria.</p>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={item?.id ?? "empty"}
-              className="category-swipe-card__item-block"
-              initial={reducedMotion ? false : { opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reducedMotion ? undefined : { opacity: 0, y: -6 }}
-              transition={{ duration: 0.28 }}
-            >
-              {item ? (
-                <>
-                  <h3 className="category-swipe-card__item">{item.name}</h3>
-                  <p className="category-swipe-card__desc">{item.description}</p>
-                  {price && <p className="category-swipe-card__price">{price}</p>}
-                </>
-              ) : (
-                <p className="category-swipe-card__desc">Nenhum item nesta categoria.</p>
-              )}
-            </motion.div>
-          </AnimatePresence>
+          <span
+            className="category-swipe-card__count"
+            aria-label={`${itemTotal} ${itemTotal === 1 ? "opção" : "opções"} nesta categoria`}
+          >
+            {itemTotal} {itemTotal === 1 ? "opção" : "opções"}
+          </span>
         </div>
       </div>
     </motion.div>

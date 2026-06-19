@@ -1,5 +1,6 @@
 import type { MenuItem } from "../data/menu";
 import { formatPrice } from "../data/menu";
+import { resolveProductCardImage } from "../lib/menuImage";
 
 interface ProductCardProps {
   item: MenuItem;
@@ -8,6 +9,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ item, onClick }: ProductCardProps) {
   const hasDouble = item.priceA != null && item.priceB != null;
+  const imageSrc = resolveProductCardImage(item);
 
   return (
     <button
@@ -15,12 +17,16 @@ export default function ProductCard({ item, onClick }: ProductCardProps) {
       className="rainbow-border group flex h-full w-full flex-col overflow-hidden rounded-2xl bg-surface text-left"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
-        <img
-          src={item.image}
-          alt={item.name}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        {imageSrc ? (
+          <img
+            src={imageSrc}
+            alt={item.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="menu-card-image-black h-full w-full" aria-hidden />
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-4">
