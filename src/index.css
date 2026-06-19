@@ -581,6 +581,11 @@ body {
   color: #fff;
 }
 
+.category-swipe-screen--deck {
+  --category-nav-h: 68px;
+  --category-actions-h: 5.35rem;
+}
+
 .category-swipe-screen--deck .category-swipe-screen__main {
   padding: 0;
   max-width: none;
@@ -593,8 +598,8 @@ body {
   right: 0;
   z-index: 50;
   display: flex;
+  justify-content: center;
   align-items: flex-start;
-  gap: 0.5rem;
   flex-shrink: 0;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, transparent 100%);
   padding: 0.65rem 0.85rem 1.25rem;
@@ -607,7 +612,8 @@ body {
 }
 
 .category-swipe-screen__header-center {
-  flex: 1;
+  width: 100%;
+  max-width: 28rem;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -723,17 +729,14 @@ body {
 .category-swipe-card__inner {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
   height: 100%;
   overflow: hidden;
   background: #000;
 }
 
 .category-swipe-card__media {
-  position: relative;
-  flex: 1;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   background: #000;
 }
@@ -741,6 +744,9 @@ body {
 .category-swipe-card__media-layer {
   position: absolute;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .category-swipe-card__media-cover {
@@ -748,6 +754,13 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.category-swipe-card__media-cover--product {
+  object-fit: contain;
+  object-position: center 38%;
+  mix-blend-mode: screen;
+  transform: scale(1.06);
 }
 
 .category-swipe-card__media-black,
@@ -764,10 +777,11 @@ body {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    transparent 30%,
-    transparent 55%,
-    rgba(0, 0, 0, 0.8) 100%
+    rgba(0, 0, 0, 0.35) 0%,
+    transparent 24%,
+    transparent 52%,
+    rgba(0, 0, 0, 0.5) 75%,
+    rgba(0, 0, 0, 0.82) 100%
   );
   pointer-events: none;
   z-index: 2;
@@ -775,8 +789,11 @@ body {
 
 .category-swipe-card__tap {
   position: absolute;
-  top: 5.5rem;
-  bottom: 9rem;
+  top: 5rem;
+  bottom: calc(
+    env(safe-area-inset-bottom, 0px) + var(--category-nav-h, 68px) +
+      var(--category-actions-h, 5.25rem) + 4rem
+  );
   z-index: 3;
   width: 50%;
   border: none;
@@ -1182,28 +1199,89 @@ body {
   bottom: 0;
   z-index: 4;
   margin: 0;
-  padding: 0 1.5rem 8.5rem;
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8.5rem);
+  padding: 0 1.35rem
+    calc(
+      env(safe-area-inset-bottom, 0px) + var(--category-nav-h, 68px) +
+        var(--category-actions-h, 5.35rem) + 0.55rem
+    );
   border: none;
   border-radius: 0;
   background: none;
   pointer-events: auto;
+  text-align: left;
 }
 
 .category-swipe-card__brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  margin: 0 0 0.25rem;
+  gap: 0.45rem;
+  margin: 0.15rem 0 0.35rem;
 }
 
 .category-swipe-card__brand-gold {
   font-family: var(--font-display);
-  font-size: 0.8125rem;
+  font-size: clamp(1.375rem, 5.2vw, 1.875rem);
   font-weight: 800;
-  letter-spacing: 0.12em;
-  line-height: 1;
-  color: #d4af37;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #e5b582;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+.category-swipe-card__brand-led {
+  display: inline-flex;
+  flex-wrap: wrap;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 5.2vw, 1.875rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.category-swipe-card__brand-led-char {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    #ff3b3b 0%,
+    #ff8c00 14%,
+    #ffe500 28%,
+    #00e676 42%,
+    #2979ff 57%,
+    #aa00ff 71%,
+    #ff4081 85%,
+    #ff3b3b 100%
+  );
+  background-size: 900% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: categoryBrandLedFlow 3.6s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(255, 64, 129, 0.35));
+  will-change: background-position, filter;
+}
+
+@keyframes categoryBrandLedFlow {
+  0% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 5px rgba(255, 59, 59, 0.45));
+  }
+  25% {
+    filter: drop-shadow(0 0 7px rgba(0, 230, 118, 0.5));
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: drop-shadow(0 0 8px rgba(41, 121, 255, 0.55));
+  }
+  75% {
+    filter: drop-shadow(0 0 7px rgba(170, 0, 255, 0.5));
+  }
+  100% {
+    background-position: 200% 50%;
+    filter: drop-shadow(0 0 5px rgba(255, 64, 129, 0.45));
+  }
 }
 
 .category-swipe-card__item-block {
@@ -1213,29 +1291,31 @@ body {
 .category-swipe-card__title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 7vw, 2.25rem);
+  font-size: clamp(1.875rem, 7.8vw, 2.625rem);
   font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
   color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.category-swipe-card__title-price {
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 
 .category-swipe-card__price-gold {
-  margin: 0.35rem 0 0.5rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, 5vw, 1.5rem);
-  font-weight: 700;
-  line-height: 1.1;
-  color: #d4af37;
+  display: none;
 }
 
 .category-swipe-card__desc {
   margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.45;
-  font-weight: 500;
-  color: rgba(226, 232, 240, 0.92);
+  font-size: clamp(0.8125rem, 3.1vw, 0.9375rem);
+  line-height: 1.28;
+  font-weight: 400;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.48);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -1281,30 +1361,86 @@ body {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--category-nav-h, 68px) + 0.85rem);
   z-index: 40;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 2rem;
-  padding: 0 1.5rem 1.5rem;
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
+  align-items: flex-end;
+  padding: 0 1rem 0.15rem;
   pointer-events: none;
+  background: none;
 }
 
-.swipe-actions > * {
+.swipe-actions__cluster {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-top: 1.35rem;
   pointer-events: auto;
+}
+
+.swipe-actions__col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.swipe-actions__col--reject {
+  margin-right: clamp(0.85rem, 5vw, 1.35rem);
+}
+
+.swipe-actions__col--like {
+  margin-left: clamp(0.85rem, 5vw, 1.35rem);
+}
+
+.swipe-actions__label {
+  position: absolute;
+  bottom: calc(100% + 0.45rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 6.5rem;
+  white-space: normal;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(0.6875rem, 2.8vw, 0.875rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: center;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.62);
+}
+
+.swipe-actions__label--red {
+  color: #ff5d63;
+}
+
+.swipe-actions__label--blue {
+  color: #249deb;
+}
+
+.swipe-actions__label--green {
+  color: #32d878;
 }
 
 .swipe-actions__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  border-radius: 999px;
+  width: clamp(2.65rem, 11vw, 3.25rem);
+  height: clamp(2.65rem, 11vw, 3.25rem);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: 50%;
   color: #fff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.4),
+    inset 0 1px 8px rgba(255, 255, 255, 0.14);
   transition: opacity 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
 }
 
 .swipe-actions__btn:disabled {
@@ -1313,31 +1449,15 @@ body {
 }
 
 .swipe-actions__btn--reject {
-  width: 4rem;
-  height: 4rem;
-  background: rgba(248, 113, 113, 0.9);
+  background: linear-gradient(145deg, #ff757b, #ff3e48);
 }
 
 .swipe-actions__btn--like {
-  width: 4rem;
-  height: 4rem;
-  background: rgba(74, 222, 128, 0.9);
+  background: linear-gradient(145deg, #43e78b, #20c767);
 }
 
 .swipe-actions__btn--super {
-  width: 5rem;
-  height: 5rem;
-  background: rgba(59, 130, 246, 0.9);
-}
-
-.swipe-actions__icon {
-  width: 2rem;
-  height: 2rem;
-}
-
-.swipe-actions__icon--super {
-  width: 2.5rem;
-  height: 2.5rem;
+  background: linear-gradient(145deg, #2eafff, #168add);
 }
 
 .swipe-actions__super-wrap {
@@ -1346,22 +1466,244 @@ body {
 
 .swipe-actions__badge {
   position: absolute;
-  top: -0.2rem;
-  right: -0.2rem;
+  top: -0.4rem;
+  right: -0.3rem;
+  display: grid;
+  place-items: center;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: #2f9ee9;
+  font-size: 0.6875rem;
+  font-weight: 750;
+  line-height: 1;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+/* ── Rodapé — menu inferior ───────────────────────────── */
+.category-bottom-nav {
+  --category-nav-h: 68px;
+
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 45;
+  height: calc(env(safe-area-inset-bottom, 0px) + var(--category-nav-h));
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  padding: 2px 6px calc(env(safe-area-inset-bottom, 0px) + 4px);
+  border-top: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.45) 55%,
+    transparent 100%
+  );
+}
+
+.category-bottom-nav__item {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  text-decoration: none;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: -0.2px;
+  color: rgba(255, 255, 255, 0.58);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
+}
+
+.category-bottom-nav__item--muted {
+  color: rgba(255, 255, 255, 0.58);
+  cursor: pointer;
+}
+
+.category-bottom-nav__item--active {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.category-bottom-nav__item--instagram {
+  color: rgba(255, 255, 255, 0.58);
+  cursor: pointer;
+}
+
+.category-bottom-nav__item--instagram span {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.category-bottom-nav__item--ifood {
+  cursor: pointer;
+}
+
+.category-bottom-nav__ifood-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2rem;
-  height: 2rem;
-  padding: 0 0.35rem;
-  border-radius: 999px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  background: #60a5fa;
-  font-size: 0.75rem;
-  font-weight: 800;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 0.45rem;
+  background: linear-gradient(135deg, #ea1d2c 0%, #c4121f 100%);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(234, 29, 44, 0.42);
+}
+
+.category-bottom-nav__ifood-icon svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.category-bottom-nav__item--ifood span:last-child {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.category-bottom-nav__compass-wrap {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+}
+
+.category-bottom-nav__item--explore-active .category-bottom-nav__compass-wrap {
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+/* ── Explorar — grid estilo Tinder ─────────────────────── */
+.category-swipe-screen--explore {
+  --category-nav-h: 68px;
+}
+
+.category-swipe-screen__main--explore {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--category-nav-h, 68px) + 1rem);
+}
+
+.explore-screen {
+  min-height: 100%;
+  padding: calc(env(safe-area-inset-top, 0px) + 1.25rem) 1rem 0;
+}
+
+.explore-screen__title {
+  margin: 0 0 1.25rem;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.explore-screen__title--inline {
+  margin: 0;
+  font-size: 1.625rem;
+}
+
+.explore-screen__subheader {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.explore-screen__back {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: -0.35rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.explore-screen__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.explore-tile {
+  display: flex;
+  flex-direction: column;
+  min-height: 11.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 1.125rem;
+  background: #1c1c1e;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.explore-tile:active {
+  transform: scale(0.98);
+  background: #242426;
+}
+
+.explore-tile__visual {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-height: 7.5rem;
+  padding: 1rem 0.75rem 0.5rem;
+}
+
+.explore-tile__image {
+  max-width: 78%;
+  max-height: 5.5rem;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   pointer-events: none;
+}
+
+.explore-tile__emoji {
+  font-size: 3.25rem;
+  line-height: 1;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
+}
+
+.explore-tile__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem 0.85rem;
+}
+
+.explore-tile__title {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.explore-tile__meta {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: nowrap;
 }
 
 .category-swipe-screen__results {
@@ -1716,6 +2058,15 @@ body {
   .swipe-actions {
     max-width: 28rem;
     margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .category-bottom-nav {
+    max-width: 28rem;
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .category-swipe-screen__main {
@@ -1732,7 +2083,8 @@ body {
   .nav-onboarding__card,
   .nav-onboarding__cta,
   .card-micro-hint__line,
-  .card-micro-hint__text {
+  .card-micro-hint__text,
+  .category-swipe-card__brand-led-char {
     animation: none;
   }
 

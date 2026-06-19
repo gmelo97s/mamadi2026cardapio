@@ -30,3 +30,25 @@ export function resolveSwipeCardImage(
 export function resolveProductCardImage(item: MenuItem): string | null {
   return isCustomMenuImage(item.image) ? item.image : null;
 }
+
+/** Placeholder por categoria — troque os PNGs em public/generated-menu/categories/ */
+const EXPLORE_CATEGORY_IMAGES: Record<string, string> = {
+  drinks: "/generated-menu/categories/cat-drinks-card.png",
+  destilados: "/generated-menu/categories/cat-destilados-card.png",
+  cervejas: "/generated-menu/categories/cat-cervejas-card.png",
+  prontos: "/generated-menu/categories/cat-prontos-card.png",
+  combos: "/generated-menu/categories/cat-combos-card.png",
+  porcoes: "/generated-menu/categories/cat-porcoes-card.png",
+  lanches: "/generated-menu/categories/cat-lanches-card.png",
+  menu: "/generated-menu/categories/cat-menu-card.png",
+};
+
+export function resolveExploreCategoryImage(category: Category): string {
+  if (category.cardImage?.trim()) return category.cardImage;
+  return EXPLORE_CATEGORY_IMAGES[category.id] ?? "";
+}
+
+/** Imagem do card Explorar — inclui placeholders gerados para substituição futura. */
+export function resolveExploreItemImage(item: MenuItem): string | null {
+  return item.image?.trim() || null;
+}

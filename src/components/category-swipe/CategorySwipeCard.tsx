@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import type { Category, MenuItem } from "../../data/menu";
 import { formatPrice } from "../../data/menu";
-import { resolveSwipeCardImage } from "../../lib/menuImage";
+import { isCustomMenuImage, resolveSwipeCardImage } from "../../lib/menuImage";
 import VerifiedBadge from "./VerifiedBadge";
 
 const SWIPE_THRESHOLD = 96;
@@ -20,9 +20,9 @@ interface CategorySwipeCardProps {
   onNextCategory: () => void;
 }
 
-function primaryPrice(item: MenuItem): string | null {
-  if (item.price != null) return formatPrice(item.price);
-  if (item.priceA != null) return formatPrice(item.priceA);
+function primaryPriceValue(item: MenuItem): number | null {
+  if (item.price != null) return item.price;
+  if (item.priceA != null) return item.priceA;
   return null;
 }
 
@@ -43,7 +43,7 @@ export default function CategorySwipeCard({
 
   const imageSrc = resolveSwipeCardImage(item, category);
   const hasDouble = item != null && item.priceA != null && item.priceB != null;
-  const price = item ? primaryPrice(item) : null;
+  const priceValue = item ? primaryPriceValue(item) : null;
 
   useEffect(() => {
     setShowOptions(false);
@@ -106,7 +106,11 @@ export default function CategorySwipeCard({
                 <img
                   src={imageSrc}
                   alt={item?.name ?? category.label}
-                  className="category-swipe-card__media-cover"
+                  className={`category-swipe-card__media-cover${
+                    isCustomMenuImage(imageSrc)
+                      ? " category-swipe-card__media-cover--product"
+                      : ""
+                  }`}
                   draggable={false}
                 />
               ) : (
@@ -149,11 +153,6 @@ export default function CategorySwipeCard({
           </AnimatePresence>
 
           <div className="category-swipe-card__dock">
-            <p className="category-swipe-card__brand">
-              <span className="category-swipe-card__brand-gold">{category.label}</span>
-              <VerifiedBadge />
-            </p>
-
             <AnimatePresence mode="wait">
               <motion.div
                 key={item?.id ?? "empty"}
@@ -165,8 +164,29 @@ export default function CategorySwipeCard({
               >
                 {item ? (
                   <>
-                    <h2 className="category-swipe-card__title">{item.name}</h2>
-                    {price && <p className="category-swipe-card__price-gold">{price}</p>}
+                    <h2 className="category-swipe-card__title">
+                      {item.name}
+                      {priceValue != null && (
+                        <span className="category-swipe-card__title-price">, {priceValue}</span>
+                      )}
+                    </h2>
+
+                    <p className="category-swipe-card__brand">
+                      <span className="category-swipe-card__brand-led" aria-label={category.label}>
+                        {category.label.split("").map((char, index) => (
+                          <span
+                            key={`${char}-${index}`}
+                            className="category-swipe-card__brand-led-char"
+                            style={{ animationDelay: `${index * 0.09}s` }}
+                            aria-hidden
+                          >
+                            {char === " " ? "\u00A0" : char}
+                          </span>
+                        ))}
+                      </span>
+                      <VerifiedBadge size="md" />
+                    </p>
+
                     <p className="category-swipe-card__desc">{item.description}</p>
 
                     {hasDouble && (
