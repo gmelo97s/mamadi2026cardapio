@@ -7,9 +7,8 @@ import { searchMenuItems } from "../../lib/menuSearch";
 import SearchBar from "../SearchBar";
 import ProductCard from "../ProductCard";
 import CategorySwipeCard from "./CategorySwipeCard";
-import CategoryControls from "./CategoryControls";
-import CategoryFooterLinks from "./CategoryFooterLinks";
-import CardMicroHint from "./CardMicroHint";
+import ItemProgressBars from "./ItemProgressBars";
+import SwipeActionButtons from "./SwipeActionButtons";
 import NavigationOnboardingOverlay, {
   hasSeenCategoryOnboarding,
   ONBOARDING_KEY,
@@ -19,12 +18,16 @@ interface CategorySwipeScreenProps {
   onBack: () => void;
 }
 
+const COMBOS_CATEGORY_ID = "combos";
+
 export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps) {
   const reducedMotion = useReducedMotion();
   const [search, setSearch] = useState("");
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [itemIndexByCategory, setItemIndexByCategory] = useState<Record<string, number>>({});
   const [showOnboarding, setShowOnboarding] = useState(() => !hasSeenCategoryOnboarding());
+
+  const combosCount = (itemsByCategory[COMBOS_CATEGORY_ID] ?? []).length;
 
   const searchResult = useMemo(
     () => searchMenuItems(search, allMenuItems, categories),
@@ -71,6 +74,13 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
     setCategoryIndex((i) => Math.max(i - 1, 0));
   }, []);
 
+  const goToCombos = useCallback(() => {
+    const idx = categories.findIndex((c) => c.id === COMBOS_CATEGORY_ID);
+    if (idx < 0) return;
+    setCategoryIndex(idx);
+    setItemIndex(COMBOS_CATEGORY_ID, 0);
+  }, [setItemIndex]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (searchResult.kind !== "idle") return;
@@ -107,22 +117,39 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   }, []);
 
   const isSearching = searchResult.kind !== "idle";
-
-  const onboardingActive = showOnboarding && searchResult.kind === "idle";
+  const isDeck = searchResult.kind === "idle";
+  const onboardingActive = showOnboarding && isDeck;
 
   return (
     <div
-      className="category-swipe-screen"
+      className={`category-swipe-screen${isDeck ? " category-swipe-screen--deck" : ""}`}
       onPointerDownCapture={onboardingActive ? handleOnboardingInteraction : undefined}
     >
       <header className="category-swipe-screen__header">
-        <div className="category-swipe-screen__search-header">
-          <SearchBar
-            variant="header"
-            value={search}
-            onChange={setSearch}
-            placeholder="Buscar..."
-          />
+        <button
+          type="button"
+          onClick={onBack}
+          className="category-swipe-screen__back"
+          aria-label="Início"
+        >
+          <Home className="h-4 w-4" strokeWidth={2.25} />
+        </button>
+
+        <div className="category-swipe-screen__header-center">
+          <div className="category-swipe-screen__search-header">
+            <SearchBar
+              variant="header"
+              value={search}
+              onChange={setSearch}
+              placeholder="Buscar..."
+            />
+          </div>
+
+          {isDeck && items.length > 0 && (
+            <div className="category-swipe-screen__progress">
+              <ItemProgressBars total={items.length} active={itemIndex} />
+            </div>
+          )}
         </div>
       </header>
 
@@ -183,7 +210,7 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
           </section>
         )}
 
-        {searchResult.kind === "idle" && (
+        {isDeck && (
           <div className="category-swipe-screen__deck">
             <div className="category-swipe-screen__card-wrap">
               <CategorySwipeCard
@@ -199,44 +226,20 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
                 onNextCategory={nextCategory}
               />
             </div>
-
-            <CategoryControls
-              onPrevCategory={prevCategory}
-              onNextCategory={nextCategory}
-              canPrev={categoryIndex > 0}
-              canNext={categoryIndex < categories.length - 1}
-              microHint={
-                !showOnboarding ? (
-                  <CardMicroHint reducedMotion={reducedMotion} />
-                ) : null
-              }
-            />
-
-            <div className="category-swipe-screen__cat-dots" aria-hidden>
-              {categories.map((cat, i) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  aria-label={cat.label}
-                  className={`category-swipe-screen__cat-dot${i === categoryIndex ? " is-active" : ""}`}
-                  onClick={() => setCategoryIndex(i)}
-                />
-              ))}
-            </div>
-
-            <CategoryFooterLinks />
           </div>
         )}
       </main>
 
-      <button
-        type="button"
-        onClick={onBack}
-        className="category-swipe-screen__back category-swipe-screen__back--floating"
-        aria-label="Início"
-      >
-        <Home className="h-4 w-4" strokeWidth={2.25} />
-      </button>
+      {isDeck && (
+        <SwipeActionButtons
+          onReject={prevCategory}
+          onLike={nextCategory}
+          onSuperLike={goToCombos}
+          canReject={categoryIndex > 0}
+          canLike={categoryIndex < categories.length - 1}
+          combosCount={combosCount}
+        />
+      )}
     </div>
   );
 }

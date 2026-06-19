@@ -18,7 +18,7 @@ export default function ItemProgressBars({ total, active }: ItemProgressBarsProp
             key={i}
             role="tab"
             aria-selected={i === active}
-            className={`item-progress-bars__bar${i === active ? " is-active" : ""}`}
+            className={`item-progress-bars__bar${i === active ? " is-active" : ""}${i < active ? " is-viewed" : ""}`}
           />
         ))}
       </div>

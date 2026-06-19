@@ -1,9 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import type { Category, MenuItem } from "../../data/menu";
 import { formatPrice } from "../../data/menu";
 import { resolveSwipeCardImage } from "../../lib/menuImage";
-import ItemProgressBars from "./ItemProgressBars";
 import VerifiedBadge from "./VerifiedBadge";
 
 const SWIPE_THRESHOLD = 96;
@@ -21,19 +20,15 @@ interface CategorySwipeCardProps {
   onNextCategory: () => void;
 }
 
-function priceLabel(item: MenuItem) {
-  if (item.priceA != null && item.priceB != null) {
-    return `${item.labelA ?? "Opção A"} ${formatPrice(item.priceA)} · ${item.labelB ?? "Opção B"} ${formatPrice(item.priceB)}`;
-  }
+function primaryPrice(item: MenuItem): string | null {
   if (item.price != null) return formatPrice(item.price);
+  if (item.priceA != null) return formatPrice(item.priceA);
   return null;
 }
 
 export default function CategorySwipeCard({
   category,
   item,
-  itemIndex,
-  itemTotal,
   reducedMotion,
   onPrevItem,
   onNextItem,
@@ -41,12 +36,18 @@ export default function CategorySwipeCard({
   onNextCategory,
 }: CategorySwipeCardProps) {
   const dragX = useMotionValue(0);
-  const rotate = useTransform(dragX, [-180, 0, 180], reducedMotion ? [0, 0, 0] : [-10, 0, 10]);
+  const rotate = useTransform(dragX, [-180, 0, 180], reducedMotion ? [0, 0, 0] : [-6, 0, 6]);
   const dragOffset = useRef(0);
   const [tapFlash, setTapFlash] = useState<"left" | "right" | null>(null);
+  const [showOptions, setShowOptions] = useState(false);
 
   const imageSrc = resolveSwipeCardImage(item, category);
-  const price = item ? priceLabel(item) : null;
+  const hasDouble = item != null && item.priceA != null && item.priceB != null;
+  const price = item ? primaryPrice(item) : null;
+
+  useEffect(() => {
+    setShowOptions(false);
+  }, [item?.id]);
 
   const flashSide = (side: "left" | "right") => {
     if (reducedMotion) return;
@@ -77,7 +78,7 @@ export default function CategorySwipeCard({
 
   return (
     <motion.div
-      className="category-swipe-card category-swipe-card-rainbow"
+      className="category-swipe-card"
       style={{ x: dragX, rotate }}
       drag={reducedMotion ? false : "x"}
       dragConstraints={{ left: 0, right: 0 }}
@@ -86,41 +87,28 @@ export default function CategorySwipeCard({
         dragOffset.current = info.offset.x;
       }}
       onDragEnd={handleDragEnd}
-      initial={reducedMotion ? false : { opacity: 0, scale: 0.94, y: 24 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ type: "spring", stiffness: 260, damping: 28 }}
+      initial={reducedMotion ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="category-swipe-card__inner">
-        <div className="category-swipe-card__top">
-          <ItemProgressBars total={itemTotal} active={itemIndex} />
-        </div>
-
         <div className="category-swipe-card__media">
           <AnimatePresence mode="wait">
             <motion.div
               key={item ? item.id : `cat-${category.id}`}
               className="category-swipe-card__media-layer"
-              initial={reducedMotion ? false : { opacity: 0, scale: 1.03 }}
+              initial={reducedMotion ? false : { opacity: 0, scale: 1.02 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={reducedMotion ? undefined : { opacity: 0, scale: 0.98 }}
+              exit={reducedMotion ? undefined : { opacity: 0 }}
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             >
               {imageSrc ? (
-                <>
-                  <img
-                    src={imageSrc}
-                    alt=""
-                    aria-hidden
-                    className="category-swipe-card__media-bg"
-                    draggable={false}
-                  />
-                  <img
-                    src={imageSrc}
-                    alt={item?.name ?? category.label}
-                    className="category-swipe-card__media-fg"
-                    draggable={false}
-                  />
-                </>
+                <img
+                  src={imageSrc}
+                  alt={item?.name ?? category.label}
+                  className="category-swipe-card__media-cover"
+                  draggable={false}
+                />
               ) : (
                 <div className="category-swipe-card__media-black" aria-hidden />
               )}
@@ -162,11 +150,9 @@ export default function CategorySwipeCard({
 
           <div className="category-swipe-card__dock">
             <p className="category-swipe-card__brand">
-              <span className="category-swipe-card__brand-led mamadi-logo">MAMADI FOOD</span>
+              <span className="category-swipe-card__brand-gold">{category.label}</span>
               <VerifiedBadge />
             </p>
-
-            <h2 className="category-swipe-card__category">{category.label}</h2>
 
             <AnimatePresence mode="wait">
               <motion.div
@@ -179,9 +165,32 @@ export default function CategorySwipeCard({
               >
                 {item ? (
                   <>
-                    <h3 className="category-swipe-card__item">{item.name}</h3>
+                    <h2 className="category-swipe-card__title">{item.name}</h2>
+                    {price && <p className="category-swipe-card__price-gold">{price}</p>}
                     <p className="category-swipe-card__desc">{item.description}</p>
-                    {price && <p className="category-swipe-card__price">{price}</p>}
+
+                    {hasDouble && (
+                      <>
+                        <button
+                          type="button"
+                          className="category-swipe-card__options-btn"
+                          onClick={() => setShowOptions((v) => !v)}
+                          aria-expanded={showOptions}
+                        >
+                          Opções disponíveis
+                        </button>
+                        {showOptions && (
+                          <div className="category-swipe-card__options-list">
+                            <p>
+                              {item.labelA ?? "Opção A"}: {formatPrice(item.priceA!)}
+                            </p>
+                            <p>
+                              {item.labelB ?? "Opção B"}: {formatPrice(item.priceB!)}
+                            </p>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </>
                 ) : (
                   <p className="category-swipe-card__desc">Nenhum item nesta categoria.</p>
@@ -189,13 +198,6 @@ export default function CategorySwipeCard({
               </motion.div>
             </AnimatePresence>
           </div>
-
-          <span
-            className="category-swipe-card__count"
-            aria-label={`${itemTotal} ${itemTotal === 1 ? "opção" : "opções"} nesta categoria`}
-          >
-            {itemTotal} {itemTotal === 1 ? "opção" : "opções"}
-          </span>
         </div>
       </div>
     </motion.div>
