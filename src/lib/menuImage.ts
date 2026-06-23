@@ -61,13 +61,22 @@ export function resolveSwipeProductImageClasses(item: MenuItem | null): string {
   return `${base} ${base}--product ${base}--product-${blend}${wide}${pack}`;
 }
 
+/** Deslocamento vertical padrão no deck pack conforme a escala. */
+function resolvePackOffsetY(scale: number, explicit?: number): number {
+  if (explicit != null) return explicit;
+  if (scale >= 2.4) return 6;
+  if (scale >= 2) return 5;
+  if (scale >= 1.6) return 5;
+  return 4;
+}
+
 /** Escala CSS do slot pack (referência visual: garrafa Brahma ce01). */
 export function resolveSwipeProductImageStyle(
   item: MenuItem | null,
 ): CSSProperties | undefined {
   if (!item || item.imageFit !== "pack") return undefined;
   const scale = item.imageScale ?? 1;
-  const y = item.imagePackY ?? 0;
+  const y = resolvePackOffsetY(scale, item.imagePackY);
   return {
     ["--product-pack-scale" as string]: String(scale),
     ["--product-pack-y" as string]: `${y}%`,

@@ -1198,7 +1198,7 @@ body {
 /* Pack (Abrir e Beber): mesmo slot da garrafa Brahma — escala + posição central */
 .category-swipe-card__media-cover--product-pack {
   --product-pack-scale: 1;
-  --product-pack-y: 0%;
+  --product-pack-y: 4%;
   width: auto;
   height: auto;
   max-width: 100%;
