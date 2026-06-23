@@ -859,7 +859,7 @@ body {
   border: none;
   border-radius: 1.125rem;
   overflow: hidden;
-  background: #111;
+  background: #000;
   text-align: left;
   cursor: pointer;
   transition: transform 0.15s ease;
@@ -873,6 +873,7 @@ body {
   position: relative;
   min-height: 11.5rem;
   overflow: hidden;
+  background: #000;
 }
 
 .search-result-card__image {
@@ -884,9 +885,63 @@ body {
   object-position: center bottom;
 }
 
-.search-result-card__image--product {
-  mix-blend-mode: screen;
+.product-card__image {
+  object-fit: cover;
+}
+
+.search-result-card__image--product-dark,
+.category-swipe-card__media-cover--product-dark,
+.product-card__image--product-dark {
   object-fit: contain;
+  object-position: center 38%;
+  transform: scale(1.06);
+  mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 84% at 50% 40%,
+    #000 48%,
+    rgba(0, 0, 0, 0.72) 72%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 90% 84% at 50% 40%,
+    #000 48%,
+    rgba(0, 0, 0, 0.72) 72%,
+    transparent 100%
+  );
+}
+
+.search-result-card__image--product-light,
+.category-swipe-card__media-cover--product-light,
+.product-card__image--product-light {
+  object-fit: contain;
+  object-position: center 38%;
+  transform: scale(1.04);
+  mix-blend-mode: normal;
+  filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.55));
+  -webkit-mask-image: radial-gradient(
+    ellipse 92% 90% at 50% 42%,
+    #000 68%,
+    rgba(0, 0, 0, 0.85) 86%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 92% 90% at 50% 42%,
+    #000 68%,
+    rgba(0, 0, 0, 0.85) 86%,
+    transparent 100%
+  );
+}
+
+.search-result-card__image--product {
+  object-fit: contain;
+}
+
+.search-result-card__image--product-dark,
+.search-result-card__image--product-light {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .search-result-card__media-black {
@@ -1062,6 +1117,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #000;
+  isolation: isolate;
 }
 
 .category-swipe-card__media-cover {
@@ -1071,11 +1128,11 @@ body {
   object-position: center;
 }
 
-.category-swipe-card__media-cover--product {
+.category-swipe-card__media-cover--product-light {
   object-fit: contain;
   object-position: center 38%;
-  mix-blend-mode: screen;
-  transform: scale(1.06);
+  mix-blend-mode: normal;
+  filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.55));
 }
 
 .category-swipe-card__media-black,

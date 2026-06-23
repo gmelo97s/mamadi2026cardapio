@@ -11,6 +11,8 @@ export interface MenuItem {
   image: string;
   badge?: string;
   obs?: string; // observação adicional
+  /** light = foto com fundo claro (exibe normal + máscara suave); dark = fundo preto na foto (screen) */
+  imageBlend?: "dark" | "light";
 }
 
 export interface Category {
@@ -328,7 +330,7 @@ export const cervejas: MenuItem[] = [
   { id: "ce13", category: "cervejas", name: "AMSTEL 600ml", description: "Amstel 600ml.", price: 15, image: "https://picsum.photos/seed/amstel600/400/300" },
   { id: "ce14", category: "cervejas", name: "EISENBAHN 600ml", description: "Eisenbahn 600ml.", price: 15, image: "https://picsum.photos/seed/eisenbahn600/400/300" },
   { id: "ce15", category: "cervejas", name: "ORIGINAL 600ml", description: "Original 600ml.", price: 15, image: "https://picsum.photos/seed/original600/400/300" },
-  { id: "ce16", category: "cervejas", name: "HEINEKEN 330ml", description: "Long neck Heineken.", price: 15, image: "https://picsum.photos/seed/heineken330/400/300" },
+  { id: "ce16", category: "cervejas", name: "HEINEKEN 330ml", description: "Long neck Heineken.", price: 15, image: "/menu-items/ce16-heineken-330ml.webp" },
   { id: "ce17", category: "cervejas", name: "BUDWEISER 330ml", description: "Long neck Budweiser.", price: 15, image: "https://picsum.photos/seed/budweiser330/400/300" },
   { id: "ce18", category: "cervejas", name: "STELLA 330ml", description: "Long neck Stella Artois.", price: 15, image: "https://picsum.photos/seed/stella330/400/300" },
   { id: "ce19", category: "cervejas", name: "CORONA 330ml", description: "Long neck Corona.", price: 15, image: "https://picsum.photos/seed/corona330/400/300" },

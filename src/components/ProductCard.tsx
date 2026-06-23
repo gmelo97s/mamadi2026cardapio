@@ -1,6 +1,6 @@
 import type { MenuItem } from "../data/menu";
 import { formatPrice } from "../data/menu";
-import { resolveProductCardImage } from "../lib/menuImage";
+import { resolveProductCardImage, resolveProductImageClasses } from "../lib/menuImage";
 
 interface ProductCardProps {
   item: MenuItem;
@@ -16,14 +16,17 @@ export default function ProductCard({ item, onClick }: ProductCardProps) {
       onClick={onClick}
       className="rainbow-border group flex h-full w-full flex-col overflow-hidden rounded-2xl bg-surface text-left"
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-black">
         {imageSrc ? (
           <img
             src={imageSrc}
             alt={item.name}
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className={`h-full w-full transition-transform duration-500 group-hover:scale-105 ${resolveProductImageClasses(
+              item,
+              "product-card__image",
+            )}`}
           />
         ) : (
           <div className="menu-card-image-black h-full w-full" aria-hidden />

@@ -1,5 +1,5 @@
 import type { Category, MenuItem } from "../../data/menu";
-import { isCustomMenuImage, resolveSwipeCardImage } from "../../lib/menuImage";
+import { resolveProductImageClasses, resolveSwipeCardImage } from "../../lib/menuImage";
 import VerifiedBadge from "./VerifiedBadge";
 
 interface SearchResultCardProps {
@@ -25,9 +25,7 @@ export default function SearchResultCard({ item, category, onClick }: SearchResu
           <img
             src={imageSrc}
             alt={item.name}
-            className={`search-result-card__image${
-              isCustomMenuImage(imageSrc) ? " search-result-card__image--product" : ""
-            }`}
+            className={resolveProductImageClasses(item, "search-result-card__image")}
             loading="lazy"
             decoding="async"
           />

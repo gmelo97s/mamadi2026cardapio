@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import type { Category, MenuItem } from "../../data/menu";
 import { formatPrice, SUPER_LIKE_CATEGORY_ID } from "../../data/menu";
-import { isCustomMenuImage, resolveSwipeCardImage } from "../../lib/menuImage";
+import { resolveProductImageClasses, resolveSwipeCardImage } from "../../lib/menuImage";
 import VerifiedBadge from "./VerifiedBadge";
 
 const SWIPE_THRESHOLD = 96;
@@ -108,11 +108,10 @@ export default function CategorySwipeCard({
                 <img
                   src={imageSrc}
                   alt={item?.name ?? category.label}
-                  className={`category-swipe-card__media-cover${
-                    isCustomMenuImage(imageSrc)
-                      ? " category-swipe-card__media-cover--product"
-                      : ""
-                  }`}
+                  className={resolveProductImageClasses(
+                    item,
+                    "category-swipe-card__media-cover",
+                  )}
                   draggable={false}
                   decoding="async"
                   fetchPriority="high"

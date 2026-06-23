@@ -31,9 +31,23 @@ export function optimizeMenuImageUrl(
   return trimmed;
 }
 
+function optimizeItemImage(item: MenuItem, size: MenuImageSize): string | null {
+  return optimizeMenuImageUrl(item.image, size);
+}
+
 export function isCustomMenuImage(src: string | undefined | null): src is string {
   if (!src?.trim()) return false;
   return !PLACEHOLDER_PATTERNS.some((pattern) => pattern.test(src));
+}
+
+/** Classes CSS para integrar produto ao fundo preto (#000) do card. */
+export function resolveProductImageClasses(
+  item: MenuItem | null,
+  baseClass: string,
+): string {
+  if (!item || !isCustomMenuImage(item.image)) return baseClass;
+  const blend = item.imageBlend === "light" ? "light" : "dark";
+  return `${baseClass} ${baseClass}--product ${baseClass}--product-${blend}`;
 }
 
 /** Imagem do card Tinder: só item customizado, ou capa da categoria quando não há item. */
@@ -42,7 +56,7 @@ export function resolveSwipeCardImage(
   category: Category,
 ): string | null {
   if (item?.image && isCustomMenuImage(item.image)) {
-    return optimizeMenuImageUrl(item.image, "card");
+    return optimizeItemImage(item, "card");
   }
 
   if (!item) {
@@ -57,7 +71,7 @@ export function resolveSwipeCardImage(
 
 export function resolveProductCardImage(item: MenuItem): string | null {
   if (!isCustomMenuImage(item.image)) return null;
-  return optimizeMenuImageUrl(item.image, "thumb");
+  return optimizeItemImage(item, "thumb");
 }
 
 /** Placeholder por categoria — troque os PNGs em public/generated-menu/categories/ */
