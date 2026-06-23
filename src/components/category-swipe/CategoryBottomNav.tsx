@@ -1,4 +1,4 @@
-import { Compass, Flame, Search } from "lucide-react";
+import { Compass, Eye, Flame, Search } from "lucide-react";
 import { SiIfood } from "react-icons/si";
 import { business } from "../../data/menu";
 
@@ -7,52 +7,24 @@ export type CategoryNavTab = "swipe" | "explore";
 interface CategoryBottomNavProps {
   activeTab: CategoryNavTab;
   searchActive: boolean;
+  menuPreviewActive: boolean;
   onSwipe: () => void;
   onExplore: () => void;
   onSearch: () => void;
-}
-
-function InstagramNavIcon() {
-  return (
-    <svg
-      className="category-bottom-nav__instagram-icon"
-      viewBox="0 0 24 24"
-      width="28"
-      height="28"
-      aria-hidden
-    >
-      <rect
-        x="2.5"
-        y="2.5"
-        width="19"
-        height="19"
-        rx="5.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <circle
-        cx="12"
-        cy="12"
-        r="4.4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" />
-    </svg>
-  );
+  onMenuPreview: () => void;
 }
 
 export default function CategoryBottomNav({
   activeTab,
   searchActive,
+  menuPreviewActive,
   onSwipe,
   onExplore,
   onSearch,
+  onMenuPreview,
 }: CategoryBottomNavProps) {
-  const swipeActive = activeTab === "swipe" && !searchActive;
-  const exploreActive = activeTab === "explore" && !searchActive;
+  const swipeActive = activeTab === "swipe" && !searchActive && !menuPreviewActive;
+  const exploreActive = activeTab === "explore" && !searchActive && !menuPreviewActive;
 
   return (
     <nav className="category-bottom-nav" aria-label="Navegação principal">
@@ -97,15 +69,20 @@ export default function CategoryBottomNav({
         <span>Pesquisar</span>
       </button>
 
-      <a
-        href={business.instagramUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="category-bottom-nav__item category-bottom-nav__item--instagram"
+      <button
+        type="button"
+        className={`category-bottom-nav__item${
+          menuPreviewActive ? " category-bottom-nav__item--active" : " category-bottom-nav__item--muted"
+        }`}
+        onClick={onMenuPreview}
+        aria-pressed={menuPreviewActive}
+        aria-label={
+          menuPreviewActive ? "Fechar visualização do cardápio" : "Visualizar cardápio"
+        }
       >
-        <InstagramNavIcon />
-        <span>Instagram</span>
-      </a>
+        <Eye size={28} strokeWidth={1.75} />
+        <span>Ver tudo</span>
+      </button>
 
       <a
         href={business.ifoodUrl}

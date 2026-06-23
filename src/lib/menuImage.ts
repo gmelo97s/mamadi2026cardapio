@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Category, MenuItem } from "../data/menu";
 
 /** URLs que ainda não foram trocadas por imagens reais do cliente. */
@@ -48,6 +49,29 @@ export function resolveProductImageClasses(
   if (!item || !isCustomMenuImage(item.image)) return baseClass;
   const blend = item.imageBlend === "light" ? "light" : "dark";
   return `${baseClass} ${baseClass}--product ${baseClass}--product-${blend}`;
+}
+
+/** Classes do deck swipe — sem máscara/scale; suporta pratos largos e pack (latas/garrafas). */
+export function resolveSwipeProductImageClasses(item: MenuItem | null): string {
+  const base = "category-swipe-card__media-cover";
+  if (!item || !isCustomMenuImage(item.image)) return base;
+  const blend = item.imageBlend === "light" ? "light" : "dark";
+  const wide = item.imageFit === "wide" ? ` ${base}--product-wide` : "";
+  const pack = item.imageFit === "pack" ? ` ${base}--product-pack` : "";
+  return `${base} ${base}--product ${base}--product-${blend}${wide}${pack}`;
+}
+
+/** Escala CSS do slot pack (referência visual: garrafa Brahma ce01). */
+export function resolveSwipeProductImageStyle(
+  item: MenuItem | null,
+): CSSProperties | undefined {
+  if (!item || item.imageFit !== "pack") return undefined;
+  const scale = item.imageScale ?? 1;
+  const y = item.imagePackY ?? 0;
+  return {
+    ["--product-pack-scale" as string]: String(scale),
+    ["--product-pack-y" as string]: `${y}%`,
+  };
 }
 
 /** Imagem do card Tinder: só item customizado, ou capa da categoria quando não há item. */

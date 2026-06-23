@@ -13,6 +13,12 @@ export interface MenuItem {
   obs?: string; // observação adicional
   /** light = foto com fundo claro (exibe normal + máscara suave); dark = fundo preto na foto (screen) */
   imageBlend?: "dark" | "light";
+  /** wide = prato largo; pack = lata/garrafa/copo (slot fixo calibrado na lata Skol 350ml) */
+  imageFit?: "default" | "wide" | "pack";
+  /** Escala extra no deck quando imageFit é pack (1 = garrafa Brahma litrão ce01) */
+  imageScale?: number;
+  /** Deslocamento vertical no deck pack, em % (positivo = desce) */
+  imagePackY?: number;
 }
 
 export interface Category {
@@ -46,7 +52,9 @@ export const drinks: MenuItem[] = [
     name: "CAIPIRINHA LIMÃO copo 300ml",
     description: "51/Velho Barreiro.",
     price: 20,
-    image: "https://picsum.photos/seed/caipirinha/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr02-caipirinha-limao-300ml.jpg",
+    imageBlend: "dark",
   },
   {
     id: "dr03",
@@ -54,7 +62,9 @@ export const drinks: MenuItem[] = [
     name: "CAIPILULA copo 300ml",
     description: "Caipirinha de Gengibre com Mel.",
     price: 20,
-    image: "https://picsum.photos/seed/caipilula/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr03-caipilula-300ml.jpg",
+    imageBlend: "dark",
   },
   {
     id: "dr04",
@@ -62,7 +72,8 @@ export const drinks: MenuItem[] = [
     name: "CAIPIROSKA LIMÃO copo 300ml",
     description: "Balalaika/Saquê.",
     price: 22,
-    image: "https://picsum.photos/seed/caipiroska/400/300",
+    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/Screenshot_3.jpg",
+    imageBlend: "dark",
   },
   {
     id: "dr05",
@@ -79,7 +90,9 @@ export const drinks: MenuItem[] = [
     name: "CHEVETTE",
     description: "Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.",
     price: 20,
-    image: "https://picsum.photos/seed/chevette/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr06-chevette.jpg",
+    imageBlend: "dark",
   },
   {
     id: "dr07",
@@ -95,7 +108,9 @@ export const drinks: MenuItem[] = [
     name: "BATIDÃO TROPICAL",
     description: "Caipirinha de Abacaxi com Hortelã.",
     price: 30,
-    image: "https://picsum.photos/seed/batidao/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr08-batidao-tropical.jpg",
+    imageBlend: "dark",
   },
   {
     id: "dr09",
@@ -103,7 +118,9 @@ export const drinks: MenuItem[] = [
     name: "MOJITO",
     description: "Rum, Limão e Hortelã.",
     price: 30,
-    image: "https://picsum.photos/seed/mojito/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr09-mojito.jpg",
+    imageBlend: "dark",
   },
   {
     id: "dr10",
@@ -111,7 +128,9 @@ export const drinks: MenuItem[] = [
     name: "CUBA LIBRE",
     description: "Rum, Coca e Limão.",
     price: 30,
-    image: "https://picsum.photos/seed/cubalibre/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr10-cuba-libre.jpg",
+    imageBlend: "dark",
   },
   {
     id: "dr11",
@@ -119,7 +138,9 @@ export const drinks: MenuItem[] = [
     name: "CAIPIRINHA DA MAMADI",
     description: "Caipirinha de Goiaba com Limão.",
     price: 30,
-    image: "https://picsum.photos/seed/mamadidrinque/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr11-caipirinha-da-mamadi.jpg",
+    imageBlend: "dark",
     badge: "🌈 Especial Mamadi",
   },
 ];
@@ -134,7 +155,9 @@ export const destilados: MenuItem[] = [
     name: "JAMBU",
     description: "Cachaça de Jambu. Dose.",
     price: 13,
-    image: "https://picsum.photos/seed/jambu/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde01-jambu.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de02",
@@ -142,7 +165,9 @@ export const destilados: MenuItem[] = [
     name: "51 / VELHO BARREIRO",
     description: "Dose de cachaça.",
     price: 5,
-    image: "https://picsum.photos/seed/51/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde02-51-velho-barreiro.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de03",
@@ -150,7 +175,9 @@ export const destilados: MenuItem[] = [
     name: "GENGIBRE COM MEL",
     description: "Dose de cachaça de gengibre com mel.",
     price: 10,
-    image: "https://picsum.photos/seed/gengibremell/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde03-gengibre-com-mel.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de04",
@@ -158,7 +185,9 @@ export const destilados: MenuItem[] = [
     name: "BANANINHA / CANELINHA",
     description: "Dose de cachaça de banana ou canela.",
     price: 10,
-    image: "https://picsum.photos/seed/bananinha/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde04-bananinha-canelinha.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de05",
@@ -169,7 +198,9 @@ export const destilados: MenuItem[] = [
     priceB: 25,
     labelA: "Copo 150ml",
     labelB: "Copo 550ml",
-    image: "https://picsum.photos/seed/kariri/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde05-kariri-mel-limao.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de06",
@@ -177,7 +208,9 @@ export const destilados: MenuItem[] = [
     name: "DREHER",
     description: "Dose de Dreher.",
     price: 13,
-    image: "https://picsum.photos/seed/dreher/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde06-dreher.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de07",
@@ -193,7 +226,9 @@ export const destilados: MenuItem[] = [
     name: "TEQUILA OURO José Cuervo",
     description: "Dose de tequila ouro.",
     price: 28,
-    image: "https://picsum.photos/seed/tequilaouro/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde08-tequila-ouro.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de09",
@@ -209,7 +244,9 @@ export const destilados: MenuItem[] = [
     name: "CAMPARI / APEROL",
     description: "Dose de Campari ou Aperol.",
     price: 15,
-    image: "https://picsum.photos/seed/campari/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde10-campari-aperol.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de11",
@@ -217,7 +254,9 @@ export const destilados: MenuItem[] = [
     name: "TANQUERAY (DOSE)",
     description: "Dose de gin Tanqueray.",
     price: 25,
-    image: "https://picsum.photos/seed/tanqueray/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde11-tanqueray.jpg",
+    imageBlend: "dark",
     badge: "⭐ Destaque",
   },
   {
@@ -229,7 +268,9 @@ export const destilados: MenuItem[] = [
     priceB: 22,
     labelA: "Dose",
     labelB: "Combo",
-    image: "https://picsum.photos/seed/mastergold/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde12-master-gold-chanceler.jpg",
+    imageBlend: "dark",
     obs: "Combo: Whisky + Energético de Garrafa + Gelo de Sabor",
   },
   {
@@ -241,7 +282,9 @@ export const destilados: MenuItem[] = [
     priceB: 50,
     labelA: "Dose",
     labelB: "Combo",
-    image: "https://picsum.photos/seed/cavalobranco/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde13-cavalo-branco-passport.jpg",
+    imageBlend: "dark",
     obs: "Combo: Whisky + Energético de Garrafa + Gelo de Sabor",
   },
   {
@@ -253,7 +296,9 @@ export const destilados: MenuItem[] = [
     priceB: 50,
     labelA: "Dose",
     labelB: "Combo",
-    image: "https://picsum.photos/seed/redlabel/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde14-red-label.jpg",
+    imageBlend: "dark",
     obs: "Combo: Whisky + Energético de Garrafa + Gelo de Sabor",
   },
   {
@@ -265,7 +310,9 @@ export const destilados: MenuItem[] = [
     priceB: 80,
     labelA: "Dose",
     labelB: "Combo",
-    image: "https://picsum.photos/seed/jackdaniels/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde15-jack-daniels.jpg",
+    imageBlend: "dark",
     badge: "⭐ Destaque",
     obs: "Combo: Whisky + Energético de Garrafa + Gelo de Sabor",
   },
@@ -275,7 +322,9 @@ export const destilados: MenuItem[] = [
     name: "BALALAIKA",
     description: "Vodka nacional. Dose.",
     price: 15,
-    image: "https://picsum.photos/seed/balalaika/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde16-balalaika.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de17",
@@ -283,7 +332,9 @@ export const destilados: MenuItem[] = [
     name: "ABSOLUT",
     description: "Vodka sueca Absolut. Dose.",
     price: 25,
-    image: "https://picsum.photos/seed/absolut/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde17-absolut.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de18",
@@ -291,7 +342,9 @@ export const destilados: MenuItem[] = [
     name: "SMIRNOFF",
     description: "Vodka Smirnoff. Dose.",
     price: 25,
-    image: "https://picsum.photos/seed/smirnoff/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde18-smirnoff.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de19",
@@ -299,7 +352,9 @@ export const destilados: MenuItem[] = [
     name: "VINHO TINTO",
     description: "Garrafa de vinho tinto.",
     price: 20,
-    image: "https://picsum.photos/seed/vinhotinto/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde19-vinho-tinto.jpg",
+    imageBlend: "dark",
   },
   {
     id: "de20",
@@ -307,7 +362,9 @@ export const destilados: MenuItem[] = [
     name: "VINHO ROSÉ",
     description: "Garrafa de vinho rosé.",
     price: 35,
-    image: "https://picsum.photos/seed/vinhorose/400/300",
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde20-vinho-rose.jpg",
+    imageBlend: "dark",
   },
 ];
 
@@ -339,25 +396,25 @@ export const cervejas: MenuItem[] = [
 ];
 
 // ─────────────────────────────────────────────────────────
-// 🥤 PRONTOS & SOFTS
+// 🥤 ABRIR E BEBER
 // ─────────────────────────────────────────────────────────
 export const prontos: MenuItem[] = [
-  { id: "pr01", category: "prontos", name: "SKOL BEATS", description: "Drink pronto Skol Beats.", price: 16, image: "https://picsum.photos/seed/skolbeats/400/300" },
-  { id: "pr02", category: "prontos", name: "51 ICE", description: "Drink pronto 51 Ice.", price: 16, image: "https://picsum.photos/seed/51ice/400/300" },
-  { id: "pr03", category: "prontos", name: "XEQUE MATE", description: "Drink pronto Xeque Mate.", price: 18, image: "https://picsum.photos/seed/xequemate/400/300" },
-  { id: "pr04", category: "prontos", name: "DRAFT", description: "Drink pronto Draft.", price: 20, image: "https://picsum.photos/seed/draft/400/300" },
-  { id: "pr05", category: "prontos", name: "VIBES", description: "Drink pronto Vibes.", price: 10, image: "https://picsum.photos/seed/vibes/400/300" },
-  { id: "pr06", category: "prontos", name: "CERVEJA LATA 350ml", description: "Cerveja em lata 350ml.", price: 10, image: "https://picsum.photos/seed/cervejalata/400/300" },
-  { id: "pr07", category: "prontos", name: "SMIRNOFF ICE", description: "Smirnoff Ice long neck.", price: 16, image: "https://picsum.photos/seed/smirnoffice/400/300" },
-  { id: "pr08", category: "prontos", name: "RED BULL lata 250ml", description: "Energético Red Bull 250ml.", price: 18, image: "https://picsum.photos/seed/redbull/400/300" },
-  { id: "pr09", category: "prontos", name: "MONSTER LATÃO", description: "Energético Monster latão.", price: 18, image: "https://picsum.photos/seed/monster/400/300" },
-  { id: "pr10", category: "prontos", name: "COPO ENERGÉTICO 300ml", description: "Energético no copo 300ml.", price: 5, image: "https://picsum.photos/seed/energetico/400/300" },
-  { id: "pr11", category: "prontos", name: "SODA ITALIANA", description: "Diversos sabores.", price: 13, image: "https://picsum.photos/seed/sodaitaliana/400/300" },
-  { id: "pr12", category: "prontos", name: "REFRIGERANTE", description: "Lata 350ml.", price: 7, image: "https://picsum.photos/seed/refri/400/300" },
-  { id: "pr13", category: "prontos", name: "SUCO LATA", description: "Suco em lata.", price: 7, image: "https://picsum.photos/seed/sucolata/400/300" },
-  { id: "pr14", category: "prontos", name: "ÁGUA ou ÁGUA COM GÁS", description: "Garrafa.", price: 6, image: "https://picsum.photos/seed/agua/400/300" },
-  { id: "pr15", category: "prontos", name: "ÁGUA TÔNICA", description: "Água tônica.", price: 6, image: "https://picsum.photos/seed/aguatonica/400/300" },
-  { id: "pr16", category: "prontos", name: "GELO SABORES", description: "Sabores: Coco / Maracujá / Morango.", price: 5, image: "https://picsum.photos/seed/gelosabores/400/300" },
+  { id: "pr01", category: "prontos", name: "SKOL BEATS", description: "Drink pronto Skol Beats.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr01-skol-beats.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.28 },
+  { id: "pr02", category: "prontos", name: "51 ICE", description: "Drink pronto 51 Ice.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr02-51-ice.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.28 },
+  { id: "pr03", category: "prontos", name: "XEQUE MATE", description: "Drink pronto Xeque Mate.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr03-xeque-mate.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 2.55, imagePackY: 6 },
+  { id: "pr04", category: "prontos", name: "DRAFT", description: "Drink pronto Draft.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr04-draft.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 2.25, imagePackY: 5 },
+  { id: "pr05", category: "prontos", name: "VIBES", description: "Drink pronto Vibes.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr05-vibes.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.95, imagePackY: 4 },
+  { id: "pr06", category: "prontos", name: "CERVEJA LATA 350ml", description: "Cerveja em lata 350ml.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr06-cerveja-lata-350ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.06 },
+  { id: "pr07", category: "prontos", name: "SMIRNOFF ICE", description: "Smirnoff Ice long neck.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr07-smirnoff-ice.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.15 },
+  { id: "pr08", category: "prontos", name: "RED BULL lata 250ml", description: "Energético Red Bull 250ml.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr08-red-bull-250ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.06 },
+  { id: "pr09", category: "prontos", name: "MONSTER LATÃO", description: "Energético Monster latão.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr09-monster-latao.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.1 },
+  { id: "pr10", category: "prontos", name: "COPO ENERGÉTICO 300ml", description: "Energético no copo 300ml.", price: 5, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr10-copo-energetico-300ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.35 },
+  { id: "pr11", category: "prontos", name: "SODA ITALIANA", description: "Diversos sabores.", price: 13, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr11-soda-italiana.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.35 },
+  { id: "pr12", category: "prontos", name: "REFRIGERANTE", description: "Lata 350ml.", price: 7, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr12-refrigerante-lata.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.06 },
+  { id: "pr13", category: "prontos", name: "SUCO LATA", description: "Suco em lata.", price: 7, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr13-suco-lata.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.06 },
+  { id: "pr14", category: "prontos", name: "ÁGUA ou ÁGUA COM GÁS", description: "Garrafa.", price: 6, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr14-agua.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 2.7 },
+  { id: "pr15", category: "prontos", name: "ÁGUA TÔNICA", description: "Água tônica.", price: 6, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr15-agua-tonica.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.15 },
+  { id: "pr16", category: "prontos", name: "GELO SABORES", description: "Sabores: Coco / Maracujá / Morango.", price: 5, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr16-gelo-sabores.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.75 },
 ];
 
 // ─────────────────────────────────────────────────────────
@@ -462,8 +519,8 @@ export const superLikeItems: MenuItem[] = [
 // 🍟 PORÇÕES
 // ─────────────────────────────────────────────────────────
 export const porcoes: MenuItem[] = [
-  { id: "po03", category: "porcoes", name: "BATATA FRITA C/ CHEDDAR E BACON", description: "Batata frita com cheddar derretido e bacon.", priceA: 35, priceB: 55, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png" },
-  { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo02-batata-frita-simples.png_xwi0dc.png", badge: "⭐ Destaque" },
+  { id: "po03", category: "porcoes", name: "BATATA FRITA C/ CHEDDAR E BACON", description: "Batata frita com cheddar derretido e bacon.", priceA: 35, priceB: 55, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png", imageFit: "wide" },
+  { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo02-batata-frita-simples.png_xwi0dc.png", badge: "⭐ Destaque", imageFit: "wide" },
   { id: "po07", category: "porcoes", name: "COXINHA FRANGO", description: "4 unidades. Vegana: Brócolis, Cenoura e Batata.", priceA: 18, priceB: 18, labelA: "Frango", labelB: "Vegana", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900275/porcoespo07-coxinha-frango.png_wzu1vh.png" },
   { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo01-mini-pasteis.png_md4qrg.png" },
   { id: "po04", category: "porcoes", name: "BATATA MAMADI", description: "Batata com Cheddar, Catupiry, Bacon e Parmesão Ralado.", priceA: 45, priceB: 60, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/batatamamadi/400/300", badge: "🌈 Especial Mamadi" },
@@ -528,7 +585,7 @@ export const categories: Category[] = [
   { id: "menu", label: "MENU DA MAMADI", emoji: "🍽️", gradient: "from-orange-400 to-green-500", from: "#FF8C00", to: "#00E676", glow: "#FF8C00" },
   { id: "drinks", label: "DRINKS", emoji: "🍹", gradient: "from-red-600 to-pink-600", from: "#FF3B3B", to: "#FF4081", glow: "#FF3B3B", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813232/mamadicategoriasdrinks-card_obncis.png" },
   { id: "combos", label: "COMBOS & COPÃO", emoji: "🎉", gradient: "from-blue-500 to-purple-600", from: "#2979FF", to: "#AA00FF", glow: "#2979FF" },
-  { id: "prontos", label: "PRONTOS & SOFTS", emoji: "🥤", gradient: "from-green-400 to-blue-500", from: "#00E676", to: "#2979FF", glow: "#00E676" },
+  { id: "prontos", label: "ABRIR E BEBER", emoji: "🥤", gradient: "from-green-400 to-blue-500", from: "#00E676", to: "#2979FF", glow: "#00E676" },
   { id: "destilados", label: "DESTILADOS", emoji: "🥃", gradient: "from-orange-500 to-yellow-400", from: "#FF8C00", to: "#FFE500", glow: "#FF8C00", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813557/destilados-card_fuifl2.png" },
   { id: "lanches", label: "LANCHES & BURGERS", emoji: "🥪", gradient: "from-red-600 to-orange-500", from: "#FF3B3B", to: "#FF8C00", glow: "#FF3B3B", cardImage: "/categories/cat-lanches-card.png", coverImage: "/categories/cat-lanches-card.png" },
 ];

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Eye, Home } from "lucide-react";
+import { Home } from "lucide-react";
 import type { MenuItem } from "../../data/menu";
 import {
   allMenuItems,
+  business,
   categories,
   itemsByCategory,
   superLikeCategory,
@@ -28,6 +29,32 @@ import NavigationOnboardingOverlay, {
 
 interface CategorySwipeScreenProps {
   onBack: () => void;
+}
+
+function InstagramCornerIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden>
+      <rect
+        x="2.5"
+        y="2.5"
+        width="19"
+        height="19"
+        rx="5.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <circle
+        cx="12"
+        cy="12"
+        r="4.4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" />
+    </svg>
+  );
 }
 
 const SUPER_LIKE_COUNT = superLikeItems.length;
@@ -274,17 +301,15 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
         <Home size={17} strokeWidth={1.75} fill="none" />
       </button>
 
-      <button
-        type="button"
-        className={`category-swipe-screen__corner-btn category-swipe-screen__corner-btn--right${
-          menuPreviewOpen ? " category-swipe-screen__corner-btn--active" : ""
-        }`}
-        onClick={toggleMenuPreview}
-        aria-label={menuPreviewOpen ? "Fechar visualização do cardápio" : "Visualizar cardápio"}
-        aria-pressed={menuPreviewOpen}
+      <a
+        href={business.instagramUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="category-swipe-screen__corner-btn category-swipe-screen__corner-btn--right"
+        aria-label="Instagram do Mamadi Food"
       >
-        <Eye size={17} strokeWidth={1.75} />
-      </button>
+        <InstagramCornerIcon />
+      </a>
 
       <AnimatePresence>
         {(searchOpen || menuPreviewOpen) && (
@@ -449,9 +474,11 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
       <CategoryBottomNav
         activeTab={mainTab}
         searchActive={searchOpen}
+        menuPreviewActive={menuPreviewOpen}
         onSwipe={goToSwipeHome}
         onExplore={goToExplore}
         onSearch={toggleSearch}
+        onMenuPreview={toggleMenuPreview}
       />
     </div>
   );

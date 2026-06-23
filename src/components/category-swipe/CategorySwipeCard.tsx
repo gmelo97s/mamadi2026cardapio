@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import type { Category, MenuItem } from "../../data/menu";
 import { formatPrice, SUPER_LIKE_CATEGORY_ID } from "../../data/menu";
-import { resolveProductImageClasses, resolveSwipeCardImage } from "../../lib/menuImage";
+import { resolveSwipeProductImageClasses, resolveSwipeCardImage, resolveSwipeProductImageStyle } from "../../lib/menuImage";
 import VerifiedBadge from "./VerifiedBadge";
 
 const SWIPE_THRESHOLD = 96;
@@ -105,17 +105,19 @@ export default function CategorySwipeCard({
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             >
               {imageSrc ? (
-                <img
-                  src={imageSrc}
-                  alt={item?.name ?? category.label}
-                  className={resolveProductImageClasses(
-                    item,
-                    "category-swipe-card__media-cover",
-                  )}
-                  draggable={false}
-                  decoding="async"
-                  fetchPriority="high"
-                />
+                <div
+                  className={`category-swipe-card__media-stage${item?.imageFit === "pack" ? " category-swipe-card__media-stage--pack" : ""}`}
+                >
+                  <img
+                    src={imageSrc}
+                    alt={item?.name ?? category.label}
+                    className={resolveSwipeProductImageClasses(item)}
+                    style={resolveSwipeProductImageStyle(item)}
+                    draggable={false}
+                    decoding="async"
+                    fetchPriority="high"
+                  />
+                </div>
               ) : (
                 <div className="category-swipe-card__media-black" aria-hidden />
               )}
@@ -154,78 +156,78 @@ export default function CategorySwipeCard({
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
 
-          <div className="category-swipe-card__dock">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={item?.id ?? "empty"}
-                className="category-swipe-card__item-block"
-                initial={reducedMotion ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reducedMotion ? undefined : { opacity: 0, y: -6 }}
-                transition={{ duration: 0.28 }}
-              >
-                {item ? (
-                  <>
-                    <h2 className="category-swipe-card__title">
-                      <span className="category-swipe-card__title-text">
-                        {item.name}
-                        {priceValue != null && (
-                          <span className="category-swipe-card__title-price">, {priceValue}</span>
-                        )}
-                      </span>
-                      <VerifiedBadge
-                        size="xs"
-                        variant={isSecretCard ? "gold" : "blue"}
-                      />
-                    </h2>
+        <div className="category-swipe-card__dock">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={item?.id ?? "empty"}
+              className="category-swipe-card__item-block"
+              initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reducedMotion ? undefined : { opacity: 0, y: -6 }}
+              transition={{ duration: 0.28 }}
+            >
+              {item ? (
+                <>
+                  <h2 className="category-swipe-card__title">
+                    <span className="category-swipe-card__title-text">
+                      {item.name}
+                      {priceValue != null && (
+                        <span className="category-swipe-card__title-price">, {priceValue}</span>
+                      )}
+                    </span>
+                    <VerifiedBadge
+                      size="xs"
+                      variant={isSecretCard ? "gold" : "blue"}
+                    />
+                  </h2>
 
-                    <p className="category-swipe-card__brand">
-                      <span className="category-swipe-card__brand-led" aria-label={category.label}>
-                        {category.label.split("").map((char, index) => (
-                          <span
-                            key={`${char}-${index}`}
-                            className="category-swipe-card__brand-led-char"
-                            style={{ animationDelay: `${index * 0.09}s` }}
-                            aria-hidden
-                          >
-                            {char === " " ? "\u00A0" : char}
-                          </span>
-                        ))}
-                      </span>
-                    </p>
-
-                    <p className="category-swipe-card__desc">{item.description}</p>
-
-                    {hasDouble && (
-                      <>
-                        <button
-                          type="button"
-                          className="category-swipe-card__options-btn"
-                          onClick={() => setShowOptions((v) => !v)}
-                          aria-expanded={showOptions}
+                  <p className="category-swipe-card__brand">
+                    <span className="category-swipe-card__brand-led" aria-label={category.label}>
+                      {category.label.split("").map((char, index) => (
+                        <span
+                          key={`${char}-${index}`}
+                          className="category-swipe-card__brand-led-char"
+                          style={{ animationDelay: `${index * 0.09}s` }}
+                          aria-hidden
                         >
-                          Opções disponíveis
-                        </button>
-                        {showOptions && (
-                          <div className="category-swipe-card__options-list">
-                            <p>
-                              {item.labelA ?? "Opção A"}: {formatPrice(item.priceA!)}
-                            </p>
-                            <p>
-                              {item.labelB ?? "Opção B"}: {formatPrice(item.priceB!)}
-                            </p>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <p className="category-swipe-card__desc">Nenhum item nesta categoria.</p>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                          {char === " " ? "\u00A0" : char}
+                        </span>
+                      ))}
+                    </span>
+                  </p>
+
+                  <p className="category-swipe-card__desc">{item.description}</p>
+
+                  {hasDouble && (
+                    <>
+                      <button
+                        type="button"
+                        className="category-swipe-card__options-btn"
+                        onClick={() => setShowOptions((v) => !v)}
+                        aria-expanded={showOptions}
+                      >
+                        Opções disponíveis
+                      </button>
+                      {showOptions && (
+                        <div className="category-swipe-card__options-list">
+                          <p>
+                            {item.labelA ?? "Opção A"}: {formatPrice(item.priceA!)}
+                          </p>
+                          <p>
+                            {item.labelB ?? "Opção B"}: {formatPrice(item.priceB!)}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </>
+              ) : (
+                <p className="category-swipe-card__desc">Nenhum item nesta categoria.</p>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </motion.div>
