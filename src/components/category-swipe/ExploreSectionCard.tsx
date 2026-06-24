@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ExploreSection } from "../../data/exploreSections";
 import { formatExploreSectionCount } from "../../data/exploreSections";
+import { resolveExploreSectionImage } from "../../lib/menuImage";
 
 interface ExploreSectionCardProps {
   section: ExploreSection;
@@ -20,7 +21,7 @@ export default function ExploreSectionCard({
       <div className="explore-tile__visual">
         {!imageFailed ? (
           <img
-            src={section.image}
+            src={resolveExploreSectionImage(section.image)}
             alt=""
             className="explore-tile__image explore-tile__image--photo"
             loading="lazy"

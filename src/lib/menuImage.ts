@@ -162,6 +162,12 @@ export function resolveExploreCategoryImage(category: Category): string {
   return EXPLORE_CATEGORY_IMAGES[category.id] ?? "";
 }
 
+export function resolveExploreSectionImage(src: string): string {
+  const trimmed = src?.trim();
+  if (!trimmed) return "";
+  return optimizeMenuImageUrl(trimmed, "card") ?? trimmed;
+}
+
 /** Imagem do card Explorar — inclui placeholders gerados para substituição futura. */
 export function resolveExploreItemImage(item: MenuItem): string | null {
   const src = item.image?.trim();

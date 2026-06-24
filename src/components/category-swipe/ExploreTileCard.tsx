@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { resolveExploreSectionImage } from "../../lib/menuImage";
 
 interface ExploreTileCardProps {
   title: string;
@@ -23,9 +24,9 @@ export default function ExploreTileCard({
       <div className="explore-tile__visual">
         {showImage ? (
           <img
-            src={imageSrc!}
+            src={resolveExploreSectionImage(imageSrc!)}
             alt=""
-            className="explore-tile__image"
+            className="explore-tile__image explore-tile__image--photo"
             loading="lazy"
             decoding="async"
             onError={() => setImageFailed(true)}

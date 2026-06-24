@@ -1,17 +1,16 @@
-/** Imagens curadas a partir dos melhores cards do cardápio Mamadi. */
+/** Imagens curadas — somente assets de alta qualidade com fundo preto. */
 const EXPLORE_SECTION_IMAGES: Record<string, string> = {
   dividir:
     "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png",
   economizar:
-    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326067/bhmojdxieygtmeunnhjh.jpg",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781893643/cervejasce01-brahma-chopp-litrao.png_zyeftc.png",
   "matar-fome":
-    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326089/gsc9sda3vlwbxl9knizd.jpg",
-  "beber-feliz":
-    "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr11-caipirinha-da-mamadi.jpg",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326110/sd7zrsbpqzlpqec7fouu.png",
+  "beber-feliz": "/menu-items/co02-2-copao-gin.png",
   "so-pros-fortes":
-    "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr10-cuba-libre.jpg",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326077/iuvspplms27ndqvorl0y.png",
   "abriu-bebeu":
-    "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr01-skol-beats.jpg",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/cervejasce09-heineken-600ml.png_hgjw0y.png",
 };
 
 export interface ExploreSection {
