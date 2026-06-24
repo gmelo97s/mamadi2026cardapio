@@ -592,6 +592,9 @@ body {
     env(safe-area-inset-bottom, 0px) + var(--category-nav-h) + var(--category-actions-h) +
       var(--deck-dock-min-h)
   );
+  --deck-tap-bottom: calc(
+    env(safe-area-inset-bottom, 0px) + var(--category-nav-h) + var(--category-actions-h)
+  );
 }
 
 .category-swipe-screen--deck .category-swipe-screen__main {
@@ -989,9 +992,30 @@ body {
 
 .search-result-card__title-text {
   min-width: 0;
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.search-result-card__title[data-title-fit="compact"] {
+  font-size: clamp(0.9375rem, 3.55vw, 1.2rem);
+}
+
+.search-result-card__title[data-title-fit="compact"] .search-result-card__title-text {
+  text-overflow: clip;
+}
+
+.search-result-card__title[data-title-fit="wrap"] {
+  align-items: flex-start;
+  font-size: clamp(0.875rem, 3.2vw, 1.0625rem);
+}
+
+.search-result-card__title[data-title-fit="wrap"] .search-result-card__title-text {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  line-height: 1.12;
 }
 
 .search-result-card__title-price {
@@ -1146,6 +1170,12 @@ body {
   padding-bottom: 10%;
 }
 
+.category-swipe-card__media-stage--wide {
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 0.15rem;
+}
+
 .category-swipe-card__media-layer {
   position: absolute;
   inset: 0;
@@ -1193,6 +1223,14 @@ body {
 .category-swipe-card__media-cover--product-wide {
   max-height: 98%;
   max-width: 100%;
+  object-position: center bottom;
+  transform: translateY(var(--product-pack-y, 0%)) scale(var(--product-pack-scale, 1));
+  transform-origin: center bottom;
+}
+
+.category-swipe-card__media-cover--product-scaled {
+  transform: translateY(var(--product-pack-y, 0%)) scale(var(--product-pack-scale, 1));
+  transform-origin: center bottom;
 }
 
 /* Pack (Abrir e Beber): mesmo slot da garrafa Brahma — escala + posição central */
@@ -1242,12 +1280,14 @@ body {
 .category-swipe-card__tap {
   position: absolute;
   top: var(--deck-header-clearance, 3.25rem);
-  bottom: var(--deck-media-bottom, 12rem);
+  bottom: var(--deck-tap-bottom, 12rem);
   z-index: 3;
   width: 50%;
   border: none;
   background: transparent;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .category-swipe-card__tap--left {
@@ -1667,7 +1707,7 @@ body {
     rgba(0, 0, 0, 0.35) 18%,
     rgba(0, 0, 0, 0.82) 100%
   );
-  pointer-events: auto;
+  pointer-events: none;
   text-align: left;
 }
 
@@ -1747,6 +1787,7 @@ body {
 .category-swipe-card__item-block {
   margin-top: 0;
   transform: translateY(-0.3rem);
+  pointer-events: auto;
 }
 
 .category-swipe-card__title {
@@ -1767,9 +1808,30 @@ body {
 
 .category-swipe-card__title-text {
   min-width: 0;
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.category-swipe-card__title[data-title-fit="compact"] {
+  font-size: clamp(0.9375rem, 3.55vw, 1.2rem);
+}
+
+.category-swipe-card__title[data-title-fit="compact"] .category-swipe-card__title-text {
+  text-overflow: clip;
+}
+
+.category-swipe-card__title[data-title-fit="wrap"] {
+  align-items: flex-start;
+  font-size: clamp(0.875rem, 3.2vw, 1.0625rem);
+}
+
+.category-swipe-card__title[data-title-fit="wrap"] .category-swipe-card__title-text {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  line-height: 1.12;
 }
 
 .category-swipe-card__title .verified-badge {

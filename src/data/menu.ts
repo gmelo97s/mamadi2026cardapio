@@ -372,15 +372,15 @@ export const destilados: MenuItem[] = [
 // 🍺 CERVEJAS
 // ─────────────────────────────────────────────────────────
 export const cervejas: MenuItem[] = [
-  { id: "ce01", category: "cervejas", name: "BRAHMA CHOPP Litrão", description: "Brahma Chopp 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781893643/cervejasce01-brahma-chopp-litrao.png_zyeftc.png" },
-  { id: "ce02", category: "cervejas", name: "SKOL PILSEN Litrão", description: "Skol Pilsen 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895374/cervejasce02-skol-litrao.png_fgorhw.png" },
-  { id: "ce03", category: "cervejas", name: "AMSTEL Litrão", description: "Amstel 1 litro.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce03-amstel-litrao.png_c2hwjg.png" },
-  { id: "ce04", category: "cervejas", name: "ANTÁRTICA Litrão", description: "Antártica 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce04-antartica-litrao.png_fx1u1a.png" },
-  { id: "ce05", category: "cervejas", name: "BUDWEISER Litrão", description: "Budweiser 1 litro.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895370/cervejasce05-budweiser-litrao.png_vrlzf5.png" },
-  { id: "ce06", category: "cervejas", name: "BRAHMA DUPLO MALTE Litrão", description: "Brahma Duplo Malte 1 litro.", price: 19, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895369/cervejasce06-brahma-duplo-malte-litrao.png_y0iayi.png" },
+  { id: "ce01", category: "cervejas", name: "BRAHMA CHOPP Litrão", description: "Brahma Chopp 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781893643/cervejasce01-brahma-chopp-litrao.png_zyeftc.png", imageBlend: "dark" },
+  { id: "ce02", category: "cervejas", name: "SKOL PILSEN Litrão", description: "Skol Pilsen 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895374/cervejasce02-skol-litrao.png_fgorhw.png", imageBlend: "dark" },
+  { id: "ce03", category: "cervejas", name: "AMSTEL Litrão", description: "Amstel 1 litro.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce03-amstel-litrao.png_c2hwjg.png", imageBlend: "dark" },
+  { id: "ce04", category: "cervejas", name: "ANTÁRTICA Litrão", description: "Antártica 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce04-antartica-litrao.png_fx1u1a.png", imageBlend: "dark" },
+  { id: "ce05", category: "cervejas", name: "BUDWEISER Litrão", description: "Budweiser 1 litro.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895370/cervejasce05-budweiser-litrao.png_vrlzf5.png", imageBlend: "dark" },
+  { id: "ce06", category: "cervejas", name: "BRAHMA DUPLO MALTE Litrão", description: "Brahma Duplo Malte 1 litro.", price: 19, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895369/cervejasce06-brahma-duplo-malte-litrao.png_y0iayi.png", imageBlend: "dark" },
   { id: "ce07", category: "cervejas", name: "ORIGINAL Litrão", description: "Original 1 litro.", price: 22, image: "https://picsum.photos/seed/original/400/300" },
   { id: "ce08", category: "cervejas", name: "PETRA Litrão", description: "Petra 1 litro.", price: 13, image: "https://picsum.photos/seed/petra/400/300" },
-  { id: "ce09", category: "cervejas", name: "HEINEKEN 600ml", description: "Heineken garrafa verde 600ml.", price: 22, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/cervejasce09-heineken-600ml.png_hgjw0y.png", badge: "⭐ Destaque" },
+  { id: "ce09", category: "cervejas", name: "HEINEKEN 600ml", description: "Heineken garrafa verde 600ml.", price: 22, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/cervejasce09-heineken-600ml.png_hgjw0y.png", imageBlend: "dark", badge: "⭐ Destaque" },
   { id: "ce10", category: "cervejas", name: "STELLA 600ml", description: "Stella Artois garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/stella600/400/300" },
   { id: "ce11", category: "cervejas", name: "BECK'S 600ml", description: "Beck's garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/becks600/400/300" },
   { id: "ce12", category: "cervejas", name: "SPATEN 600ml", description: "Spaten garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/spaten600/400/300" },
@@ -427,11 +427,11 @@ export const combos: MenuItem[] = [
   { id: "co04", category: "combos", name: "COPÃO DA SORRAH", description: "Dose de Dreher, limão, mel e energético.", price: 20, image: "https://picsum.photos/seed/sorrah/400/300" },
   { id: "co05", category: "combos", name: "COPÃO VODKA C/ ENERGÉTICO", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 15, image: "/menu-items/co05-copao-vodka-energetico.png", badge: "🌈 Especial Mamadi" },
   { id: "co06", category: "combos", name: "3 EISENBAHN 600ml", description: "Pack com 3 garrafas Eisenbahn 600ml.", price: 40, image: "https://picsum.photos/seed/3eisenbahn/400/300" },
-  { id: "co07", category: "combos", name: "3 ORIGINAL 600ml", description: "Pack com 3 garrafas Original 600ml.", price: 40, image: "https://picsum.photos/seed/3original/400/300" },
-  { id: "co08", category: "combos", name: "3 HEINEKEN 600ml", description: "Pack com 3 garrafas Heineken 600ml.", price: 60, image: "https://picsum.photos/seed/3heineken/400/300", badge: "⭐ Destaque" },
-  { id: "co09", category: "combos", name: "3 LITRÃO BRAHMA Chopp", description: "Pack com 3 litrões Brahma Chopp.", price: 45, image: "https://picsum.photos/seed/3litraobrahma/400/300" },
-  { id: "co10", category: "combos", name: "3 LITRÃO SKOL", description: "Pack com 3 litrões Skol.", price: 45, image: "https://picsum.photos/seed/3litraoskol/400/300" },
-  { id: "co11", category: "combos", name: "3 LITRÃO ORIGINAL", description: "Pack com 3 litrões Original.", price: 60, image: "https://picsum.photos/seed/3litraooriginal/400/300" },
+  { id: "co07", category: "combos", name: "3 ORIGINAL 600ml", description: "Pack com 3 garrafas Original 600ml.", price: 40, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326101/mmxxekph4chcwun65rpb.jpg", imageBlend: "dark", imageFit: "wide" },
+  { id: "co08", category: "combos", name: "3 HEINEKEN 600ml", description: "Pack com 3 garrafas Heineken 600ml.", price: 60, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326091/zxufk3ewztmkxpndvpd4.jpg", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque" },
+  { id: "co09", category: "combos", name: "3 LITRÃO BRAHMA Chopp", description: "Pack com 3 litrões Brahma Chopp.", price: 45, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326067/bhmojdxieygtmeunnhjh.jpg", imageBlend: "dark", imageFit: "wide" },
+  { id: "co10", category: "combos", name: "3 LITRÃO SKOL", description: "Pack com 3 litrões Skol.", price: 45, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326070/ynpactkvpc5e6ecywoms.webp", imageBlend: "dark", imageFit: "wide" },
+  { id: "co11", category: "combos", name: "3 LITRÃO ORIGINAL", description: "Pack com 3 litrões Original.", price: 60, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326092/qxsbqrdhcc4kcssnhbbs.webp", imageBlend: "dark", imageFit: "wide" },
 ];
 
 // ─────────────────────────────────────────────────────────
@@ -457,7 +457,9 @@ export const superLikeItems: MenuItem[] = [
     name: "CHURRASCO À VONTADE",
     description: "Churrasco à Vontade (Individual). Acompanha: Arroz, Farofa e Vinagrete.",
     price: 25,
-    image: "https://picsum.photos/seed/churrascomamadi/400/300",
+    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326077/iuvspplms27ndqvorl0y.png",
+    imageBlend: "dark",
+    imageFit: "wide",
     badge: "⭐ Destaque",
     obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs",
   },
@@ -494,7 +496,9 @@ export const superLikeItems: MenuItem[] = [
     name: "3 LITRÃO SKOL ou BRAHMA",
     description: "Pack com 3 litrões Skol ou 3 litrões Brahma Chopp.",
     price: 45,
-    image: "https://picsum.photos/seed/3litraoskol/400/300",
+    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326067/bhmojdxieygtmeunnhjh.jpg",
+    imageBlend: "dark",
+    imageFit: "wide",
   },
   {
     id: "sl06",
@@ -502,7 +506,9 @@ export const superLikeItems: MenuItem[] = [
     name: "3 HEINEKEN 600ml",
     description: "Pack com 3 garrafas Heineken 600ml.",
     price: 60,
-    image: "https://picsum.photos/seed/3heineken/400/300",
+    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326091/zxufk3ewztmkxpndvpd4.jpg",
+    imageBlend: "dark",
+    imageFit: "wide",
     badge: "⭐ Destaque",
   },
   {
@@ -511,7 +517,9 @@ export const superLikeItems: MenuItem[] = [
     name: "3 LITRÃO ORIGINAL",
     description: "Pack com 3 litrões Original.",
     price: 60,
-    image: "https://picsum.photos/seed/3litraooriginal/400/300",
+    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326092/qxsbqrdhcc4kcssnhbbs.webp",
+    imageBlend: "dark",
+    imageFit: "wide",
   },
 ];
 
@@ -519,49 +527,49 @@ export const superLikeItems: MenuItem[] = [
 // 🍟 PORÇÕES
 // ─────────────────────────────────────────────────────────
 export const porcoes: MenuItem[] = [
-  { id: "po03", category: "porcoes", name: "BATATA FRITA C/ CHEDDAR E BACON", description: "Batata frita com cheddar derretido e bacon.", priceA: 35, priceB: 55, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png", imageFit: "wide" },
-  { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo02-batata-frita-simples.png_xwi0dc.png", badge: "⭐ Destaque", imageFit: "wide" },
-  { id: "po07", category: "porcoes", name: "COXINHA FRANGO", description: "4 unidades. Vegana: Brócolis, Cenoura e Batata.", priceA: 18, priceB: 18, labelA: "Frango", labelB: "Vegana", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900275/porcoespo07-coxinha-frango.png_wzu1vh.png" },
-  { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo01-mini-pasteis.png_md4qrg.png" },
-  { id: "po04", category: "porcoes", name: "BATATA MAMADI", description: "Batata com Cheddar, Catupiry, Bacon e Parmesão Ralado.", priceA: 45, priceB: 60, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/batatamamadi/400/300", badge: "🌈 Especial Mamadi" },
-  { id: "po05", category: "porcoes", name: "CALABRESA ACEBOLADA", description: "Calabresa grelhada com cebola.", priceA: 38.9, priceB: 79.9, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/calabresa/400/300" },
-  { id: "po06", category: "porcoes", name: "MANDIOCA FRITA", description: "Mandioca frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://picsum.photos/seed/mandioca/400/300" },
-  { id: "po09", category: "porcoes", name: "ESPETINHO", description: "1 unidade. Sabores: Carne, Frango, Linguiça, Queijo Coalho ou Pão de Alho.", price: 16, image: "https://picsum.photos/seed/espetinho/400/300" },
-  { id: "po10", category: "porcoes", name: "COUVERT DA MAMADI", description: "Sardela, Caponata de Berinjela, Azeitonas, Queijo Temperado, Calabresa Curada e Pão da Casa.", price: 30, image: "https://picsum.photos/seed/couvert/400/300", badge: "🌈 Especial Mamadi" },
+  { id: "po03", category: "porcoes", name: "BATATA FRITA C/ CHEDDAR E BACON", description: "Batata frita com cheddar derretido e bacon.", priceA: 35, priceB: 55, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png", imageBlend: "dark", imageFit: "wide" },
+  { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo02-batata-frita-simples.png_xwi0dc.png", imageBlend: "dark", badge: "⭐ Destaque", imageFit: "wide" },
+  { id: "po07", category: "porcoes", name: "COXINHA FRANGO", description: "4 unidades. Vegana: Brócolis, Cenoura e Batata.", priceA: 18, priceB: 18, labelA: "Frango", labelB: "Vegana", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900275/porcoespo07-coxinha-frango.png_wzu1vh.png", imageBlend: "dark" },
+  { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo01-mini-pasteis.png_md4qrg.png", imageBlend: "dark" },
+  { id: "po04", category: "porcoes", name: "BATATA MAMADI", description: "Batata com Cheddar, Catupiry, Bacon e Parmesão Ralado.", priceA: 45, priceB: 60, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326066/gyus9joaxjg5fle20gst.jpg", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
+  { id: "po05", category: "porcoes", name: "CALABRESA ACEBOLADA", description: "Calabresa grelhada com cebola.", priceA: 38.9, priceB: 79.9, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326105/z6xbkzwcvh1v5ud6rq5b.jpg", imageBlend: "dark", imageFit: "wide" },
+  { id: "po06", category: "porcoes", name: "MANDIOCA FRITA", description: "Mandioca frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326108/jz3xbd9wsmhbkqnrahft.jpg", imageBlend: "dark", imageFit: "wide" },
+  { id: "po09", category: "porcoes", name: "ESPETINHO", description: "1 unidade. Sabores: Carne, Frango, Linguiça, Queijo Coalho ou Pão de Alho.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326106/ox0aflfbdrwjstlg5btf.jpg", imageBlend: "dark" },
+  { id: "po10", category: "porcoes", name: "COUVERT DA MAMADI", description: "Sardela, Caponata de Berinjela, Azeitonas, Queijo Temperado, Calabresa Curada e Pão da Casa.", price: 30, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326074/busfm2xqw86ma3yybefm.jpg", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
 ];
 
 // ─────────────────────────────────────────────────────────
 // 🥩 TÁBUAS
 // ─────────────────────────────────────────────────────────
 export const tabuas: MenuItem[] = [
-  { id: "ta01", category: "porcoes", name: "TÁBUA DE ESPETINHOS", description: "6 Espetos: 2 de Carne + 1 de Frango + 1 de Linguiça + 1 de Queijo Coalho + 1 Pão de Alho. Acompanha Farofa e Vinagrete.", price: 89.9, image: "https://picsum.photos/seed/tabuaespetinhos/400/300", badge: "⭐ Destaque" },
-  { id: "ta02", category: "porcoes", name: "TÁBUA MISTA", description: "Batata Frita Simples + Calabresa Acebolada + Contra-Filé Acebolado + Frango Acebolado + Mandioca Frita. Acompanha Pão + Farofa + Vinagrete + Maionese Temperada.", price: 129.9, image: "https://picsum.photos/seed/tabuamista/400/300", badge: "🌈 Especial Mamadi" },
-  { id: "ta03", category: "porcoes", name: "TÁBUA DUPLA 1", description: "Batata Frita Simples + Calabresa Acebolada. Acompanha Pão + Vinagrete + Maionese Temperada.", price: 62.9, image: "https://picsum.photos/seed/tabuadupla1/400/300" },
-  { id: "ta04", category: "porcoes", name: "TÁBUA DUPLA 2", description: "Batata Frita Simples + Contra-Filé Acebolado. Acompanha Pão + Vinagrete + Maionese Temperada.", price: 99.9, image: "https://picsum.photos/seed/tabuadupla2/400/300" },
+  { id: "ta01", category: "porcoes", name: "TÁBUA DE ESPETINHOS", description: "6 Espetos: 2 de Carne + 1 de Frango + 1 de Linguiça + 1 de Queijo Coalho + 1 Pão de Alho. Acompanha Farofa e Vinagrete.", price: 89.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326114/kw0tdwzokq3odiwaklcy.jpg", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque" },
+  { id: "ta02", category: "porcoes", name: "TÁBUA MISTA", description: "Batata Frita Simples + Calabresa Acebolada + Contra-Filé Acebolado + Frango Acebolado + Mandioca Frita. Acompanha Pão + Farofa + Vinagrete + Maionese Temperada.", price: 129.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326072/sjkazuvopy7f9qo28fog.jpg", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
+  { id: "ta03", category: "porcoes", name: "TÁBUA DUPLA 1", description: "Batata Frita Simples + Calabresa Acebolada. Acompanha Pão + Vinagrete + Maionese Temperada.", price: 62.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326088/osqtphp1gga2hq3n6rid.jpg", imageBlend: "dark", imageFit: "wide" },
+  { id: "ta04", category: "porcoes", name: "TÁBUA DUPLA 2", description: "Batata Frita Simples + Contra-Filé Acebolado. Acompanha Pão + Vinagrete + Maionese Temperada.", price: 99.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326079/hc5ajmaulhtx9zkfo2js.webp", imageBlend: "dark", imageFit: "wide" },
 ];
 
 // ─────────────────────────────────────────────────────────
 // 🥪 LANCHES & BURGERS
 // ─────────────────────────────────────────────────────────
 export const lanchesEBurgers: MenuItem[] = [
-  { id: "la01", category: "lanches", name: "LANCHE DE CALABRESA", description: "Calabresa, Queijo e Cebola no Pão. Acompanha Maionese Temperada.", price: 27.9, image: "https://picsum.photos/seed/lanchecalabresa/400/300" },
-  { id: "la02", category: "lanches", name: "LANCHE DE CARNE LOUCA", description: "Carne de Panela Desfiada e Temperada no Pão. Acompanha Maionese Temperada.", price: 27.9, image: "https://picsum.photos/seed/carnelouca/400/300", badge: "⭐ Destaque" },
-  { id: "la03", category: "lanches", name: "LANCHE DE PERNIL", description: "Pernil com Molho Especial, Cebola Refogada no Pão. Acompanha Maionese Temperada.", price: 27.9, image: "https://picsum.photos/seed/lanchepernil/400/300" },
-  { id: "la04", category: "lanches", name: "LANCHE VEGANO", description: "Berinjela Temperada, Azeitona, Tomate e Cebola no Pão. Acompanha Barbecue. (Vegano)", price: 23.9, image: "https://picsum.photos/seed/lanchevegano/400/300", badge: "🌱 Vegano" },
-  { id: "bu01", category: "lanches", name: "MAMADI ORIGINAL", description: "Pão Brioche, 70g de Carne, Queijo Cheddar e Maionese Especial.", priceA: 29.9, priceB: 39.9, labelA: "Lanche", labelB: "Combo", image: "https://picsum.photos/seed/madadioriginal/400/300", obs: "Combo: Lanche + Batata Frita Simples + Refrigerante Lata" },
-  { id: "bu02", category: "lanches", name: "MAMADI BACON", description: "Pão Brioche, 70g de Carne, Queijo Cheddar, Bacon, Barbecue e Maionese Especial.", priceA: 32.9, priceB: 42.9, labelA: "Lanche", labelB: "Combo", image: "https://picsum.photos/seed/mamadibacon/400/300", badge: "⭐ Destaque", obs: "Combo: Lanche + Batata Frita Simples + Refrigerante Lata" },
-  { id: "bu03", category: "lanches", name: "MAMADI CLÁSSICO", description: "Pão Australiano, 70g de Carne, Queijo Cheddar, Cebola Caramelizada, Bacon, Barbecue e Maionese Especial.", priceA: 37.9, priceB: 47.9, labelA: "Lanche", labelB: "Combo", image: "https://picsum.photos/seed/madadiclassico/400/300", badge: "🌈 Especial Mamadi", obs: "Combo: Lanche + Batata Frita Simples + Refrigerante Lata" },
+  { id: "la01", category: "lanches", name: "LANCHE DE CALABRESA", description: "Calabresa, Queijo e Cebola no Pão. Acompanha Maionese Temperada.", price: 27.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326069/p9dnwv78g72db3agfozq.jpg", imageBlend: "dark" },
+  { id: "la02", category: "lanches", name: "LANCHE DE CARNE LOUCA", description: "Carne de Panela Desfiada e Temperada no Pão. Acompanha Maionese Temperada.", price: 27.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326100/i01hnokusaffykyvoncl.jpg", imageBlend: "dark", badge: "⭐ Destaque" },
+  { id: "la03", category: "lanches", name: "LANCHE DE PERNIL", description: "Pernil com Molho Especial, Cebola Refogada no Pão. Acompanha Maionese Temperada.", price: 27.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326097/f3i2kotmjtgie9fa1uim.avif", imageBlend: "dark" },
+  { id: "la04", category: "lanches", name: "LANCHE VEGANO", description: "Berinjela Temperada, Azeitona, Tomate e Cebola no Pão. Acompanha Barbecue. (Vegano)", price: 23.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326103/cd8xf2ftbby2uib0ceoc.webp", imageBlend: "dark", badge: "🌱 Vegano" },
+  { id: "bu01", category: "lanches", name: "MAMADI ORIGINAL", description: "Pão Brioche, 70g de Carne, Queijo Cheddar e Maionese Especial.", priceA: 29.9, priceB: 39.9, labelA: "Lanche", labelB: "Combo", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326095/ohbakagmnfbxf6kcwcmt.png", imageBlend: "dark", obs: "Combo: Lanche + Batata Frita Simples + Refrigerante Lata" },
+  { id: "bu02", category: "lanches", name: "MAMADI BACON", description: "Pão Brioche, 70g de Carne, Queijo Cheddar, Bacon, Barbecue e Maionese Especial.", priceA: 32.9, priceB: 42.9, labelA: "Lanche", labelB: "Combo", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326089/gsc9sda3vlwbxl9knizd.jpg", imageBlend: "dark", badge: "⭐ Destaque", obs: "Combo: Lanche + Batata Frita Simples + Refrigerante Lata" },
+  { id: "bu03", category: "lanches", name: "MAMADI CLÁSSICO", description: "Pão Australiano, 70g de Carne, Queijo Cheddar, Cebola Caramelizada, Bacon, Barbecue e Maionese Especial.", priceA: 37.9, priceB: 47.9, labelA: "Lanche", labelB: "Combo", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326084/tk450vqdlvhrj1ssnqox.jpg", imageBlend: "dark", badge: "🌈 Especial Mamadi", obs: "Combo: Lanche + Batata Frita Simples + Refrigerante Lata" },
 ];
 
 // ─────────────────────────────────────────────────────────
 // 🍽️ MENU DA MAMADI (Comidinhas Caseiras)
 // ─────────────────────────────────────────────────────────
 export const menuMamadi: MenuItem[] = [
-  { id: "me01", category: "menu", name: "CAFÉ DA MAMADI", description: "Pão na Chapa + Ovos Mexidos + Bacon + Café Preto.", price: 10, image: "https://picsum.photos/seed/cafemamadi/400/300", obs: "Disponível de Quarta a Domingo, 10:30 às 21hrs" },
-  { id: "me02", category: "menu", name: "CHURRASCO DA MAMADI", description: "Churrasco à Vontade (Individual). Acompanha: Arroz, Farofa e Vinagrete.", price: 25, image: "https://picsum.photos/seed/churrascomamadi/400/300", badge: "⭐ Destaque", obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs" },
-  { id: "me03", category: "menu", name: "PRATO EXECUTIVO c/ 2 Espetinhos", description: "Sabores: Carne / Frango / Linguiça / Pão de Alho / Queijo Coalho. Acompanha: Arroz, Feijão, Fritas, Vinagrete e Farofa.", price: 29.99, image: "https://picsum.photos/seed/pratoexecutivo/400/300", obs: "Quarta a Domingo, 10:30 às 21hrs" },
-  { id: "me04", category: "menu", name: "BAIÃO DE DOIS — Prato de Domingo", description: "Baião de Dois servido com Mandioca Frita e Tiras de Contra-Filé. Serve 2 pessoas.", price: 49.9, image: "https://picsum.photos/seed/baiaomedois/400/300", badge: "🌈 Especial Mamadi", obs: "Disponível somente aos Domingos" },
-  { id: "me05", category: "menu", name: "BERINJELA REFOGADA (Vegano)", description: "Arroz, Berinjela Refogada, Feijão, Fritas, Vinagrete e Farofa.", price: 25, image: "https://picsum.photos/seed/berinjela/400/300", badge: "🌱 Vegano", obs: "Quarta a Domingo, 10:30 às 21hrs" },
+  { id: "me01", category: "menu", name: "CAFÉ DA MAMADI", description: "Pão na Chapa + Ovos Mexidos + Bacon + Café Preto.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326094/kqddl68lrkmruuo65xoa.jpg", imageBlend: "dark", imageFit: "wide", obs: "Disponível de Quarta a Domingo, 10:30 às 21hrs" },
+  { id: "me02", category: "menu", name: "CHURRASCO DA MAMADI", description: "Churrasco à Vontade (Individual). Acompanha: Arroz, Farofa e Vinagrete.", price: 25, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326077/iuvspplms27ndqvorl0y.png", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque", obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs" },
+  { id: "me03", category: "menu", name: "PRATO EXECUTIVO c/ 2 Espetinhos", description: "Sabores: Carne / Frango / Linguiça / Pão de Alho / Queijo Coalho. Acompanha: Arroz, Feijão, Fritas, Vinagrete e Farofa.", price: 29.99, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326112/ugtdfc420qvoshz5jlnb.png", imageBlend: "dark", imageFit: "wide", obs: "Quarta a Domingo, 10:30 às 21hrs" },
+  { id: "me04", category: "menu", name: "BAIÃO DE DOIS — Prato de Domingo", description: "Baião de Dois servido com Mandioca Frita e Tiras de Contra-Filé. Serve 2 pessoas.", price: 49.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326110/sd7zrsbpqzlpqec7fouu.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi", obs: "Disponível somente aos Domingos" },
+  { id: "me05", category: "menu", name: "BERINJELA REFOGADA (Vegano)", description: "Arroz, Berinjela Refogada, Feijão, Fritas, Vinagrete e Farofa.", price: 25, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326085/fjvjxnssbgxhrdhuzkoe.png", imageBlend: "dark", imageFit: "wide", badge: "🌱 Vegano", obs: "Quarta a Domingo, 10:30 às 21hrs" },
 ];
 
 // ─────────────────────────────────────────────────────────

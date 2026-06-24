@@ -3,6 +3,8 @@ import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-mo
 import type { Category, MenuItem } from "../../data/menu";
 import { formatPrice, SUPER_LIKE_CATEGORY_ID } from "../../data/menu";
 import { resolveSwipeProductImageClasses, resolveSwipeCardImage, resolveSwipeProductImageStyle } from "../../lib/menuImage";
+import { applyDeckCalibration } from "../../lib/menuDeckCalibration";
+import { useTitleFitTier } from "../../hooks/useTitleFitTier";
 import VerifiedBadge from "./VerifiedBadge";
 
 const SWIPE_THRESHOLD = 96;
@@ -42,8 +44,14 @@ export default function CategorySwipeCard({
   const [showOptions, setShowOptions] = useState(false);
 
   const imageSrc = resolveSwipeCardImage(item, category);
+  const deckItem = applyDeckCalibration(item);
   const hasDouble = item != null && item.priceA != null && item.priceB != null;
   const priceValue = item ? primaryPriceValue(item) : null;
+  const titleLabel =
+    item != null
+      ? `${item.name}${priceValue != null ? `, ${priceValue}` : ""}`
+      : "";
+  const { ref: titleRef, tier: titleFitTier } = useTitleFitTier(titleLabel);
 
   useEffect(() => {
     setShowOptions(false);
@@ -106,7 +114,13 @@ export default function CategorySwipeCard({
             >
               {imageSrc ? (
                 <div
-                  className={`category-swipe-card__media-stage${item?.imageFit === "pack" ? " category-swipe-card__media-stage--pack" : ""}`}
+                  className={`category-swipe-card__media-stage${
+                    deckItem?.imageFit === "pack"
+                      ? " category-swipe-card__media-stage--pack"
+                      : deckItem?.imageFit === "wide"
+                        ? " category-swipe-card__media-stage--wide"
+                        : ""
+                  }`}
                 >
                   <img
                     src={imageSrc}
@@ -124,38 +138,6 @@ export default function CategorySwipeCard({
             </motion.div>
           </AnimatePresence>
           <div className="category-swipe-card__shade" aria-hidden />
-
-          <button
-            type="button"
-            className="category-swipe-card__tap category-swipe-card__tap--left"
-            aria-label="Item anterior"
-            onClick={() => tryTapZone("left")}
-          />
-          <button
-            type="button"
-            className="category-swipe-card__tap category-swipe-card__tap--right"
-            aria-label="Próximo item"
-            onClick={() => tryTapZone("right")}
-          />
-
-          <AnimatePresence>
-            {tapFlash && (
-              <motion.div
-                key={tapFlash}
-                className={`tap-flash tap-flash--${tapFlash}`}
-                initial={{ opacity: 0, scale: 0.65 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.2 }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                aria-hidden
-              >
-                <span className="tap-flash__ring" />
-                <span className="tap-flash__glyph">
-                  {tapFlash === "right" ? "›" : "‹"}
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
 
         <div className="category-swipe-card__dock">
@@ -170,8 +152,8 @@ export default function CategorySwipeCard({
             >
               {item ? (
                 <>
-                  <h2 className="category-swipe-card__title">
-                    <span className="category-swipe-card__title-text">
+                  <h2 className="category-swipe-card__title" data-title-fit={titleFitTier}>
+                    <span ref={titleRef} className="category-swipe-card__title-text">
                       {item.name}
                       {priceValue != null && (
                         <span className="category-swipe-card__title-price">, {priceValue}</span>
@@ -229,6 +211,38 @@ export default function CategorySwipeCard({
             </motion.div>
           </AnimatePresence>
         </div>
+
+        <button
+          type="button"
+          className="category-swipe-card__tap category-swipe-card__tap--left"
+          aria-label="Item anterior"
+          onClick={() => tryTapZone("left")}
+        />
+        <button
+          type="button"
+          className="category-swipe-card__tap category-swipe-card__tap--right"
+          aria-label="Próximo item"
+          onClick={() => tryTapZone("right")}
+        />
+
+        <AnimatePresence>
+          {tapFlash && (
+            <motion.div
+              key={tapFlash}
+              className={`tap-flash tap-flash--${tapFlash}`}
+              initial={{ opacity: 0, scale: 0.65 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.2 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              aria-hidden
+            >
+              <span className="tap-flash__ring" />
+              <span className="tap-flash__glyph">
+                {tapFlash === "right" ? "›" : "‹"}
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );

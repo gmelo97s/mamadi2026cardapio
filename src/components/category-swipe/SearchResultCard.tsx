@@ -1,5 +1,7 @@
 import type { Category, MenuItem } from "../../data/menu";
-import { resolveProductImageClasses, resolveSwipeCardImage } from "../../lib/menuImage";
+import { resolveProductImageClasses, resolveSwipeCardImage, resolveSwipeProductImageStyle } from "../../lib/menuImage";
+import { applyDeckCalibration } from "../../lib/menuDeckCalibration";
+import { useTitleFitTier } from "../../hooks/useTitleFitTier";
 import VerifiedBadge from "./VerifiedBadge";
 
 interface SearchResultCardProps {
@@ -17,6 +19,8 @@ function primaryPriceValue(item: MenuItem): number | null {
 export default function SearchResultCard({ item, category, onClick }: SearchResultCardProps) {
   const imageSrc = resolveSwipeCardImage(item, category);
   const priceValue = primaryPriceValue(item);
+  const titleLabel = `${item.name}${priceValue != null ? `, ${priceValue}` : ""}`;
+  const { ref: titleRef, tier: titleFitTier } = useTitleFitTier(titleLabel);
 
   return (
     <button type="button" className="search-result-card" onClick={onClick}>
@@ -25,7 +29,8 @@ export default function SearchResultCard({ item, category, onClick }: SearchResu
           <img
             src={imageSrc}
             alt={item.name}
-            className={resolveProductImageClasses(item, "search-result-card__image")}
+            className={resolveProductImageClasses(applyDeckCalibration(item), "search-result-card__image")}
+            style={resolveSwipeProductImageStyle(item)}
             loading="lazy"
             decoding="async"
           />
@@ -34,8 +39,8 @@ export default function SearchResultCard({ item, category, onClick }: SearchResu
         )}
         <div className="search-result-card__shade" aria-hidden />
         <div className="search-result-card__dock">
-          <h3 className="search-result-card__title">
-            <span className="search-result-card__title-text">
+          <h3 className="search-result-card__title" data-title-fit={titleFitTier}>
+            <span ref={titleRef} className="search-result-card__title-text">
               {item.name}
               {priceValue != null && (
                 <span className="search-result-card__title-price">, {priceValue}</span>

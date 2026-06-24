@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Category, MenuItem } from "../data/menu";
+import { applyDeckCalibration } from "./menuDeckCalibration";
 
 /** URLs que ainda não foram trocadas por imagens reais do cliente. */
 const PLACEHOLDER_PATTERNS = [/picsum\.photos/i, /\/generated-menu\//i];
@@ -8,11 +9,23 @@ export type MenuImageSize = "thumb" | "card" | "full";
 
 const IMAGE_WIDTH: Record<MenuImageSize, number> = {
   thumb: 480,
-  card: 720,
-  full: 960,
+  card: 1200,
+  full: 1200,
 };
 
-/** Cloudinary: formato automático, qualidade adaptativa e largura máxima por contexto. */
+/** Imagens já em canvas 1200×1500 — não reaplicar c_pad (evita blur e barras). */
+function isPreprocessedDeckImage(src: string): boolean {
+  return (
+    src.includes("fundo_preto/") ||
+    /\/v1782326\d+\//.test(src) ||
+    src.includes("b_rgb:000000") ||
+    /\/v178190027[0-9]\//.test(src) ||
+    /\/v1781895[0-9]{3}\//.test(src) ||
+    /\/v1781893643\//.test(src)
+  );
+}
+
+/** Cloudinary: formato automático, qualidade máxima no deck. */
 export function optimizeMenuImageUrl(
   src: string | null | undefined,
   size: MenuImageSize = "card",
@@ -26,7 +39,17 @@ export function optimizeMenuImageUrl(
     !/f_auto|q_auto/.test(trimmed)
   ) {
     const width = IMAGE_WIDTH[size];
-    return trimmed.replace("/image/upload/", `/image/upload/f_auto,q_auto:good,w_${width}/`);
+    const preprocessed = isPreprocessedDeckImage(trimmed);
+    const height = size === "card" && !preprocessed ? Math.round(width * 1.25) : undefined;
+    const canvas =
+      size === "card" && !preprocessed
+        ? `b_rgb:000000,c_pad,g_center,w_${width},h_${height},`
+        : "";
+    const quality = size === "card" ? "q_auto:best" : "q_auto:good";
+    return trimmed.replace(
+      "/image/upload/",
+      `/image/upload/${canvas}f_auto,${quality},w_${width}/`,
+    );
   }
 
   return trimmed;
@@ -51,14 +74,19 @@ export function resolveProductImageClasses(
   return `${baseClass} ${baseClass}--product ${baseClass}--product-${blend}`;
 }
 
-/** Classes do deck swipe — sem máscara/scale; suporta pratos largos e pack (latas/garrafas). */
+/** Classes do deck swipe — suporta pratos largos, pack e escala unificada. */
 export function resolveSwipeProductImageClasses(item: MenuItem | null): string {
+  const calibrated = applyDeckCalibration(item);
   const base = "category-swipe-card__media-cover";
-  if (!item || !isCustomMenuImage(item.image)) return base;
-  const blend = item.imageBlend === "light" ? "light" : "dark";
-  const wide = item.imageFit === "wide" ? ` ${base}--product-wide` : "";
-  const pack = item.imageFit === "pack" ? ` ${base}--product-pack` : "";
-  return `${base} ${base}--product ${base}--product-${blend}${wide}${pack}`;
+  if (!calibrated || !isCustomMenuImage(calibrated.image)) return base;
+  const blend = calibrated.imageBlend === "light" ? "light" : "dark";
+  const wide = calibrated.imageFit === "wide" ? ` ${base}--product-wide` : "";
+  const pack = calibrated.imageFit === "pack" ? ` ${base}--product-pack` : "";
+  const scaled =
+    calibrated.imageScale != null && calibrated.imageFit !== "pack" && calibrated.imageFit !== "wide"
+      ? ` ${base}--product-scaled`
+      : "";
+  return `${base} ${base}--product ${base}--product-${blend}${wide}${pack}${scaled}`;
 }
 
 /** Deslocamento vertical padrão no deck pack conforme a escala. */
@@ -70,13 +98,20 @@ function resolvePackOffsetY(scale: number, explicit?: number): number {
   return 4;
 }
 
-/** Escala CSS do slot pack (referência visual: garrafa Brahma ce01). */
+/** Escala CSS no deck — pack, wide e default calibrados. */
 export function resolveSwipeProductImageStyle(
   item: MenuItem | null,
 ): CSSProperties | undefined {
-  if (!item || item.imageFit !== "pack") return undefined;
-  const scale = item.imageScale ?? 1;
-  const y = resolvePackOffsetY(scale, item.imagePackY);
+  const calibrated = applyDeckCalibration(item);
+  if (!calibrated) return undefined;
+
+  const scale =
+    calibrated.imageScale ??
+    (calibrated.imageFit === "pack" ? 1 : calibrated.imageFit === "wide" ? 1.08 : undefined);
+
+  if (scale == null) return undefined;
+
+  const y = resolvePackOffsetY(scale, calibrated.imagePackY);
   return {
     ["--product-pack-scale" as string]: String(scale),
     ["--product-pack-y" as string]: `${y}%`,
@@ -88,8 +123,9 @@ export function resolveSwipeCardImage(
   item: MenuItem | null,
   category: Category,
 ): string | null {
-  if (item?.image && isCustomMenuImage(item.image)) {
-    return optimizeItemImage(item, "card");
+  const calibrated = applyDeckCalibration(item);
+  if (calibrated?.image && isCustomMenuImage(calibrated.image)) {
+    return optimizeItemImage(calibrated, "card");
   }
 
   if (!item) {
