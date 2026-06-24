@@ -24,7 +24,6 @@ const P = {
 
 export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
   // ── Drinks ──
-  dr01: P.copoDrink,
   dr02: P.copoDrink,
   dr03: P.copoDrink,
   dr04: P.copoDrink,
@@ -33,26 +32,6 @@ export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
   dr09: P.copoDrink,
   dr10: P.copoDrink,
   dr11: P.copoDrink,
-
-  // ── Destilados ──
-  de01: P.dose,
-  de02: P.dose,
-  de03: P.dose,
-  de04: P.dose,
-  de05: { ...P.copoDrink, imageScale: 1.45 },
-  de06: P.dose,
-  de08: P.garrafaDose,
-  de10: P.dose,
-  de11: P.garrafaDose,
-  de12: P.garrafaDose,
-  de13: P.garrafaDose,
-  de14: P.garrafaDose,
-  de15: { ...P.garrafaDose, imageScale: 1.6 },
-  de16: P.garrafaDose,
-  de17: P.garrafaDose,
-  de18: P.garrafaDose,
-  de19: P.vinho,
-  de20: P.vinho,
 
   // ── Cervejas ──
   ce01: P.litrao,
@@ -83,9 +62,6 @@ export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
   pr16: { imageBlend: "dark", imageFit: "pack", imageScale: 1.85, imagePackY: 5 },
 
   // ── Combos ──
-  co01: P.copoCopao,
-  co02: P.copoCopao,
-  co05: P.copoCopao,
   co07: P.pack3Garrafa,
   co08: P.pack3Garrafa,
   co09: P.pack3Litrao,
@@ -114,7 +90,6 @@ export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
   la02: P.lanche,
   la03: P.lanche,
   la04: P.lanche,
-  bu01: P.lanche,
   bu02: P.lanche,
   bu03: P.lanche,
 
@@ -127,9 +102,6 @@ export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
 
   // ── Super Like ──
   sl01: P.prato,
-  sl02: P.copoCopao,
-  sl03: P.copoCopao,
-  sl04: P.copoCopao,
   sl05: P.pack3Litrao,
   sl06: P.pack3Garrafa,
   sl07: P.pack3Litrao,

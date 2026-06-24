@@ -1,17 +1,17 @@
-/** Imagens curadas via Unsplash — substitua por assets locais em public/explore-sections/ se preferir. */
+/** Imagens curadas a partir dos melhores cards do cardápio Mamadi. */
 const EXPLORE_SECTION_IMAGES: Record<string, string> = {
   dividir:
-    "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800&q=80&auto=format&fit=crop",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png",
   economizar:
-    "https://images.unsplash.com/photo-1608270575622-70caf0a9528d?w=800&q=80&auto=format&fit=crop",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326067/bhmojdxieygtmeunnhjh.jpg",
   "matar-fome":
-    "https://images.unsplash.com/photo-1568901346735-4efe35964925?w=800&q=80&auto=format&fit=crop",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326089/gsc9sda3vlwbxl9knizd.jpg",
   "beber-feliz":
-    "https://images.unsplash.com/photo-1514362545857-3bc16ae4a932?w=800&q=80&auto=format&fit=crop",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr11-caipirinha-da-mamadi.jpg",
   "so-pros-fortes":
-    "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80&auto=format&fit=crop",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr10-cuba-libre.jpg",
   "abriu-bebeu":
-    "https://images.unsplash.com/photo-1436073163999-0ca3ce295be2?w=800&q=80&auto=format&fit=crop",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr01-skol-beats.jpg",
 };
 
 export interface ExploreSection {
@@ -60,10 +60,10 @@ export const exploreSections: ExploreSection[] = [
   {
     id: "so-pros-fortes",
     label: "Só pros fortes...",
-    tag: "DESTILADOS",
-    description: "Doses e garrafas pra quem gosta de ir com tudo.",
+    tag: "FORTE",
+    description: "Drinks potentes e combos pra quem gosta de ir com tudo.",
     image: EXPLORE_SECTION_IMAGES["so-pros-fortes"],
-    categoryIds: ["destilados"],
+    categoryIds: ["drinks", "combos"],
   },
   {
     id: "abriu-bebeu",
