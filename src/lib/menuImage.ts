@@ -18,6 +18,9 @@ function isPreprocessedDeckImage(src: string): boolean {
   return (
     src.includes("fundo_preto/") ||
     /\/v1782326\d+\//.test(src) ||
+    /\/v1782488\d+\//.test(src) ||
+    /\/v1782491\d+\//.test(src) ||
+    /\/v1782502\d+\//.test(src) ||
     src.includes("b_rgb:000000") ||
     /\/v178190027[0-9]\//.test(src) ||
     /\/v1781895[0-9]{3}\//.test(src) ||
