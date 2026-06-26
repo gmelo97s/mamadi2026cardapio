@@ -1,3 +1,5 @@
+import { hasMenuPhoto } from "../lib/menuPhoto";
+
 export interface MenuItem {
   id: string;
   category: string;
@@ -33,18 +35,47 @@ export interface Category {
   coverImage?: string;
 }
 
+function visibleMenuItems(items: MenuItem[]): MenuItem[] {
+  return items.filter((item) => hasMenuPhoto(item.image));
+}
+
 // ─────────────────────────────────────────────────────────
-// 🍹 DRINKS
+// 🍹 DRINKS (ordem do deck)
 // ─────────────────────────────────────────────────────────
+const COPAO_GIN_IMAGE =
+  "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/e_copao_de_gin_jy8t3z.png";
+
+/** Mesma base do copão gin — líquido do copo esquerdo em verde (overlay Cloudinary). */
+const COPAO_VODKA_IMAGE =
+  "https://res.cloudinary.com/du8l3x4rh/image/upload/" +
+  "l_v1782502472:e_copao_de_gin_jy8t3z,w_0.44,h_1.0,c_crop,g_west," +
+  "e_colorize:88,co_rgb:00e676/fl_layer_apply,g_west,w_0.44/" +
+  "v1782502472/e_copao_de_gin_jy8t3z.png";
+
 export const drinks: MenuItem[] = [
   {
-    id: "dr01",
+    id: "dr05",
     category: "drinks",
-    name: "GIN TÔNICA",
-    description: "GIN Nacional, Água Tônica e Limão Taiti.",
-    price: 25,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781812072/dr01-gin-tonica_rmpvzh.png",
-    badge: "⭐ Destaque",
+    name: "CAIPIRINHA SABORES copo 550ml",
+    description:
+      "51/Velho Barreiro / Balalaika / Jambu / Saquê. Sabores: Kiwi / Morango / Maracujá / Caju / Limão.",
+    price: 30,
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502482/caipirinha_sabores_copo_500ml_fnpwvt.png",
+    imageBlend: "dark",
+    imageFit: "pack",
+  },
+  {
+    id: "dr11",
+    category: "drinks",
+    name: "CAIPIRINHA DA MAMADI",
+    description: "Caipirinha de Goiaba com Limão.",
+    price: 30,
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502474/caipirinha_da_mamadi_dubapf.png",
+    imageBlend: "dark",
+    imageFit: "pack",
+    badge: "🌈 Especial Mamadi",
   },
   {
     id: "dr02",
@@ -56,6 +87,36 @@ export const drinks: MenuItem[] = [
       "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502482/caiprinha_300ml_agoesr.png",
     imageBlend: "dark",
     imageFit: "pack",
+  },
+  {
+    id: "dr07",
+    category: "drinks",
+    name: "GIN SABORES",
+    description: "Sabores: Tropical / Melancia / Morango / Maçã Verde.",
+    price: 25,
+    image: COPAO_GIN_IMAGE,
+    imageBlend: "dark",
+    imageFit: "pack",
+  },
+  {
+    id: "dr06",
+    category: "drinks",
+    name: "CHEVETTE",
+    description: "Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.",
+    price: 20,
+    image:
+      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502481/chevette_wuoo8r.png",
+    imageBlend: "dark",
+    imageFit: "pack",
+  },
+  {
+    id: "dr01",
+    category: "drinks",
+    name: "GIN TÔNICA",
+    description: "GIN Nacional, Água Tônica e Limão Taiti.",
+    price: 25,
+    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781812072/dr01-gin-tonica_rmpvzh.png",
+    badge: "⭐ Destaque",
   },
   {
     id: "dr03",
@@ -78,37 +139,6 @@ export const drinks: MenuItem[] = [
       "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502482/caiprinha_300ml_agoesr.png",
     imageBlend: "dark",
     imageFit: "pack",
-  },
-  {
-    id: "dr05",
-    category: "drinks",
-    name: "CAIPIRINHA SABORES copo 550ml",
-    description:
-      "51/Velho Barreiro / Balalaika / Jambu / Saquê. Sabores: Kiwi / Morango / Maracujá / Caju / Limão.",
-    price: 30,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502482/caipirinha_sabores_copo_500ml_fnpwvt.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "dr06",
-    category: "drinks",
-    name: "CHEVETTE",
-    description: "Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.",
-    price: 20,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502481/chevette_wuoo8r.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "dr07",
-    category: "drinks",
-    name: "GIN SABORES",
-    description: "Sabores: Tropical / Melancia / Morango / Maçã Verde.",
-    price: 25,
-    image: "https://picsum.photos/seed/ginsabores/400/300",
   },
   {
     id: "dr08",
@@ -139,18 +169,6 @@ export const drinks: MenuItem[] = [
     image:
       "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr10-cuba-libre.jpg",
     imageBlend: "dark",
-  },
-  {
-    id: "dr11",
-    category: "drinks",
-    name: "CAIPIRINHA DA MAMADI",
-    description: "Caipirinha de Goiaba com Limão.",
-    price: 30,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502474/caipirinha_da_mamadi_dubapf.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "🌈 Especial Mamadi",
   },
 ];
 
@@ -413,13 +431,13 @@ export const prontos: MenuItem[] = [
   { id: "pr03", category: "prontos", name: "XEQUE MATE", description: "Drink pronto Xeque Mate.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr03-xeque-mate.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 2.55, imagePackY: 6 },
   { id: "pr04", category: "prontos", name: "DRAFT", description: "Drink pronto Draft.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr04-draft.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 2.25, imagePackY: 5 },
   { id: "pr05", category: "prontos", name: "VIBES", description: "Drink pronto Vibes.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr05-vibes.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.95, imagePackY: 4 },
-  { id: "pr06", category: "prontos", name: "CERVEJA LATA 350ml", description: "Cerveja em lata 350ml.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr06-cerveja-lata-350ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1, imagePackY: 4 },
+  { id: "pr06", category: "prontos", name: "CERVEJA LATA 350ml", description: "Cerveja em lata 350ml.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr06-cerveja-lata-350ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 0.78, imagePackY: 4 },
   { id: "pr07", category: "prontos", name: "SMIRNOFF ICE", description: "Smirnoff Ice long neck.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr07-smirnoff-ice.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.16, imagePackY: 4 },
   { id: "pr08", category: "prontos", name: "RED BULL lata 250ml", description: "Energético Red Bull 250ml.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr08-red-bull-250ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1, imagePackY: 4 },
   { id: "pr09", category: "prontos", name: "MONSTER LATÃO", description: "Energético Monster latão.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr09-monster-latao.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.08, imagePackY: 4 },
   { id: "pr10", category: "prontos", name: "COPO ENERGÉTICO 300ml", description: "Energético no copo 300ml.", price: 5, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr10-copo-energetico-300ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.42, imagePackY: 4 },
   { id: "pr11", category: "prontos", name: "SODA ITALIANA", description: "Diversos sabores.", price: 13, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr11-soda-italiana.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.48, imagePackY: 4 },
-  { id: "pr12", category: "prontos", name: "REFRIGERANTE", description: "Lata 350ml.", price: 7, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502469/refrigerante_jl678v.png", imageBlend: "dark", imageFit: "pack", imageScale: 1.05, imagePackY: 4 },
+  { id: "pr12", category: "prontos", name: "REFRIGERANTE", description: "Lata 350ml.", price: 7, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502469/refrigerante_jl678v.png", imageBlend: "dark", imageFit: "pack", imageScale: 1.12, imagePackY: 5 },
   { id: "pr13", category: "prontos", name: "SUCO LATA", description: "Suco em lata.", price: 7, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr13-suco-lata.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1, imagePackY: 4 },
   { id: "pr14", category: "prontos", name: "ÁGUA ou ÁGUA COM GÁS", description: "Garrafa.", price: 6, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr14-agua.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 2.35, imagePackY: 5 },
   { id: "pr15", category: "prontos", name: "ÁGUA TÔNICA", description: "Água tônica.", price: 6, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr15-agua-tonica.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.16, imagePackY: 4 },
@@ -427,29 +445,29 @@ export const prontos: MenuItem[] = [
 ];
 
 // ─────────────────────────────────────────────────────────
-// 🎉 COMBOS & COPÃO
+// 🎉 COMBOS & COPÃO (ordem do deck)
 // ─────────────────────────────────────────────────────────
 export const combos: MenuItem[] = [
+  { id: "co09", category: "combos", name: "3 LITRÃO BRAHMA Chopp", description: "Pack com 3 litrões Brahma Chopp.", price: 45, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487997/3_litrao_skol_ou_brahma_tgthmz.png", imageBlend: "dark", imageFit: "pack" },
+  { id: "co10", category: "combos", name: "3 LITRÃO SKOL", description: "Pack com 3 litrões Skol.", price: 45, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/3_litrao_skol_qq1ez4.png", imageBlend: "dark", imageFit: "pack" },
+  { id: "co11", category: "combos", name: "3 LITRÃO ORIGINAL", description: "Pack com 3 litrões Original.", price: 60, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487999/3_litrao_original_umyxny.png", imageBlend: "dark", imageFit: "pack" },
+  { id: "co08", category: "combos", name: "3 HEINEKEN 600ml", description: "Pack com 3 garrafas Heineken 600ml.", price: 60, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487996/3_heineken_600ml_yctyrx.png", imageBlend: "dark", imageFit: "pack", badge: "⭐ Destaque" },
+  { id: "co07", category: "combos", name: "3 ORIGINAL 600ml", description: "Pack com 3 garrafas Original 600ml.", price: 40, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/3_original_600ml_hzczzf.png", imageBlend: "dark", imageFit: "pack" },
+  { id: "co06", category: "combos", name: "3 EISENBAHN 600ml", description: "Pack com 3 garrafas Eisenbahn 600ml.", price: 40, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/3_einsenbahn_600ml_kcbmse.png", imageBlend: "dark", imageFit: "pack" },
   { id: "co01", category: "combos", name: "3 CAIPIRINHA LIMÃO", description: "Somente de limão. Copo 300ml. Pack com 3 unidades.", price: 30, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502481/3_caiprinhas_hg9mkg.png", imageBlend: "dark", imageFit: "pack", badge: "🌈 Especial Mamadi" },
   { id: "co02", category: "combos", name: "2 COPÃO DE GIN", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 30, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/e_copao_de_gin_jy8t3z.png", imageBlend: "dark", imageFit: "pack", badge: "🌈 Especial Mamadi" },
   { id: "co03", category: "combos", name: "2 CHEVETTE", description: "Dois Chevettes: Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.", price: 35, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/2_chevette_psofcx.png", imageBlend: "dark", imageFit: "pack" },
   { id: "co05", category: "combos", name: "COPÃO VODKA C/ ENERGÉTICO", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 15, image: "/menu-items/co05-copao-vodka-energetico.png", badge: "🌈 Especial Mamadi" },
-  { id: "co06", category: "combos", name: "3 EISENBAHN 600ml", description: "Pack com 3 garrafas Eisenbahn 600ml.", price: 40, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/3_einsenbahn_600ml_kcbmse.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co07", category: "combos", name: "3 ORIGINAL 600ml", description: "Pack com 3 garrafas Original 600ml.", price: 40, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/3_original_600ml_hzczzf.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co08", category: "combos", name: "3 HEINEKEN 600ml", description: "Pack com 3 garrafas Heineken 600ml.", price: 60, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487996/3_heineken_600ml_yctyrx.png", imageBlend: "dark", imageFit: "pack", badge: "⭐ Destaque" },
-  { id: "co09", category: "combos", name: "3 LITRÃO BRAHMA Chopp", description: "Pack com 3 litrões Brahma Chopp.", price: 45, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487997/3_litrao_skol_ou_brahma_tgthmz.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co10", category: "combos", name: "3 LITRÃO SKOL", description: "Pack com 3 litrões Skol.", price: 45, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/3_litrao_skol_qq1ez4.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co11", category: "combos", name: "3 LITRÃO ORIGINAL", description: "Pack com 3 litrões Original.", price: 60, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487999/3_litrao_original_umyxny.png", imageBlend: "dark", imageFit: "pack" },
 ];
 
 // ─────────────────────────────────────────────────────────
-// ⭐ SUPER LIKE — card secreto (somente via botão estrela)
+// ⭐ SUPER PROMOS — deck secreto (botão estrela)
 // ─────────────────────────────────────────────────────────
 export const SUPER_LIKE_CATEGORY_ID = "superlike";
 
 export const superLikeCategory: Category = {
   id: SUPER_LIKE_CATEGORY_ID,
-  label: "SUPER LIKE",
+  label: "SUPER PROMOS",
   emoji: "⭐",
   gradient: "from-yellow-400 to-purple-600",
   from: "#FFE500",
@@ -458,35 +476,25 @@ export const superLikeCategory: Category = {
   cardImage: "/generated-menu/categories/cat-combos-card.png",
 };
 
-export const superLikeItems: MenuItem[] = [
-  {
-    id: "sl01",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "CHURRASCO À VONTADE",
-    description: "Churrasco à Vontade (Individual). Acompanha: Arroz, Farofa e Vinagrete.",
-    price: 25,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/churrasco_a_vontade_udj3ye.png",
-    imageBlend: "dark",
-    imageFit: "wide",
-    badge: "⭐ Destaque",
-    obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs",
-  },
-  {
-    id: "sl02",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "COPÃO VODKA C/ ENERGÉTICO",
-    description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.",
-    price: 15,
-    image: "/menu-items/co05-copao-vodka-energetico.png",
-    badge: "🌈 Especial Mamadi",
-  },
+export const superLikeItems = visibleMenuItems([
   {
     id: "sl03",
     category: SUPER_LIKE_CATEGORY_ID,
     name: "2 COPÃO DE GIN",
     description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.",
     price: 30,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/e_copao_de_gin_jy8t3z.png",
+    image: COPAO_GIN_IMAGE,
+    imageBlend: "dark",
+    imageFit: "pack",
+    badge: "🌈 Especial Mamadi",
+  },
+  {
+    id: "sl02",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "2 COPÃO VODKA C/ ENERGÉTICO",
+    description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.",
+    price: 30,
+    image: COPAO_VODKA_IMAGE,
     imageBlend: "dark",
     imageFit: "pack",
     badge: "🌈 Especial Mamadi",
@@ -533,31 +541,46 @@ export const superLikeItems: MenuItem[] = [
     imageBlend: "dark",
     imageFit: "pack",
   },
-];
+  {
+    id: "sl08",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "2 CHEVETTE",
+    description: "Dois Chevettes: Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.",
+    price: 35,
+    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/2_chevette_psofcx.png",
+    imageBlend: "dark",
+    imageFit: "pack",
+  },
+  {
+    id: "sl01",
+    category: SUPER_LIKE_CATEGORY_ID,
+    name: "CHURRASCO À VONTADE",
+    description: "Churrasco à Vontade (Individual). Acompanha: Arroz, Farofa e Vinagrete.",
+    price: 25,
+    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/churrasco_a_vontade_udj3ye.png",
+    imageBlend: "dark",
+    imageFit: "wide",
+    badge: "⭐ Destaque",
+    obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs",
+  },
+]);
 
 // ─────────────────────────────────────────────────────────
-// 🍟 PORÇÕES
+// 🍟 PORÇÕES (ordem do deck)
 // ─────────────────────────────────────────────────────────
 export const porcoes: MenuItem[] = [
-  { id: "po03", category: "porcoes", name: "BATATA FRITA C/ CHEDDAR E BACON", description: "Batata frita com cheddar derretido e bacon.", priceA: 35, priceB: 55, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png", imageBlend: "dark", imageFit: "wide" },
-  { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo02-batata-frita-simples.png_xwi0dc.png", imageBlend: "dark", badge: "⭐ Destaque", imageFit: "wide" },
-  { id: "po07", category: "porcoes", name: "COXINHA FRANGO", description: "4 unidades. Vegana: Brócolis, Cenoura e Batata.", priceA: 18, priceB: 18, labelA: "Frango", labelB: "Vegana", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900275/porcoespo07-coxinha-frango.png_wzu1vh.png", imageBlend: "dark" },
-  { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo01-mini-pasteis.png_md4qrg.png", imageBlend: "dark" },
-  { id: "po04", category: "porcoes", name: "BATATA MAMADI", description: "Batata com Cheddar, Catupiry, Bacon e Parmesão Ralado.", priceA: 45, priceB: 60, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/batata_da_mamadi_2_cogbhi.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
-  { id: "po05", category: "porcoes", name: "CALABRESA ACEBOLADA", description: "Calabresa grelhada com cebola.", priceA: 38.9, priceB: 79.9, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326105/z6xbkzwcvh1v5ud6rq5b.jpg", imageBlend: "dark", imageFit: "wide" },
-  { id: "po06", category: "porcoes", name: "MANDIOCA FRITA", description: "Mandioca frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326108/jz3xbd9wsmhbkqnrahft.jpg", imageBlend: "dark", imageFit: "wide" },
-  { id: "po09", category: "porcoes", name: "ESPETINHO", description: "1 unidade. Sabores: Carne, Frango, Linguiça, Queijo Coalho ou Pão de Alho.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326106/ox0aflfbdrwjstlg5btf.jpg", imageBlend: "dark" },
-  { id: "po10", category: "porcoes", name: "COUVERT DA MAMADI", description: "Sardela, Caponata de Berinjela, Azeitonas, Queijo Temperado, Calabresa Curada e Pão da Casa.", price: 30, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502477/courvert_dpvi2h.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
-];
-
-// ─────────────────────────────────────────────────────────
-// 🥩 TÁBUAS
-// ─────────────────────────────────────────────────────────
-export const tabuas: MenuItem[] = [
-  { id: "ta01", category: "porcoes", name: "TÁBUA DE ESPETINHOS", description: "6 Espetos: 2 de Carne + 1 de Frango + 1 de Linguiça + 1 de Queijo Coalho + 1 Pão de Alho. Acompanha Farofa e Vinagrete.", price: 89.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326114/kw0tdwzokq3odiwaklcy.jpg", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque" },
   { id: "ta02", category: "porcoes", name: "TÁBUA MISTA", description: "Batata Frita Simples + Calabresa Acebolada + Contra-Filé Acebolado + Frango Acebolado + Mandioca Frita. Acompanha Pão + Farofa + Vinagrete + Maionese Temperada.", price: 129.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/t_abua_mista_bbiu5x.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
   { id: "ta03", category: "porcoes", name: "TÁBUA DUPLA 1", description: "Batata Frita Simples + Calabresa Acebolada. Acompanha Pão + Vinagrete + Maionese Temperada.", price: 62.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502476/t%C3%A1bua_dupla_1_wi2ake.png", imageBlend: "dark", imageFit: "wide" },
   { id: "ta04", category: "porcoes", name: "TÁBUA DUPLA 2", description: "Batata Frita Simples + Contra-Filé Acebolado. Acompanha Pão + Vinagrete + Maionese Temperada.", price: 99.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502478/t%C3%A1bua_dupla_2_cpncsw.png", imageBlend: "dark", imageFit: "wide" },
+  { id: "po10", category: "porcoes", name: "COUVERT DA MAMADI", description: "Sardela, Caponata de Berinjela, Azeitonas, Queijo Temperado, Calabresa Curada e Pão da Casa.", price: 30, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502477/courvert_dpvi2h.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
+  { id: "po03", category: "porcoes", name: "BATATA FRITA C/ CHEDDAR E BACON", description: "Batata frita com cheddar derretido e bacon.", priceA: 35, priceB: 55, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png", imageBlend: "dark", imageFit: "wide" },
+  { id: "po04", category: "porcoes", name: "BATATA MAMADI", description: "Batata com Cheddar, Catupiry, Bacon e Parmesão Ralado.", priceA: 45, priceB: 60, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/batata_da_mamadi_2_cogbhi.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
+  { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo02-batata-frita-simples.png_xwi0dc.png", imageBlend: "dark", badge: "⭐ Destaque", imageFit: "wide" },
+  { id: "po05", category: "porcoes", name: "CALABRESA ACEBOLADA", description: "Calabresa grelhada com cebola.", priceA: 38.9, priceB: 79.9, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326105/z6xbkzwcvh1v5ud6rq5b.jpg", imageBlend: "dark", imageFit: "wide" },
+  { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo01-mini-pasteis.png_md4qrg.png", imageBlend: "dark" },
+  { id: "po07", category: "porcoes", name: "COXINHA FRANGO", description: "4 unidades. Vegana: Brócolis, Cenoura e Batata.", priceA: 18, priceB: 18, labelA: "Frango", labelB: "Vegana", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900275/porcoespo07-coxinha-frango.png_wzu1vh.png", imageBlend: "dark" },
+  { id: "ta01", category: "porcoes", name: "TÁBUA DE ESPETINHOS", description: "6 Espetos: 2 de Carne + 1 de Frango + 1 de Linguiça + 1 de Queijo Coalho + 1 Pão de Alho. Acompanha Farofa e Vinagrete.", price: 89.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326114/kw0tdwzokq3odiwaklcy.jpg", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque" },
+  { id: "po09", category: "porcoes", name: "ESPETINHO", description: "1 unidade. Sabores: Carne, Frango, Linguiça, Queijo Coalho ou Pão de Alho.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326106/ox0aflfbdrwjstlg5btf.jpg", imageBlend: "dark" },
 ];
 
 // ─────────────────────────────────────────────────────────
@@ -587,17 +610,18 @@ export const menuMamadi: MenuItem[] = [
 // ─────────────────────────────────────────────────────────
 // EXPORT AGRUPADO
 // ─────────────────────────────────────────────────────────
-export const allMenuItems: MenuItem[] = [
-  ...drinks,
-  ...destilados,
-  ...cervejas,
-  ...prontos,
-  ...combos,
-  ...porcoes,
-  ...tabuas,
-  ...lanchesEBurgers,
-  ...menuMamadi,
-];
+export const itemsByCategory: Record<string, MenuItem[]> = {
+  drinks: visibleMenuItems(drinks),
+  destilados: visibleMenuItems(destilados),
+  cervejas: visibleMenuItems(cervejas),
+  prontos: visibleMenuItems(prontos),
+  combos: visibleMenuItems(combos),
+  porcoes: visibleMenuItems(porcoes),
+  lanches: visibleMenuItems(lanchesEBurgers),
+  menu: visibleMenuItems(menuMamadi),
+};
+
+export const allMenuItems: MenuItem[] = Object.values(itemsByCategory).flat();
 
 export const categories: Category[] = [
   { id: "cervejas", label: "CERVEJAS", emoji: "🍺", gradient: "from-yellow-400 to-green-400", from: "#FFE500", to: "#00E676", glow: "#FFE500" },
@@ -608,17 +632,6 @@ export const categories: Category[] = [
   { id: "prontos", label: "ABRIR E BEBER", emoji: "🥤", gradient: "from-green-400 to-blue-500", from: "#00E676", to: "#2979FF", glow: "#00E676" },
   { id: "lanches", label: "LANCHES & BURGERS", emoji: "🥪", gradient: "from-red-600 to-orange-500", from: "#FF3B3B", to: "#FF8C00", glow: "#FF3B3B", cardImage: "/categories/cat-lanches-card.png", coverImage: "/categories/cat-lanches-card.png" },
 ];
-
-export const itemsByCategory: Record<string, MenuItem[]> = {
-  drinks,
-  destilados,
-  cervejas,
-  prontos,
-  combos,
-  porcoes: [...porcoes, ...tabuas],
-  lanches: lanchesEBurgers,
-  menu: menuMamadi,
-};
 
 export const complementosLanches = [
   { name: "Maionese Temperada extra", price: 1 },

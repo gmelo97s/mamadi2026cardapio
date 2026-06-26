@@ -43,7 +43,7 @@ export default function SwipeActionButtons({
           <div className="swipe-actions__super-wrap">
             <motion.button
               type="button"
-              aria-label="Abrir Super Like"
+              aria-label="Abrir Super Promos"
               onClick={onSuperLike}
               whileTap={reducedMotion ? undefined : { scale: 0.92 }}
               className="swipe-actions__btn swipe-actions__btn--super"

@@ -3,7 +3,7 @@ const EXPLORE_SECTION_IMAGES: Record<string, string> = {
   dividir:
     "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/t_abua_mista_bbiu5x.png",
   economizar:
-    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781893643/cervejasce01-brahma-chopp-litrao.png_zyeftc.png",
+    "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487997/3_litrao_skol_ou_brahma_tgthmz.png",
   "matar-fome":
     "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502468/lanche_de_calabresa_l6vaeq.png",
   "beber-feliz":

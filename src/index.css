@@ -1228,6 +1228,12 @@ body {
   transform-origin: center bottom;
 }
 
+.category-swipe-card__media-cover--deck-fresh.category-swipe-card__media-cover--product-wide {
+  max-height: 94%;
+  object-position: center center;
+  transform-origin: center center;
+}
+
 .category-swipe-card__media-cover--product-scaled {
   transform: translateY(var(--product-pack-y, 0%)) scale(var(--product-pack-scale, 1));
   transform-origin: center bottom;
@@ -1275,6 +1281,15 @@ body {
   );
   pointer-events: none;
   z-index: 2;
+}
+
+.category-swipe-card__media:has(.category-swipe-card__media-cover--deck-fresh) .category-swipe-card__shade {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.18) 0%,
+    transparent 20%,
+    transparent 100%
+  );
 }
 
 .category-swipe-card__tap {
@@ -2210,9 +2225,11 @@ body {
 .explore-tile__visual {
   position: absolute;
   inset: 0;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 0;
-  padding: 0;
+  padding: 0.5rem 0.625rem 2.75rem;
   overflow: hidden;
   background: #000;
 }
@@ -2222,15 +2239,15 @@ body {
   display: block;
   width: 100%;
   height: 100%;
-  max-width: none;
-  max-height: none;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   object-position: center;
   border-radius: 0;
   filter: none;
   min-height: 0;
   pointer-events: none;
-  background: #000;
+  background: transparent;
 }
 
 .explore-tile__emoji {

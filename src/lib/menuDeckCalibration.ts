@@ -26,7 +26,8 @@ const P = {
   v2502CopoMulti: { imageBlend: "dark" as const, imageFit: "pack" as const, imageScale: 0.84, imagePackY: 7 },
   v2502Copo2: { imageBlend: "dark" as const, imageFit: "pack" as const, imageScale: 0.82, imagePackY: 7 },
   v2502Lanche: { imageBlend: "dark" as const, imageFit: "pack" as const, imageScale: 1.02, imagePackY: 7 },
-  v2502Prato: { imageBlend: "dark" as const, imageFit: "wide" as const, imageScale: 0.92, imagePackY: 6 },
+  v2502Prato: { imageBlend: "dark" as const, imageFit: "wide" as const, imageScale: 0.86, imagePackY: -3 },
+  v2502PratoCentro: { imageBlend: "dark" as const, imageFit: "wide" as const, imageScale: 0.84, imagePackY: -4 },
   v2502PackCentro: { imageBlend: "dark" as const, imageFit: "pack" as const, imageScale: 0.84, imagePackY: 7 },
   v2502Lata: { imageBlend: "dark" as const, imageFit: "pack" as const, imageScale: 0.9, imagePackY: 6 },
   copoDrink: { imageBlend: "dark" as const, imageFit: "pack" as const, imageScale: 1.52, imagePackY: 4 },
@@ -47,6 +48,7 @@ export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
   dr04: P.v2502Copo1,
   dr05: P.v2502CopoMulti,
   dr06: P.v2502Copo1,
+  dr07: P.v2502Copo2,
   dr08: P.copoDrink,
   dr09: P.copoDrink,
   dr10: P.copoDrink,
@@ -88,13 +90,13 @@ export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
   pr03: { imageBlend: "dark", imageFit: "pack", imageScale: 2.55, imagePackY: 6 },
   pr04: { imageBlend: "dark", imageFit: "pack", imageScale: 2.25, imagePackY: 5 },
   pr05: { imageBlend: "dark", imageFit: "pack", imageScale: 1.95, imagePackY: 4 },
-  pr06: { imageBlend: "dark", imageFit: "pack", imageScale: 1.05, imagePackY: 4 },
+  pr06: { imageBlend: "dark", imageFit: "pack", imageScale: 0.78, imagePackY: 4 },
   pr07: { imageBlend: "dark", imageFit: "pack", imageScale: 1.18, imagePackY: 4 },
   pr08: { imageBlend: "dark", imageFit: "pack", imageScale: 1.12, imagePackY: 4 },
   pr09: { imageBlend: "dark", imageFit: "pack", imageScale: 1.1, imagePackY: 4 },
   pr10: { imageBlend: "dark", imageFit: "pack", imageScale: 1.45, imagePackY: 4 },
   pr11: { imageBlend: "dark", imageFit: "pack", imageScale: 1.5, imagePackY: 4 },
-  pr12: P.v2502Lata,
+  pr12: { ...P.v2502Lata, imageScale: 1.12, imagePackY: 5 },
   pr13: { imageBlend: "dark", imageFit: "pack", imageScale: 1.38, imagePackY: 4 },
   pr14: { imageBlend: "dark", imageFit: "pack", imageScale: 2.35, imagePackY: 5 },
   pr15: { imageBlend: "dark", imageFit: "pack", imageScale: 1.2, imagePackY: 4 },
@@ -113,21 +115,20 @@ export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
   co11: P.mamadiPackV2,
 
   // ── Porções ──
-  po01: P.porcaoVert,
+  po01: { ...P.porcaoVert, imageScale: 1.08, imagePackY: 1 },
   po02: { ...P.prato, imageScale: 1.12 },
   po03: { ...P.prato, imageScale: 1.12 },
-  po04: P.v2502Prato,
+  po04: P.v2502PratoCentro,
   po05: P.prato,
-  po06: P.prato,
   po07: { ...P.porcaoVert, imageScale: 1.2 },
   po09: { ...P.porcaoVert, imageScale: 1.45 },
-  po10: P.v2502PackCentro,
+  po10: P.v2502PratoCentro,
 
   // ── Tábuas ──
   ta01: P.prato,
-  ta02: P.v2502Prato,
-  ta03: P.v2502Prato,
-  ta04: P.v2502Prato,
+  ta02: P.v2502PratoCentro,
+  ta03: P.v2502PratoCentro,
+  ta04: P.v2502PratoCentro,
 
   // ── Lanches & Burgers ──
   la01: P.v2502Lanche,
@@ -145,14 +146,15 @@ export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
   me04: P.prato,
   me05: P.prato,
 
-  // ── Super Like ──
-  sl01: P.v2502Prato,
-  sl02: P.copoCopao,
+  // ── Super Promos ──
+  sl01: P.v2502PratoCentro,
+  sl02: P.v2502Copo2,
   sl03: P.v2502Copo2,
   sl04: P.v2502CopoMulti,
   sl05: P.mamadiPackV2,
   sl06: P.mamadiPackV2,
   sl07: P.mamadiPackV2,
+  sl08: P.v2502Copo2,
 };
 
 export function applyDeckCalibration(item: MenuItem | null): MenuItem | null {
