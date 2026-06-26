@@ -606,7 +606,6 @@ export const categories: Category[] = [
   { id: "drinks", label: "DRINKS", emoji: "🍹", gradient: "from-red-600 to-pink-600", from: "#FF3B3B", to: "#FF4081", glow: "#FF3B3B", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813232/mamadicategoriasdrinks-card_obncis.png" },
   { id: "combos", label: "COMBOS & COPÃO", emoji: "🎉", gradient: "from-blue-500 to-purple-600", from: "#2979FF", to: "#AA00FF", glow: "#2979FF" },
   { id: "prontos", label: "ABRIR E BEBER", emoji: "🥤", gradient: "from-green-400 to-blue-500", from: "#00E676", to: "#2979FF", glow: "#00E676" },
-  { id: "destilados", label: "DESTILADOS", emoji: "🥃", gradient: "from-orange-500 to-yellow-400", from: "#FF8C00", to: "#FFE500", glow: "#FF8C00", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813557/destilados-card_fuifl2.png" },
   { id: "lanches", label: "LANCHES & BURGERS", emoji: "🥪", gradient: "from-red-600 to-orange-500", from: "#FF3B3B", to: "#FF8C00", glow: "#FF3B3B", cardImage: "/categories/cat-lanches-card.png", coverImage: "/categories/cat-lanches-card.png" },
 ];
 
