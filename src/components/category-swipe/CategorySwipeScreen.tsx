@@ -22,13 +22,22 @@ import CategoryBottomNav, { type CategoryNavTab } from "./CategoryBottomNav";
 import ExploreSectionsScreen from "./ExploreSectionsScreen";
 import MenuPreviewScreen from "./MenuPreviewScreen";
 import SearchResultCard from "./SearchResultCard";
-import NavigationOnboardingOverlay, {
-  hasSeenCategoryOnboarding,
-  ONBOARDING_KEY,
-} from "./NavigationOnboardingOverlay";
 
-interface CategorySwipeScreenProps {
-  onBack: () => void;
+const DEFAULT_SWIPE_CATEGORY_ID = "cervejas";
+const DEFAULT_SWIPE_ITEM_ID = "ce01";
+
+function initialSwipeState() {
+  const categoryIndex = Math.max(
+    0,
+    categories.findIndex((category) => category.id === DEFAULT_SWIPE_CATEGORY_ID),
+  );
+  const items = itemsByCategory[DEFAULT_SWIPE_CATEGORY_ID] ?? [];
+  const itemIndex = items.findIndex((item) => item.id === DEFAULT_SWIPE_ITEM_ID);
+  return {
+    categoryIndex,
+    itemIndexByCategory:
+      itemIndex > 0 ? { [DEFAULT_SWIPE_CATEGORY_ID]: itemIndex } : {},
+  };
 }
 
 function InstagramCornerIcon() {
@@ -59,7 +68,7 @@ function InstagramCornerIcon() {
 
 const SUPER_LIKE_COUNT = superLikeItems.length;
 
-export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps) {
+export default function CategorySwipeScreen() {
   const reducedMotion = useReducedMotion();
   const [search, setSearch] = useState("");
   const [previewSearch, setPreviewSearch] = useState("");
@@ -67,9 +76,10 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   const [menuPreviewOpen, setMenuPreviewOpen] = useState(false);
   const [mainTab, setMainTab] = useState<CategoryNavTab>("swipe");
   const [categoryFilterIds, setCategoryFilterIds] = useState<string[] | null>(null);
-  const [categoryIndex, setCategoryIndex] = useState(0);
-  const [itemIndexByCategory, setItemIndexByCategory] = useState<Record<string, number>>({});
-  const [showOnboarding, setShowOnboarding] = useState(() => !hasSeenCategoryOnboarding());
+  const [categoryIndex, setCategoryIndex] = useState(() => initialSwipeState().categoryIndex);
+  const [itemIndexByCategory, setItemIndexByCategory] = useState<Record<string, number>>(
+    () => initialSwipeState().itemIndexByCategory,
+  );
   const [superLikeActive, setSuperLikeActive] = useState(false);
   const [returnCategoryIndex, setReturnCategoryIndex] = useState(0);
 
@@ -100,18 +110,6 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
     [search],
   );
 
-  const dismissOnboarding = useCallback(() => {
-    setShowOnboarding((current) => {
-      if (!current) return current;
-      localStorage.setItem(ONBOARDING_KEY, "1");
-      return false;
-    });
-  }, []);
-
-  const handleOnboardingInteraction = useCallback(() => {
-    if (showOnboarding) dismissOnboarding();
-  }, [showOnboarding, dismissOnboarding]);
-
   const setItemIndex = useCallback((catId: string, index: number) => {
     setItemIndexByCategory((prev) => ({ ...prev, [catId]: index }));
   }, []);
@@ -124,10 +122,11 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   }, []);
 
   const goToSwipeHome = useCallback(() => {
+    const landing = initialSwipeState();
     setMainTab("swipe");
     setCategoryFilterIds(null);
-    setCategoryIndex(0);
-    setItemIndexByCategory({});
+    setCategoryIndex(landing.categoryIndex);
+    setItemIndexByCategory(landing.itemIndexByCategory);
     setSuperLikeActive(false);
     closeOverlays();
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -247,7 +246,6 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
       if (mainTab !== "swipe" || searchResult.kind !== "idle" || searchOpen || menuPreviewOpen) {
         return;
       }
-      if (showOnboarding) dismissOnboarding();
       const shift = e.shiftKey;
       if (e.key === "ArrowRight") {
         e.preventDefault();
@@ -267,8 +265,6 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
     searchOpen,
     menuPreviewOpen,
     searchResult.kind,
-    showOnboarding,
-    dismissOnboarding,
     nextCategory,
     prevCategory,
     nextItem,
@@ -279,8 +275,6 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
   const isPanelOpen = isSearching || menuPreviewOpen;
   const isSwipeDeck =
     mainTab === "swipe" && !isPanelOpen && (superLikeActive || category != null);
-  const onboardingActive = showOnboarding && isSwipeDeck && !superLikeActive;
-
   return (
     <div
       className={`category-swipe-screen${isSwipeDeck ? " category-swipe-screen--deck" : ""}${
@@ -290,12 +284,11 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
       }${superLikeActive ? " category-swipe-screen--superlike" : ""}${
         isPanelOpen ? " category-swipe-screen--panel-open" : ""
       }`}
-      onPointerDownCapture={onboardingActive ? handleOnboardingInteraction : undefined}
     >
       <button
         type="button"
         className="category-swipe-screen__corner-btn category-swipe-screen__corner-btn--left"
-        onClick={onBack}
+        onClick={goToSwipeHome}
         aria-label="Início"
       >
         <Home size={17} strokeWidth={1.75} fill="none" />
@@ -326,6 +319,7 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
               <div className="category-swipe-screen__search-header">
                 <SearchBar
                   variant="header"
+                  pridePlaceholder
                   value={menuPreviewOpen ? previewSearch : search}
                   onChange={menuPreviewOpen ? setPreviewSearch : setSearch}
                   placeholder="Buscar..."
@@ -346,15 +340,6 @@ export default function CategorySwipeScreen({ onBack }: CategorySwipeScreenProps
           </div>
         </header>
       )}
-
-      <AnimatePresence>
-        {onboardingActive && (
-          <NavigationOnboardingOverlay
-            reducedMotion={reducedMotion}
-            onDismiss={dismissOnboarding}
-          />
-        )}
-      </AnimatePresence>
 
       <main
         className={`category-swipe-screen__main${

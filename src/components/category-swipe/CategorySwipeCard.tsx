@@ -154,15 +154,17 @@ export default function CategorySwipeCard({
                 <>
                   <h2 className="category-swipe-card__title" data-title-fit={titleFitTier}>
                     <span ref={titleRef} className="category-swipe-card__title-text">
-                      {item.name}
-                      {priceValue != null && (
-                        <span className="category-swipe-card__title-price">, {priceValue}</span>
-                      )}
+                      <span className="category-swipe-card__title-name">{item.name}</span>
+                      <span className="category-swipe-card__title-meta">
+                        {priceValue != null && (
+                          <span className="category-swipe-card__title-price">, {priceValue}</span>
+                        )}
+                        <VerifiedBadge
+                          size="xs"
+                          variant={isSecretCard ? "gold" : "blue"}
+                        />
+                      </span>
                     </span>
-                    <VerifiedBadge
-                      size="xs"
-                      variant={isSecretCard ? "gold" : "blue"}
-                    />
                   </h2>
 
                   <p className="category-swipe-card__brand">

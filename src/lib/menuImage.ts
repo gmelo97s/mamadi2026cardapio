@@ -19,20 +19,13 @@ function isPreprocessedDeckImage(src: string): boolean {
     /\/v1782488\d+\//.test(src) ||
     /\/v1782491\d+\//.test(src) ||
     /\/v1782502\d+\//.test(src) ||
+    /\/v1782506917\//.test(src) ||
+    /\/v1782507697\//.test(src) ||
+    /\/v1782510374\//.test(src) ||
     src.includes("b_rgb:000000") ||
     /\/v178190027[0-9]\//.test(src) ||
     /\/v1781895[0-9]{3}\//.test(src) ||
     /\/v1781893643\//.test(src)
-  );
-}
-
-/** Copão vodka — mesma base do gin, líquido do copo esquerdo em verde (overlay Cloudinary). */
-export function buildCopaoVodkaFromGinUrl(): string {
-  return (
-    "https://res.cloudinary.com/du8l3x4rh/image/upload/" +
-    "l_v1782502472:e_copao_de_gin_jy8t3z,w_0.44,h_1.0,c_crop,g_west," +
-    "e_colorize:88,co_rgb:00e676/fl_layer_apply,g_west,w_0.44/" +
-    "v1782502472/e_copao_de_gin_jy8t3z.png"
   );
 }
 
@@ -78,7 +71,7 @@ export function isCustomMenuImage(src: string | undefined | null): src is string
 export function isFreshDeckImage(src: string | undefined | null): boolean {
   const trimmed = src?.trim();
   if (!trimmed) return false;
-  return /\/v1782502\d+\//.test(trimmed);
+  return /\/v1782502\d+\//.test(trimmed) || /\/v1782506917\//.test(trimmed) || /\/v1782507697\//.test(trimmed) || /\/v1782510374\//.test(trimmed);
 }
 
 /** Classes CSS para integrar produto ao fundo preto (#000) do card. */

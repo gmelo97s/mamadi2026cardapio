@@ -41,12 +41,14 @@ export default function SearchResultCard({ item, category, onClick }: SearchResu
         <div className="search-result-card__dock">
           <h3 className="search-result-card__title" data-title-fit={titleFitTier}>
             <span ref={titleRef} className="search-result-card__title-text">
-              {item.name}
-              {priceValue != null && (
-                <span className="search-result-card__title-price">, {priceValue}</span>
-              )}
+              <span className="search-result-card__title-name">{item.name}</span>
+              <span className="search-result-card__title-meta">
+                {priceValue != null && (
+                  <span className="search-result-card__title-price">, {priceValue}</span>
+                )}
+                <VerifiedBadge size="xs" />
+              </span>
             </span>
-            <VerifiedBadge size="xs" />
           </h3>
           <p className="search-result-card__brand">
             <span className="search-result-card__brand-text">{category.label}</span>

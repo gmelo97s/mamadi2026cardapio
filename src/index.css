@@ -706,7 +706,39 @@ body {
 
 .category-swipe-screen__search-header .category-search-input::placeholder {
   text-align: center;
-  color: rgba(255, 255, 255, 0.88);
+  color: transparent;
+}
+
+.category-search-placeholder-led {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.category-search-placeholder-led__char {
+  font-size: inherit;
+}
+
+.category-search-placeholder-led__suffix {
+  margin-left: 0.05em;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.55);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.55);
 }
 
 .category-swipe-screen__search-header .category-search-input:focus {
@@ -831,13 +863,28 @@ body {
 }
 
 .menu-preview-section__title {
-  margin: 0 0 0.75rem;
+  display: flex;
+  justify-content: center;
+  margin: 0 0 0.85rem;
+  padding: 0 0.35rem;
+  text-align: center;
+}
+
+.menu-preview-section__brand-led {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
   font-family: var(--font-display);
-  font-size: 0.8125rem;
+  font-size: clamp(0.9375rem, 4.2vw, 1.1875rem);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
+  line-height: 1.15;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.48);
+}
+
+.menu-preview-section__brand-led-char {
+  font-size: inherit;
 }
 
 .category-swipe-screen__results-title {
@@ -978,7 +1025,6 @@ body {
 .search-result-card__title {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
   margin: 0;
   max-width: 100%;
   font-family: var(--font-display);
@@ -993,8 +1039,23 @@ body {
 .search-result-card__title-text {
   min-width: 0;
   flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.search-result-card__title-name {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-result-card__title-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  flex-shrink: 0;
   white-space: nowrap;
 }
 
@@ -1002,7 +1063,7 @@ body {
   font-size: clamp(0.9375rem, 3.55vw, 1.2rem);
 }
 
-.search-result-card__title[data-title-fit="compact"] .search-result-card__title-text {
+.search-result-card__title[data-title-fit="compact"] .search-result-card__title-name {
   text-overflow: clip;
 }
 
@@ -1012,10 +1073,15 @@ body {
 }
 
 .search-result-card__title[data-title-fit="wrap"] .search-result-card__title-text {
+  flex-wrap: wrap;
+  overflow: visible;
+  line-height: 1.12;
+}
+
+.search-result-card__title[data-title-fit="wrap"] .search-result-card__title-name {
   white-space: normal;
   overflow: visible;
   text-overflow: unset;
-  line-height: 1.12;
 }
 
 .search-result-card__title-price {
@@ -1157,21 +1223,21 @@ body {
 
 .category-swipe-card__media-stage {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-  padding: 0 clamp(0.5rem, 3vw, 1rem) 0.15rem;
+  padding: 0 clamp(0.5rem, 3vw, 1rem);
 }
 
 .category-swipe-card__media-stage--pack {
   align-items: center;
   justify-content: center;
-  padding-bottom: 10%;
+  padding-bottom: 8%;
 }
 
 .category-swipe-card__media-stage--wide {
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   padding-bottom: 0.15rem;
 }
@@ -1208,7 +1274,14 @@ body {
 
 .category-swipe-card__media-cover--product-dark:not(.category-swipe-card__media-cover--product-wide),
 .category-swipe-card__media-cover--product-light:not(.category-swipe-card__media-cover--product-wide) {
-  max-height: 112%;
+  max-height: 100%;
+  object-position: center center;
+}
+
+.category-swipe-card__media-cover--product-dark:not(.category-swipe-card__media-cover--product-wide):not(.category-swipe-card__media-cover--product-pack),
+.category-swipe-card__media-cover--product-light:not(.category-swipe-card__media-cover--product-wide):not(.category-swipe-card__media-cover--product-pack) {
+  transform: translateY(var(--product-pack-y, 0%)) scale(var(--product-pack-scale, 1));
+  transform-origin: center center;
 }
 
 .category-swipe-card__media-cover--product-dark {
@@ -1221,17 +1294,21 @@ body {
 }
 
 .category-swipe-card__media-cover--product-wide {
-  max-height: 98%;
+  max-height: 92%;
   max-width: 100%;
-  object-position: center bottom;
+  object-position: center center;
   transform: translateY(var(--product-pack-y, 0%)) scale(var(--product-pack-scale, 1));
-  transform-origin: center bottom;
+  transform-origin: center center;
 }
 
 .category-swipe-card__media-cover--deck-fresh.category-swipe-card__media-cover--product-wide {
-  max-height: 94%;
+  max-height: 90%;
   object-position: center center;
   transform-origin: center center;
+}
+
+.category-swipe-card__media-cover--deck-fresh.category-swipe-card__media-cover--product-pack {
+  max-height: 96%;
 }
 
 .category-swipe-card__media-cover--product-scaled {
@@ -1246,7 +1323,7 @@ body {
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: 112%;
+  max-height: 100%;
   object-fit: contain;
   object-position: center center;
   transform: translateY(var(--product-pack-y)) scale(var(--product-pack-scale));
@@ -1256,7 +1333,7 @@ body {
 .category-swipe-card__media-cover--product-dark.category-swipe-card__media-cover--product-pack,
 .category-swipe-card__media-cover--product-light.category-swipe-card__media-cover--product-pack {
   max-width: 100%;
-  max-height: 112%;
+  max-height: 100%;
 }
 
 .category-swipe-card__media-black,
@@ -1808,7 +1885,6 @@ body {
 .category-swipe-card__title {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
   margin: 0;
   max-width: 100%;
   font-family: var(--font-display);
@@ -1824,8 +1900,23 @@ body {
 .category-swipe-card__title-text {
   min-width: 0;
   flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.category-swipe-card__title-name {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-swipe-card__title-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  flex-shrink: 0;
   white-space: nowrap;
 }
 
@@ -1833,7 +1924,7 @@ body {
   font-size: clamp(0.9375rem, 3.55vw, 1.2rem);
 }
 
-.category-swipe-card__title[data-title-fit="compact"] .category-swipe-card__title-text {
+.category-swipe-card__title[data-title-fit="compact"] .category-swipe-card__title-name {
   text-overflow: clip;
 }
 
@@ -1843,16 +1934,18 @@ body {
 }
 
 .category-swipe-card__title[data-title-fit="wrap"] .category-swipe-card__title-text {
-  white-space: normal;
+  flex-wrap: wrap;
   overflow: visible;
-  text-overflow: unset;
   line-height: 1.12;
 }
 
-.category-swipe-card__title .verified-badge {
-  flex-shrink: 0;
+.category-swipe-card__title[data-title-fit="wrap"] .category-swipe-card__title-name {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
 }
 
+.category-swipe-card__title .verified-badge,
 .search-result-card__title .verified-badge {
   flex-shrink: 0;
 }
@@ -2138,24 +2231,18 @@ body {
 /* ── Explorar — grid estilo Tinder ─────────────────────── */
 .category-swipe-screen__main--explore {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   padding-bottom: 0;
-  scroll-padding-bottom: var(--category-nav-clearance);
 }
 
 .category-swipe-screen__main--explore::after {
-  content: "";
-  display: block;
-  height: var(--category-nav-clearance);
-  flex-shrink: 0;
-  pointer-events: none;
+  display: none;
 }
 
 .explore-screen {
-  min-height: 100%;
+  height: 100%;
   padding: calc(env(safe-area-inset-top, 0px) + 3rem) 1rem 0;
+  overflow: hidden;
 }
 
 .explore-screen__title {
@@ -2171,10 +2258,12 @@ body {
 .explore-screen--sections {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
+  min-height: 0;
   padding-left: 0;
   padding-right: 0;
-  padding-bottom: 0;
+  padding-bottom: calc(var(--category-nav-clearance, 5rem) - 0.5rem);
+  overflow: hidden;
 }
 
 .explore-screen--sections .explore-screen__title {
@@ -2192,6 +2281,9 @@ body {
 }
 
 .explore-screen--sections .explore-screen__grid {
+  flex: 1;
+  min-height: 0;
+  align-content: center;
   --explore-card-h: calc(
     (
       100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) -
@@ -2686,6 +2778,68 @@ body {
   background: linear-gradient(90deg, #ff3b3b, #ffe500, #00e676, #2979ff, #ff4081);
 }
 
+@media (min-width: 768px) {
+  .category-swipe-screen--deck .category-swipe-screen__main {
+    max-width: 28rem;
+    margin-inline: auto;
+  }
+
+  .category-swipe-screen__header {
+    left: 50%;
+    right: auto;
+    width: min(100%, 28rem);
+    transform: translateX(-50%);
+  }
+
+  .category-swipe-screen__corner-btn--left {
+    left: max(0.75rem, calc(50% - 14rem + 0.75rem));
+  }
+
+  .category-swipe-screen__corner-btn--right {
+    right: max(0.75rem, calc(50% - 14rem + 0.75rem));
+  }
+
+  .category-swipe-screen__panel-scroll {
+    width: min(100%, 28rem);
+    margin-inline: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .category-swipe-screen__main--panel {
+    align-items: center;
+  }
+
+  .menu-preview-screen,
+  .category-swipe-screen__results--cards {
+    width: 100%;
+    max-width: 28rem;
+    margin-inline: auto;
+  }
+
+  .menu-preview-screen__title {
+    text-align: center;
+  }
+
+  .explore-screen {
+    width: min(100%, 28rem);
+    margin-inline: auto;
+  }
+
+  .category-bottom-nav,
+  .swipe-actions {
+    width: min(100%, 28rem);
+  }
+
+  .tap-flash--left {
+    left: max(0.85rem, calc(50% - 14rem + 0.85rem));
+  }
+
+  .tap-flash--right {
+    right: max(0.85rem, calc(50% - 14rem + 0.85rem));
+  }
+}
+
 @media (min-width: 640px) {
   .category-swipe-screen__search-header > .category-search-notch {
     width: min(14rem, 44%);
@@ -2725,7 +2879,8 @@ body {
   .nav-onboarding__cta,
   .card-micro-hint__line,
   .card-micro-hint__text,
-  .category-swipe-card__brand-led-char {
+  .category-swipe-card__brand-led-char,
+  .menu-preview-section__brand-led-char {
     animation: none;
   }
 

@@ -123,7 +123,23 @@ export default function MenuPreviewScreen({
               variants={sectionVariants}
               transition={{ delay: sectionDelay }}
             >
-              <h2 className="menu-preview-section__title">{section.category.label}</h2>
+              <h2 className="menu-preview-section__title">
+                <span
+                  className="menu-preview-section__brand-led"
+                  aria-label={section.category.label}
+                >
+                  {section.category.label.split("").map((char, index) => (
+                    <span
+                      key={`${char}-${index}`}
+                      className="category-swipe-card__brand-led-char menu-preview-section__brand-led-char"
+                      style={{ animationDelay: `${index * 0.09}s` }}
+                      aria-hidden
+                    >
+                      {char === " " ? "\u00A0" : char}
+                    </span>
+                  ))}
+                </span>
+              </h2>
               <div className="search-results-list">
                 {section.items.map((item, index) => (
                   <motion.div
