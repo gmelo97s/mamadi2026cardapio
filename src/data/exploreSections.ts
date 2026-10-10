@@ -16,6 +16,8 @@ export interface ExploreSection {
   tag: string;
   description: string;
   image: string;
+  /** Emoji da arte neon exibida quando a capa não carrega. */
+  emoji: string;
   categoryIds: string[];
 }
 
@@ -27,6 +29,7 @@ export const exploreSections: ExploreSection[] = [
     tag: "PORÇÕES",
     description: "Petiscos, batatas e tábuas pra compartilhar com a galera.",
     image: EXPLORE_SECTION_IMAGES.dividir,
+    emoji: "🍟",
     categoryIds: ["porcoes"],
   },
   {
@@ -35,6 +38,7 @@ export const exploreSections: ExploreSection[] = [
     tag: "PROMO",
     description: "Combos, cerveja e drinks com o melhor custo-benefício.",
     image: EXPLORE_SECTION_IMAGES.economizar,
+    emoji: "🍺",
     categoryIds: ["porcoes", "combos", "cervejas", "drinks"],
   },
   {
@@ -43,6 +47,7 @@ export const exploreSections: ExploreSection[] = [
     tag: "COMIDA",
     description: "Lanches, menu Mamadi e porções pra saciar de verdade.",
     image: EXPLORE_SECTION_IMAGES["matar-fome"],
+    emoji: "🥪",
     categoryIds: ["lanches", "menu", "porcoes"],
   },
   {
@@ -51,6 +56,7 @@ export const exploreSections: ExploreSection[] = [
     tag: "DRINKS",
     description: "Drinks clássicos e cervejas geladas pro happy hour.",
     image: EXPLORE_SECTION_IMAGES["beber-feliz"],
+    emoji: "🍹",
     categoryIds: ["drinks", "cervejas"],
   },
 ];

@@ -1,7 +1,9 @@
+import { useState } from "react";
 import type { Category, MenuItem } from "../../data/menu";
 import { resolveProductImageClasses, resolveSwipeCardImage, resolveSwipeProductImageStyle } from "../../lib/menuImage";
 import { applyDeckCalibration } from "../../lib/menuDeckCalibration";
 import { useTitleFitTier } from "../../hooks/useTitleFitTier";
+import MenuArtFallback from "./MenuArtFallback";
 import VerifiedBadge from "./VerifiedBadge";
 
 interface SearchResultCardProps {
@@ -17,7 +19,9 @@ function primaryPriceValue(item: MenuItem): number | null {
 }
 
 export default function SearchResultCard({ item, category, onClick }: SearchResultCardProps) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const imageSrc = resolveSwipeCardImage(item, category);
+  const showImage = imageSrc != null && failedSrc !== imageSrc;
   const priceValue = primaryPriceValue(item);
   const titleLabel = `${item.name}${priceValue != null ? `, ${priceValue}` : ""}`;
   const { ref: titleRef, tier: titleFitTier } = useTitleFitTier(titleLabel);
@@ -25,7 +29,7 @@ export default function SearchResultCard({ item, category, onClick }: SearchResu
   return (
     <button type="button" className="search-result-card" onClick={onClick}>
       <div className="search-result-card__media">
-        {imageSrc ? (
+        {showImage ? (
           <img
             src={imageSrc}
             alt={item.name}
@@ -33,9 +37,10 @@ export default function SearchResultCard({ item, category, onClick }: SearchResu
             style={resolveSwipeProductImageStyle(item)}
             loading="lazy"
             decoding="async"
+            onError={() => setFailedSrc(imageSrc)}
           />
         ) : (
-          <div className="search-result-card__media-black" aria-hidden />
+          <MenuArtFallback category={category} variant="result" />
         )}
         <div className="search-result-card__shade" aria-hidden />
         <div className="search-result-card__dock">

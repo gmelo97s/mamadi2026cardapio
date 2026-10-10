@@ -5,6 +5,7 @@ import { formatPrice, SUPER_LIKE_CATEGORY_ID } from "../../data/menu";
 import { resolveSwipeProductImageClasses, resolveSwipeCardImage, resolveSwipeProductImageStyle } from "../../lib/menuImage";
 import { applyDeckCalibration } from "../../lib/menuDeckCalibration";
 import { useTitleFitTier } from "../../hooks/useTitleFitTier";
+import MenuArtFallback from "./MenuArtFallback";
 import VerifiedBadge from "./VerifiedBadge";
 
 const SWIPE_THRESHOLD = 96;
@@ -42,8 +43,11 @@ export default function CategorySwipeCard({
   const dragOffset = useRef(0);
   const [tapFlash, setTapFlash] = useState<"left" | "right" | null>(null);
   const [showOptions, setShowOptions] = useState(false);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
 
   const imageSrc = resolveSwipeCardImage(item, category);
+  /** Foto que não carregou cai na arte da casa — nunca mostra imagem quebrada. */
+  const showImage = imageSrc != null && failedSrc !== imageSrc;
   const deckItem = applyDeckCalibration(item);
   const hasDouble = item != null && item.priceA != null && item.priceB != null;
   const priceValue = item ? primaryPriceValue(item) : null;
@@ -112,7 +116,7 @@ export default function CategorySwipeCard({
               exit={reducedMotion ? undefined : { opacity: 0 }}
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             >
-              {imageSrc ? (
+              {showImage ? (
                 <div
                   className={`category-swipe-card__media-stage${
                     deckItem?.imageFit === "pack"
@@ -130,10 +134,11 @@ export default function CategorySwipeCard({
                     draggable={false}
                     decoding="async"
                     fetchPriority="high"
+                    onError={() => setFailedSrc(imageSrc)}
                   />
                 </div>
               ) : (
-                <div className="category-swipe-card__media-black" aria-hidden />
+                <MenuArtFallback category={category} variant="deck" />
               )}
             </motion.div>
           </AnimatePresence>

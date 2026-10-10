@@ -6,6 +6,8 @@ export type CategoryNavTab = "swipe" | "explore";
 
 interface CategoryBottomNavProps {
   activeTab: CategoryNavTab;
+  /** Aba Deslizar (deck) — oculta quando o cardápio roda em modo texto. */
+  showSwipe: boolean;
   searchActive: boolean;
   menuPreviewActive: boolean;
   onSwipe: () => void;
@@ -16,6 +18,7 @@ interface CategoryBottomNavProps {
 
 export default function CategoryBottomNav({
   activeTab,
+  showSwipe,
   searchActive,
   menuPreviewActive,
   onSwipe,
@@ -27,18 +30,25 @@ export default function CategoryBottomNav({
   const exploreActive = activeTab === "explore" && !searchActive && !menuPreviewActive;
 
   return (
-    <nav className="category-bottom-nav" aria-label="Navegação principal">
-      <button
-        type="button"
-        className={`category-bottom-nav__item${
-          swipeActive ? " category-bottom-nav__item--active" : " category-bottom-nav__item--muted"
-        }`}
-        onClick={onSwipe}
-        aria-current={swipeActive ? "page" : undefined}
-      >
-        <Flame size={24} fill="currentColor" />
-        <span>Deslizar</span>
-      </button>
+    <nav
+      className={`category-bottom-nav${
+        showSwipe ? "" : " category-bottom-nav--compact"
+      }`}
+      aria-label="Navegação principal"
+    >
+      {showSwipe && (
+        <button
+          type="button"
+          className={`category-bottom-nav__item${
+            swipeActive ? " category-bottom-nav__item--active" : " category-bottom-nav__item--muted"
+          }`}
+          onClick={onSwipe}
+          aria-current={swipeActive ? "page" : undefined}
+        >
+          <Flame size={24} fill="currentColor" />
+          <span>Deslizar</span>
+        </button>
+      )}
 
       <button
         type="button"

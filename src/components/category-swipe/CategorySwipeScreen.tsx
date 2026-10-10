@@ -12,11 +12,17 @@ import {
   SUPER_LIKE_CATEGORY_ID,
 } from "../../data/menu";
 import { getExploreSection } from "../../data/exploreSections";
+import { SHOW_ITEM_PHOTOS, SHOW_SWIPE_DECK } from "../../config/menuDisplay";
 import { searchMenuItems } from "../../lib/menuSearch";
 import { preloadAdjacentDeckImages } from "../../lib/menuImage";
 import SearchBar from "../SearchBar";
 import CategorySwipeCard from "./CategorySwipeCard";
+import DeckNavigationHints, {
+  hasSeenDeckHints,
+  markDeckHintsSeen,
+} from "./DeckNavigationHints";
 import ItemProgressBars from "./ItemProgressBars";
+import MenuTextRow from "./MenuTextRow";
 import SwipeActionButtons from "./SwipeActionButtons";
 import CategoryBottomNav, { type CategoryNavTab } from "./CategoryBottomNav";
 import ExploreSectionsScreen from "./ExploreSectionsScreen";
@@ -73,7 +79,7 @@ export default function CategorySwipeScreen() {
   const [search, setSearch] = useState("");
   const [previewSearch, setPreviewSearch] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
-  const [menuPreviewOpen, setMenuPreviewOpen] = useState(false);
+  const [menuPreviewOpen, setMenuPreviewOpen] = useState(!SHOW_SWIPE_DECK);
   const [mainTab, setMainTab] = useState<CategoryNavTab>("swipe");
   const [categoryFilterIds, setCategoryFilterIds] = useState<string[] | null>(null);
   const [categoryIndex, setCategoryIndex] = useState(() => initialSwipeState().categoryIndex);
@@ -82,6 +88,12 @@ export default function CategorySwipeScreen() {
   );
   const [superLikeActive, setSuperLikeActive] = useState(false);
   const [returnCategoryIndex, setReturnCategoryIndex] = useState(0);
+  const [hintsVisible, setHintsVisible] = useState(() => !hasSeenDeckHints());
+
+  const dismissHints = useCallback(() => {
+    setHintsVisible(false);
+    markDeckHintsSeen();
+  }, []);
 
   const activeCategories = useMemo(() => {
     if (!categoryFilterIds) return categories;
@@ -101,6 +113,7 @@ export default function CategorySwipeScreen() {
   const currentItem = deckItems[itemIndex] ?? null;
 
   useEffect(() => {
+    if (!SHOW_ITEM_PHOTOS) return;
     if (mainTab !== "swipe" || !deckItems.length || !deckCategory) return;
     preloadAdjacentDeckImages(deckItems, itemIndex, deckCategory);
   }, [mainTab, deckItems, itemIndex, deckCategory]);
@@ -109,6 +122,14 @@ export default function CategorySwipeScreen() {
     () => searchMenuItems(search, allMenuItems, categories),
     [search],
   );
+
+  const focusSearchInput = useCallback(() => {
+    window.setTimeout(() => {
+      document
+        .querySelector<HTMLInputElement>(".category-swipe-screen__header .category-search-input")
+        ?.focus();
+    }, 60);
+  }, []);
 
   const setItemIndex = useCallback((catId: string, index: number) => {
     setItemIndexByCategory((prev) => ({ ...prev, [catId]: index }));
@@ -129,6 +150,8 @@ export default function CategorySwipeScreen() {
     setItemIndexByCategory(landing.itemIndexByCategory);
     setSuperLikeActive(false);
     closeOverlays();
+    // Sem deck, a home é o cardápio em lista.
+    if (!SHOW_SWIPE_DECK) setMenuPreviewOpen(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [closeOverlays]);
 
@@ -141,6 +164,15 @@ export default function CategorySwipeScreen() {
   }, [closeOverlays]);
 
   const toggleSearch = useCallback(() => {
+    if (!SHOW_SWIPE_DECK) {
+      // Modo texto: a busca filtra a própria lista do cardápio.
+      setMainTab("swipe");
+      setSearch("");
+      setSearchOpen(false);
+      setMenuPreviewOpen(true);
+      focusSearchInput();
+      return;
+    }
     setSearchOpen((open) => {
       if (open) {
         setSearch("");
@@ -149,9 +181,20 @@ export default function CategorySwipeScreen() {
       setMenuPreviewOpen(false);
       return true;
     });
-  }, []);
+  }, [focusSearchInput]);
 
   const toggleMenuPreview = useCallback(() => {
+    if (!SHOW_SWIPE_DECK) {
+      // Modo texto: "Ver tudo" sempre abre o cardápio completo, sem filtro.
+      setMainTab("swipe");
+      setCategoryFilterIds(null);
+      setPreviewSearch("");
+      setSearch("");
+      setSearchOpen(false);
+      setMenuPreviewOpen(true);
+      window.scrollTo({ top: 0, behavior: "auto" });
+      return;
+    }
     setMenuPreviewOpen((open) => {
       if (open) {
         setPreviewSearch("");
@@ -174,20 +217,24 @@ export default function CategorySwipeScreen() {
     setItemIndexByCategory({});
     setSuperLikeActive(false);
     closeOverlays();
+    if (!SHOW_SWIPE_DECK) setMenuPreviewOpen(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [closeOverlays]);
 
   const nextItem = useCallback(() => {
+    dismissHints();
     if (!deckCategoryId || deckItems.length === 0) return;
     setItemIndex(deckCategoryId, Math.min(itemIndex + 1, deckItems.length - 1));
-  }, [deckCategoryId, deckItems.length, itemIndex, setItemIndex]);
+  }, [deckCategoryId, deckItems.length, dismissHints, itemIndex, setItemIndex]);
 
   const prevItem = useCallback(() => {
+    dismissHints();
     if (!deckCategoryId || deckItems.length === 0) return;
     setItemIndex(deckCategoryId, Math.max(itemIndex - 1, 0));
-  }, [deckCategoryId, itemIndex, deckItems.length, setItemIndex]);
+  }, [deckCategoryId, dismissHints, itemIndex, deckItems.length, setItemIndex]);
 
   const nextCategory = useCallback(() => {
+    dismissHints();
     if (superLikeActive) {
       setSuperLikeActive(false);
       setCategoryIndex((index) =>
@@ -196,18 +243,20 @@ export default function CategorySwipeScreen() {
       return;
     }
     setCategoryIndex((index) => Math.min(index + 1, activeCategories.length - 1));
-  }, [superLikeActive, returnCategoryIndex, activeCategories.length]);
+  }, [superLikeActive, returnCategoryIndex, activeCategories.length, dismissHints]);
 
   const prevCategory = useCallback(() => {
+    dismissHints();
     if (superLikeActive) {
       setSuperLikeActive(false);
       setCategoryIndex(returnCategoryIndex);
       return;
     }
     setCategoryIndex((index) => Math.max(index - 1, 0));
-  }, [superLikeActive, returnCategoryIndex]);
+  }, [superLikeActive, returnCategoryIndex, dismissHints]);
 
   const goToSuperLike = useCallback(() => {
+    dismissHints();
     setReturnCategoryIndex(categoryIndex);
     setSearch("");
     setPreviewSearch("");
@@ -215,7 +264,7 @@ export default function CategorySwipeScreen() {
     setMenuPreviewOpen(false);
     setSuperLikeActive(true);
     setItemIndex(SUPER_LIKE_CATEGORY_ID, 0);
-  }, [categoryIndex, setItemIndex]);
+  }, [categoryIndex, dismissHints, setItemIndex]);
 
   const openItemInSwipe = useCallback((item: MenuItem) => {
     const catIdx = categories.findIndex((c) => c.id === item.category);
@@ -232,6 +281,10 @@ export default function CategorySwipeScreen() {
       setItemIndexByCategory((prev) => ({ ...prev, [item.category]: itemIdx }));
     }
     closeOverlays();
+    if (!SHOW_SWIPE_DECK) {
+      setCategoryFilterIds([item.category]);
+      setMenuPreviewOpen(true);
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [closeOverlays]);
 
@@ -274,7 +327,10 @@ export default function CategorySwipeScreen() {
   const isSearching = searchOpen && searchResult.kind !== "idle";
   const isPanelOpen = isSearching || menuPreviewOpen;
   const isSwipeDeck =
-    mainTab === "swipe" && !isPanelOpen && (superLikeActive || category != null);
+    SHOW_SWIPE_DECK &&
+    mainTab === "swipe" &&
+    !isPanelOpen &&
+    (superLikeActive || category != null);
   return (
     <div
       className={`category-swipe-screen${isSwipeDeck ? " category-swipe-screen--deck" : ""}${
@@ -358,7 +414,7 @@ export default function CategorySwipeScreen() {
           <div className="category-swipe-screen__panel-scroll">
             {menuPreviewOpen && (
               <MenuPreviewScreen
-                categories={categories}
+                categories={activeCategories}
                 itemsByCategory={itemsByCategory}
                 filterQuery={previewSearch}
                 reducedMotion={reducedMotion}
@@ -371,17 +427,23 @@ export default function CategorySwipeScreen() {
                 <h2 className="category-swipe-screen__results-title">
                   Resultados ({searchResult.items.length})
                 </h2>
-                <div className="search-results-list">
+                <div
+                  className={`search-results-list${
+                    SHOW_ITEM_PHOTOS ? "" : " search-results-list--text"
+                  }`}
+                >
                   {searchResult.items.map((item) => {
                     const itemCategory = categories.find((c) => c.id === item.category);
                     if (!itemCategory) return null;
-                    return (
+                    return SHOW_ITEM_PHOTOS ? (
                       <SearchResultCard
                         key={item.id}
                         item={item}
                         category={itemCategory}
                         onClick={() => openItemInSwipe(item)}
                       />
+                    ) : (
+                      <MenuTextRow key={item.id} item={item} category={itemCategory} />
                     );
                   })}
                 </div>
@@ -394,17 +456,23 @@ export default function CategorySwipeScreen() {
                   Nenhum item com esse nome exato.
                 </p>
                 <h2 className="category-swipe-screen__results-title">Você quis dizer...?</h2>
-                <div className="search-results-list">
+                <div
+                  className={`search-results-list${
+                    SHOW_ITEM_PHOTOS ? "" : " search-results-list--text"
+                  }`}
+                >
                   {searchResult.items.map((item) => {
                     const itemCategory = categories.find((c) => c.id === item.category);
                     if (!itemCategory) return null;
-                    return (
+                    return SHOW_ITEM_PHOTOS ? (
                       <SearchResultCard
                         key={item.id}
                         item={item}
                         category={itemCategory}
                         onClick={() => openItemInSwipe(item)}
                       />
+                    ) : (
+                      <MenuTextRow key={item.id} item={item} category={itemCategory} />
                     );
                   })}
                 </div>
@@ -441,6 +509,16 @@ export default function CategorySwipeScreen() {
         )}
       </main>
 
+      <AnimatePresence>
+        {isSwipeDeck && hintsVisible && (
+          <DeckNavigationHints
+            key="deck-hints"
+            reducedMotion={reducedMotion}
+            onDismiss={dismissHints}
+          />
+        )}
+      </AnimatePresence>
+
       {isSwipeDeck && (
         <SwipeActionButtons
           onReject={prevCategory}
@@ -458,6 +536,7 @@ export default function CategorySwipeScreen() {
 
       <CategoryBottomNav
         activeTab={mainTab}
+        showSwipe={SHOW_SWIPE_DECK}
         searchActive={searchOpen}
         menuPreviewActive={menuPreviewOpen}
         onSwipe={goToSwipeHome}

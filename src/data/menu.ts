@@ -21,6 +21,8 @@ export interface MenuItem {
   imageScale?: number;
   /** Deslocamento vertical no deck pack, em % (positivo = desce) */
   imagePackY?: number;
+  /** Item no mix sem foto própria ainda — exibe a arte neon da casa no lugar da foto. */
+  photoPending?: boolean;
 }
 
 export interface Category {
@@ -36,14 +38,37 @@ export interface Category {
 }
 
 /** Itens ocultos do deck, busca e cardápio (mantidos no código para reativar depois). */
-const HIDDEN_MENU_ITEM_IDS = new Set(["dr08", "dr09", "dr10", "pr10", "la04"]);
+const HIDDEN_MENU_ITEM_IDS = new Set([
+  "dr01", // GIN TÔNICA — fora do mix
+  "dr08",
+  "dr09",
+  "dr10",
+  "pr10",
+  "la04",
+  // Cervejas fora do mix atual (mix definido em `cervejas`).
+  "ce08",
+  "ce10",
+  "ce11",
+  "ce12",
+  "ce13",
+  "ce14",
+  "ce15",
+  "ce16",
+  "ce17",
+  "ce18",
+  "ce19",
+  "ce20",
+  "ce21",
+]);
 
 /** Categorias ocultas temporariamente — reativar incluindo de volta em `categories`. */
 const HIDDEN_CATEGORY_IDS = new Set(["prontos"]);
 
 function visibleMenuItems(items: MenuItem[]): MenuItem[] {
   return items.filter(
-    (item) => hasMenuPhoto(item.image) && !HIDDEN_MENU_ITEM_IDS.has(item.id),
+    (item) =>
+      (hasMenuPhoto(item.image) || item.photoPending === true) &&
+      !HIDDEN_MENU_ITEM_IDS.has(item.id),
   );
 }
 
@@ -126,9 +151,9 @@ export const drinks: MenuItem[] = [
   {
     id: "dr07",
     category: "drinks",
-    name: "GIN SABORES",
-    description: "Sabores: Tropical / Melancia / Morango / Maçã Verde.",
-    price: 25,
+    name: "COPÃO DE GIN",
+    description: "Copo 770ml. Sabores: Tropical / Melancia / Morango / Maçã Verde.",
+    price: 20,
     image: COPAO_GIN_IMAGE,
     imageBlend: "dark",
     imageFit: "pack",
@@ -434,15 +459,22 @@ export const destilados: MenuItem[] = [
 // 🍺 CERVEJAS
 // ─────────────────────────────────────────────────────────
 export const cervejas: MenuItem[] = [
-  { id: "ce01", category: "cervejas", name: "BRAHMA CHOPP Litrão", description: "Brahma Chopp 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781893643/cervejasce01-brahma-chopp-litrao.png_zyeftc.png", imageBlend: "dark" },
-  { id: "ce02", category: "cervejas", name: "SKOL PILSEN Litrão", description: "Skol Pilsen 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895374/cervejasce02-skol-litrao.png_fgorhw.png", imageBlend: "dark" },
+  // Mix atual — ordem do deck.
+  { id: "ce01", category: "cervejas", name: "BRAHMA CHOPP Litrão", description: "Brahma Chopp 1 litro.", price: 17, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781893643/cervejasce01-brahma-chopp-litrao.png_zyeftc.png", imageBlend: "dark" },
   { id: "ce03", category: "cervejas", name: "AMSTEL Litrão", description: "Amstel 1 litro.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce03-amstel-litrao.png_c2hwjg.png", imageBlend: "dark" },
-  { id: "ce04", category: "cervejas", name: "ANTÁRTICA Litrão", description: "Antártica 1 litro.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce04-antartica-litrao.png_fx1u1a.png", imageBlend: "dark" },
-  { id: "ce05", category: "cervejas", name: "BUDWEISER Litrão", description: "Budweiser 1 litro.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895370/cervejasce05-budweiser-litrao.png_vrlzf5.png", imageBlend: "dark" },
-  { id: "ce06", category: "cervejas", name: "BRAHMA DUPLO MALTE Litrão", description: "Brahma Duplo Malte 1 litro.", price: 19, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895369/cervejasce06-brahma-duplo-malte-litrao.png_y0iayi.png", imageBlend: "dark" },
-  { id: "ce07", category: "cervejas", name: "ORIGINAL Litrão", description: "Original 1 litro.", price: 22, image: "https://picsum.photos/seed/original/400/300" },
-  { id: "ce08", category: "cervejas", name: "PETRA Litrão", description: "Petra 1 litro.", price: 13, image: "https://picsum.photos/seed/petra/400/300" },
+  { id: "ce02", category: "cervejas", name: "SKOL PILSEN Litrão", description: "Skol Pilsen 1 litro.", price: 17, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895374/cervejasce02-skol-litrao.png_fgorhw.png", imageBlend: "dark" },
   { id: "ce09", category: "cervejas", name: "HEINEKEN 600ml", description: "Heineken garrafa verde 600ml.", price: 22, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/cervejasce09-heineken-600ml.png_hgjw0y.png", imageBlend: "dark", badge: "⭐ Destaque" },
+  { id: "ce07", category: "cervejas", name: "ORIGINAL Litrão", description: "Original 1 litro.", price: 23, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
+  { id: "ce22", category: "cervejas", name: "CACILDIS 600ml", description: "Cacildis 600ml.", price: 15, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
+  { id: "ce04", category: "cervejas", name: "ANTÁRTICA Litrão", description: "Antártica 1 litro.", price: 17, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce04-antartica-litrao.png_fx1u1a.png", imageBlend: "dark" },
+  { id: "ce05", category: "cervejas", name: "BUDWEISER Litrão", description: "Budweiser 1 litro.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895370/cervejasce05-budweiser-litrao.png_vrlzf5.png", imageBlend: "dark" },
+  { id: "ce23", category: "cervejas", name: "MICHELOB Lata", description: "Michelob em lata gelada.", price: 10, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
+  { id: "ce24", category: "cervejas", name: "AMSTEL Lata", description: "Amstel em lata gelada.", price: 10, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
+  { id: "ce25", category: "cervejas", name: "BRAHMA DUPLO MALTE Lata", description: "Brahma Duplo Malte em lata gelada.", price: 10, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
+  { id: "ce06", category: "cervejas", name: "BRAHMA DUPLO MALTE Litrão", description: "Brahma Duplo Malte 1 litro.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895369/cervejasce06-brahma-duplo-malte-litrao.png_y0iayi.png", imageBlend: "dark" },
+
+  // Fora do mix atual (ocultos em HIDDEN_MENU_ITEM_IDS) — mantidos para reativar.
+  { id: "ce08", category: "cervejas", name: "PETRA Litrão", description: "Petra 1 litro.", price: 13, image: "https://picsum.photos/seed/petra/400/300" },
   { id: "ce10", category: "cervejas", name: "STELLA 600ml", description: "Stella Artois garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/stella600/400/300" },
   { id: "ce11", category: "cervejas", name: "BECK'S 600ml", description: "Beck's garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/becks600/400/300" },
   { id: "ce12", category: "cervejas", name: "SPATEN 600ml", description: "Spaten garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/spaten600/400/300" },
@@ -627,9 +659,9 @@ export const superLikeItems = visibleMenuItems([
   {
     id: "sl01",
     category: SUPER_LIKE_CATEGORY_ID,
-    name: "CHURRASCO À VONTADE",
-    description: "Churrasco à Vontade (Individual). Acompanha: Arroz, Farofa e Vinagrete.",
-    price: 25,
+    name: "CHURRASCO DA MAMADI",
+    description: "Churrasco Individual. Acompanha: Arroz, Farofa e Vinagrete.",
+    price: 29,
     image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/churrasco_a_vontade_udj3ye.png",
     imageBlend: "dark",
     imageFit: "wide",
@@ -651,7 +683,7 @@ export const porcoes: MenuItem[] = [
   { id: "po04", category: "porcoes", name: "BATATA MAMADI", description: "Batata com Cheddar, Catupiry, Bacon e Parmesão Ralado.", priceA: 45, priceB: 60, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/batata_da_mamadi_2_cogbhi.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
   { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo02-batata-frita-simples.png_xwi0dc.png", imageBlend: "dark", badge: "⭐ Destaque", imageFit: "wide" },
   { id: "po05", category: "porcoes", name: "CALABRESA ACEBOLADA", description: "Calabresa grelhada com cebola.", priceA: 38.9, priceB: 79.9, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326105/z6xbkzwcvh1v5ud6rq5b.jpg", imageBlend: "dark", imageFit: "wide" },
-  { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo01-mini-pasteis.png_md4qrg.png", imageBlend: "dark" },
+  { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 30, priceB: 55, labelA: "Meia porção", labelB: "Porção inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo01-mini-pasteis.png_md4qrg.png", imageBlend: "dark" },
   { id: "po07", category: "porcoes", name: "COXINHA FRANGO", description: "4 unidades. Vegana: Brócolis, Cenoura e Batata.", priceA: 18, priceB: 18, labelA: "Frango", labelB: "Vegana", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900275/porcoespo07-coxinha-frango.png_wzu1vh.png", imageBlend: "dark" },
   { id: "ta01", category: "porcoes", name: "TÁBUA DE ESPETINHOS", description: "6 Espetos: 2 de Carne + 1 de Frango + 1 de Linguiça + 1 de Queijo Coalho + 1 Pão de Alho. Acompanha Farofa e Vinagrete.", price: 89.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326114/kw0tdwzokq3odiwaklcy.jpg", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque" },
   { id: "po09", category: "porcoes", name: "ESPETINHO", description: "1 unidade. Sabores: Carne, Frango, Linguiça, Queijo Coalho ou Pão de Alho.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326106/ox0aflfbdrwjstlg5btf.jpg", imageBlend: "dark" },
@@ -675,7 +707,7 @@ export const lanchesEBurgers: MenuItem[] = [
 // ─────────────────────────────────────────────────────────
 export const menuMamadi: MenuItem[] = [
   { id: "me01", category: "menu", name: "CAFÉ DA MAMADI", description: "Pão na Chapa + Ovos Mexidos + Bacon + Café Preto.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502475/caf%C3%A9_da_mamadi_hyhjuq.png", imageBlend: "dark", imageFit: "wide", obs: "Disponível de Quarta a Domingo, 10:30 às 21hrs" },
-  { id: "me02", category: "menu", name: "CHURRASCO DA MAMADI", description: "Churrasco à Vontade (Individual). Acompanha: Arroz, Farofa e Vinagrete.", price: 25, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/churrasco_a_vontade_udj3ye.png", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque", obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs" },
+  { id: "me02", category: "menu", name: "CHURRASCO DA MAMADI", description: "Churrasco Individual. Acompanha: Arroz, Farofa e Vinagrete.", price: 29, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/churrasco_a_vontade_udj3ye.png", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque", obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs" },
   { id: "me03", category: "menu", name: "PRATO EXECUTIVO c/ 2 Espetinhos", description: "Sabores: Carne / Frango / Linguiça / Pão de Alho / Queijo Coalho. Acompanha: Arroz, Feijão, Fritas, Vinagrete e Farofa.", price: 29.99, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326112/ugtdfc420qvoshz5jlnb.png", imageBlend: "dark", imageFit: "wide", obs: "Quarta a Domingo, 10:30 às 21hrs" },
   { id: "me04", category: "menu", name: "BAIÃO DE DOIS — Prato de Domingo", description: "Baião de Dois servido com Mandioca Frita e Tiras de Contra-Filé. Serve 2 pessoas.", price: 49.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326110/sd7zrsbpqzlpqec7fouu.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi", obs: "Disponível somente aos Domingos" },
   { id: "me05", category: "menu", name: "BERINJELA REFOGADA (Vegano)", description: "Arroz, Berinjela Refogada, Feijão, Fritas, Vinagrete e Farofa.", price: 25, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326085/fjvjxnssbgxhrdhuzkoe.png", imageBlend: "dark", imageFit: "wide", badge: "🌱 Vegano", obs: "Quarta a Domingo, 10:30 às 21hrs" },

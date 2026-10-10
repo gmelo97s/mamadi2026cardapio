@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import type { Category, MenuItem } from "../../data/menu";
 import { allMenuItems } from "../../data/menu";
 import { searchMenuItems, type MenuSearchResult } from "../../lib/menuSearch";
+import { SHOW_ITEM_PHOTOS } from "../../config/menuDisplay";
+import MenuTextRow from "./MenuTextRow";
 import SearchResultCard from "./SearchResultCard";
 
 interface MenuPreviewScreenProps {
@@ -140,7 +142,11 @@ export default function MenuPreviewScreen({
                   ))}
                 </span>
               </h2>
-              <div className="search-results-list">
+              <div
+                className={`search-results-list${
+                  SHOW_ITEM_PHOTOS ? "" : " search-results-list--text"
+                }`}
+              >
                 {section.items.map((item, index) => (
                   <motion.div
                     key={item.id}
@@ -151,11 +157,15 @@ export default function MenuPreviewScreen({
                       delay: sectionDelay + 0.04 + index * (isFiltering ? 0.02 : 0.035),
                     }}
                   >
-                    <SearchResultCard
-                      item={item}
-                      category={section.category}
-                      onClick={() => onSelectItem(item)}
-                    />
+                    {SHOW_ITEM_PHOTOS ? (
+                      <SearchResultCard
+                        item={item}
+                        category={section.category}
+                        onClick={() => onSelectItem(item)}
+                      />
+                    ) : (
+                      <MenuTextRow item={item} />
+                    )}
                   </motion.div>
                 ))}
               </div>

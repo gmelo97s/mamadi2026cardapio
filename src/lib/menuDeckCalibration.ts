@@ -81,7 +81,9 @@ export const DECK_CALIBRATION: Record<string, DeckCalibration> = {
   ce04: P.litrao,
   ce05: P.litrao,
   ce06: P.litrao,
+  ce07: P.litrao,
   ce09: P.garrafa600,
+  ce22: P.garrafa600,
   ce16: P.longNeck,
 
   // ── Abrir e Beber ──
