@@ -1,0 +1,391 @@
+/* ── Cabeçalho de seção ─────────────────────────── */
+.sec {
+  padding: 26px 16px 8px;
+  scroll-margin-top: calc(var(--bar-h) + 58px + var(--safe-t));
+}
+.sec-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.sec-head__titles {
+  flex: 1;
+  min-width: 0;
+}
+.sec-head__title {
+  margin: 0;
+  font-size: clamp(30px, 8.6vw, 38px);
+  line-height: 0.98;
+  text-wrap: balance;
+}
+.sec-head__note {
+  margin: 6px 0 0;
+  color: var(--ink-2);
+  font-size: 17px;
+  line-height: 1.15;
+  transform: rotate(-1.2deg);
+  transform-origin: left center;
+}
+.sec-head__art {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  margin-top: -6px;
+  transform: rotate(8deg);
+  filter: drop-shadow(0 4px 0 rgba(34, 21, 12, 0.08));
+}
+.squiggle {
+  display: block;
+  width: 64%;
+  height: 10px;
+  color: var(--orange);
+}
+
+/* subtítulos dentro da seção */
+.block-title {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 2px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--orange-ink);
+}
+.block-title::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--line-2) 0 6px, transparent 6px 11px);
+}
+
+/* ── Linha do item ──────────────────────────────── */
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.row + .row {
+  border-top: 1.5px dashed var(--line);
+}
+.row__btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  width: 100%;
+  padding: 13px 2px 13px 0;
+  text-align: left;
+  border-radius: 14px;
+  transition:
+    background 0.2s,
+    transform 0.2s var(--ease-out);
+}
+.row__btn:active {
+  background: var(--paper-2);
+  transform: scale(0.985);
+}
+@media (hover: hover) {
+  .row__btn:hover .art-tile {
+    transform: rotate(-4deg) scale(1.04);
+  }
+}
+.row.is-highlight .row__btn {
+  animation: row-flash 1.6s var(--ease-out) 0.25s;
+}
+@keyframes row-flash {
+  0%,
+  100% {
+    background: transparent;
+  }
+  20%,
+  60% {
+    background: var(--orange-soft);
+  }
+}
+
+.art-tile {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1.5px rgba(34, 21, 12, 0.08);
+  transition: transform 0.35s var(--ease-spring);
+}
+.art-tile svg {
+  width: 82%;
+  height: 82%;
+}
+.art-tile--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.row__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 2px;
+}
+.row__top {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+.row__name {
+  flex: 0 1 auto;
+  font-size: 16.5px;
+  font-weight: 750;
+  font-stretch: 94%;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.row__lead {
+  flex: 1 1 14px;
+  min-width: 14px;
+  height: 0;
+  margin-bottom: 0.42em;
+  border-bottom: 2px dotted rgba(34, 21, 12, 0.3);
+}
+.row__price {
+  flex: none;
+  font-size: 20.5px;
+  color: var(--orange-ink);
+}
+.row__desc {
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--ink-2);
+}
+.row__opts {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--ink-3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.row__variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 3px;
+}
+.variant {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 10px 4px 9px;
+  border-radius: 10px;
+  background: var(--paper-2);
+  box-shadow: inset 0 0 0 1.5px var(--line);
+}
+.variant__label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.variant__price {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--orange-ink);
+}
+.row__tags {
+  margin-top: 3px;
+}
+
+/* ── Preço pintado ──────────────────────────────── */
+.price {
+  display: inline-flex;
+  align-items: flex-start;
+  font-family: var(--font-display);
+  line-height: 1;
+  white-space: nowrap;
+}
+.price__cur {
+  font-size: 0.56em;
+  margin: 0.2em 0.12em 0 0;
+}
+.price__cents {
+  font-size: 0.56em;
+  margin-top: 0.1em;
+}
+
+/* ── Tags ───────────────────────────────────────── */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.tag {
+  display: inline-block;
+  padding: 2px 8px 3px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  color: var(--ink);
+  background: var(--paper-3);
+}
+.tag--promo {
+  background: var(--orange);
+  color: #fff;
+}
+.tag--novo {
+  background: var(--pink);
+  color: #fff;
+}
+.tag--vegano {
+  background: #cfeab0;
+  color: #24521a;
+}
+.tag--serve2,
+.tag--fds,
+.tag--domingo {
+  background: #ffe6a8;
+  color: #6b3d00;
+}
+.tag--da-casa {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+
+/* ── Comidinhas da Mamadi ───────────────────────── */
+.kitchen {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 10px 0 0;
+  padding: 5px 11px 5px 9px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink-2);
+  background: var(--paper-2);
+  box-shadow: inset 0 0 0 1.5px var(--line);
+}
+.kitchen__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-3);
+}
+.kitchen.is-open .kitchen__dot {
+  background: #2fbf4a;
+  box-shadow: 0 0 0 0 rgba(47, 191, 74, 0.6);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  70% {
+    box-shadow: 0 0 0 8px rgba(47, 191, 74, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(47, 191, 74, 0);
+  }
+}
+
+.pratos {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.prato {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 14px 14px;
+  text-align: left;
+  border-radius: 22px;
+  background: #fffaf1;
+  box-shadow:
+    0 0 0 2px var(--ink),
+    4px 4px 0 0 var(--ink);
+  transition: transform 0.2s var(--ease-out);
+}
+.prato:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    0 0 0 2px var(--ink),
+    2px 2px 0 0 var(--ink);
+}
+.prato__when {
+  position: absolute;
+  top: -12px;
+  right: 14px;
+  padding: 1px 10px 2px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--red);
+  border-radius: 8px;
+  transform: rotate(2deg);
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.prato__art {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--orange-soft);
+}
+.prato__art svg {
+  width: 88%;
+  height: 88%;
+}
+.prato__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.prato__name {
+  font-family: var(--font-display);
+  font-size: 21px;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.prato__desc {
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--ink-2);
+}
+.prato__opts {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.prato__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+.prato__price {
+  font-size: 26px;
+  color: var(--orange-ink);
+}
+.pratos__foot {
+  margin: 14px 4px 0;
+  font-size: 15px;
+  color: var(--ink-3);
+  text-align: center;
+}

@@ -1,0 +1,271 @@
+<!doctype html>
+<!--
+  Arte impressa no topo da tampinha (logo do Mamadi em formato de tampinha).
+  Renderizada para PNG por scripts/render-brand.mjs (Playwright).
+  O mascote vem de mascot-medallion.png (recortado do logo original);
+  anel, estrelas, faixa "Mamadi" e letreiro da borda são vetor.
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Lilita One";
+        src: url("../../node_modules/@fontsource/lilita-one/files/lilita-one-latin-400-normal.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Archivo";
+        font-weight: 100 900;
+        font-stretch: 62% 125%;
+        src: url("../../node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2") format("woff2-variations");
+      }
+      html,
+      body {
+        margin: 0;
+        background: transparent;
+      }
+      body.preview {
+        background: #1c1c1c;
+      }
+      svg {
+        display: block;
+        width: 1024px;
+        height: 1024px;
+      }
+      .rim {
+        font-family: "Archivo";
+        font-weight: 800;
+        font-stretch: 112%;
+        font-size: 30px;
+        letter-spacing: 5px;
+        fill: #2a0c00;
+      }
+      .top-arc {
+        font-family: "Lilita One";
+        font-size: 50px;
+        letter-spacing: 9px;
+        fill: #fff7ea;
+      }
+      .ribbon-text {
+        font-family: "Lilita One";
+        font-size: 128px;
+        letter-spacing: 2px;
+        fill: #fffaf0;
+        stroke: #5e0a05;
+        stroke-width: 14px;
+        stroke-linejoin: round;
+        paint-order: stroke;
+      }
+    </style>
+  </head>
+  <body>
+    <svg id="art" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <defs>
+        <radialGradient id="paint" cx="50%" cy="42%" r="62%">
+          <stop offset="0" stop-color="#ff7a1a" />
+          <stop offset="1" stop-color="#ef5a0c" />
+        </radialGradient>
+        <radialGradient id="band" cx="50%" cy="45%" r="55%">
+          <stop offset="0.6" stop-color="#17110d" />
+          <stop offset="1" stop-color="#0a0706" />
+        </radialGradient>
+        <linearGradient id="ribbon" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ff3b22" />
+          <stop offset="0.45" stop-color="#e3140b" />
+          <stop offset="1" stop-color="#b30a06" />
+        </linearGradient>
+        <linearGradient id="tail" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#b40c07" />
+          <stop offset="1" stop-color="#7d0603" />
+        </linearGradient>
+        <path id="rimPath" d="" />
+        <path id="topArcPath" d="" />
+        <path id="ribbonTextPath" d="" />
+        <clipPath id="face"><circle cx="512" cy="512" r="512" /></clipPath>
+      </defs>
+      <g clip-path="url(#face)">
+        <circle cx="512" cy="512" r="512" fill="url(#paint)" />
+        <text class="rim"><textPath id="rimText" href="#rimPath" xlink:href="#rimPath"></textPath></text>
+        <circle cx="512" cy="512" r="424" fill="url(#band)" />
+        <g id="arcs" fill="none" stroke="#fb7a12" stroke-width="10" stroke-linecap="round"></g>
+        <circle cx="512" cy="512" r="352" fill="none" stroke="#fb7a12" stroke-width="8" />
+        <g id="stars" fill="#fffaf0"></g>
+        <text class="top-arc" text-anchor="middle"><textPath href="#topArcPath" xlink:href="#topArcPath" startOffset="50%">BAR</textPath></text>
+        <image id="mascot" href="mascot-medallion.png" xlink:href="mascot-medallion.png" />
+        <g id="ribbonGroup"></g>
+      </g>
+    </svg>
+    <script>
+      const C = 512;
+      const DISK_R = 300; // raio do disco do mascote na arte
+      const meta = { w: 1161, h: 1065, cx: 582.9, cy: 544.8, R: 508.8 };
+      const s = DISK_R / meta.R;
+      const m = document.getElementById("mascot");
+      m.setAttribute("x", C - meta.cx * s);
+      m.setAttribute("y", C - meta.cy * s);
+      m.setAttribute("width", meta.w * s);
+      m.setAttribute("height", meta.h * s);
+
+      const pol = (r, deg) => {
+        const t = (deg * Math.PI) / 180;
+        return [C + r * Math.cos(t), C + r * Math.sin(t)];
+      };
+      const circlePath = (r, startDeg) => {
+        const [x0, y0] = pol(r, startDeg);
+        const [x1, y1] = pol(r, startDeg + 180);
+        return `M ${x0} ${y0} A ${r} ${r} 0 1 1 ${x1} ${y1} A ${r} ${r} 0 1 1 ${x0} ${y0}`;
+      };
+
+      // letreiro da borda (como o texto em relevo das tampinhas): em cima no sentido horário,
+      // embaixo no anti-horário, para os dois lerem de pé.
+      const RIM_R = 468;
+      const arcD = (r, a0, a1, sweep) => {
+        const [x0, y0] = pol(r, a0);
+        const [x1, y1] = pol(r, a1);
+        return `M ${x0} ${y0} A ${r} ${r} 0 0 ${sweep} ${x1} ${y1}`;
+      };
+      document.getElementById("rimPath").setAttribute("d", arcD(RIM_R, 196, 344, 1));
+      const rim = document.getElementById("rimText");
+      rim.textContent = "COMIDA DE MÃE ✦ DRINK DE DIVA";
+      rim.setAttribute("startOffset", "50%");
+      rim.parentNode.setAttribute("text-anchor", "middle");
+      const rimB = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      rimB.setAttribute("id", "rimPathB");
+      rimB.setAttribute("d", arcD(RIM_R + 22, 128, 52, 0));
+      document.querySelector("defs").appendChild(rimB);
+      const tB = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      tB.setAttribute("class", "rim");
+      tB.setAttribute("text-anchor", "middle");
+      const tpB = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
+      tpB.setAttribute("href", "#rimPathB");
+      tpB.setAttribute("startOffset", "50%");
+      tpB.textContent = "PRAÇA ROOSEVELT ✦ DESDE 2019";
+      tB.appendChild(tpB);
+      rim.parentNode.after(tB);
+      // estrelinhas nas laterais da borda
+      const rimStars = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      rimStars.setAttribute("fill", "#2a0c00");
+      for (const deg of [172, 8]) {
+        const [x, y] = pol(RIM_R - 10, deg);
+        const sp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        sp.setAttribute("d", starPathFn(x, y, 13, 5.5, deg));
+        rimStars.appendChild(sp);
+      }
+      tB.after(rimStars);
+
+      // "BAR" no arco de cima (no lugar do antigo "Burger")
+      const TOP_R = 382;
+      const [ax, ay] = pol(TOP_R, 200);
+      const [bx, by] = pol(TOP_R, 340);
+      document.getElementById("topArcPath").setAttribute("d", `M ${ax} ${ay} A ${TOP_R} ${TOP_R} 0 0 1 ${bx} ${by}`);
+
+      // arcos externos (esquerda e direita), como no logo
+      const arcs = document.getElementById("arcs");
+      const arc = (r, a0, a1) => {
+        const [x0, y0] = pol(r, a0);
+        const [x1, y1] = pol(r, a1);
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("d", `M ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y1}`);
+        arcs.appendChild(p);
+      };
+      arc(398, 128, 232);
+      arc(398, -52, 52);
+
+      // estrelas (3 de cada lado, mesmas posições do logo)
+      function starPathFn(cx, cy, R, r, rot) { return starPath(cx, cy, R, r, rot); }
+      function starPath(cx, cy, R, r, rot) {
+        let d = "";
+        for (let i = 0; i < 10; i++) {
+          const rr = i % 2 ? r : R;
+          const t = ((rot + i * 36 - 90) * Math.PI) / 180;
+          d += (i ? "L" : "M") + (cx + rr * Math.cos(t)).toFixed(2) + " " + (cy + rr * Math.sin(t)).toFixed(2) + " ";
+        }
+        return d + "Z";
+      }
+      const stars = document.getElementById("stars");
+      for (const deg of [150, 177, 204, -24, 3, 30]) {
+        const [x, y] = pol(326, deg);
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("d", starPath(x, y, 15, 6.4, deg + 90));
+        stars.appendChild(p);
+      }
+
+      // faixa "Mamadi": arco suave para cima, pontas dobradas para trás
+      const g = document.getElementById("ribbonGroup");
+      const NS = "http://www.w3.org/2000/svg";
+      const BIG = 1150; // raio do arco da faixa
+      const midY = 756; // linha central no meio
+      const ccy = midY + BIG; // centro do arco, bem abaixo
+      const yAt = (x, off) => ccy - Math.sqrt((BIG + off) ** 2 - (x - C) ** 2);
+      const HALF = 50; // meia altura da faixa
+      const X0 = 214, X1 = 1024 - 214;
+      const bandPath = (x0, x1, hTop, hBot) => {
+        const top = [], bot = [];
+        for (let i = 0; i <= 40; i++) {
+          const x = x0 + ((x1 - x0) * i) / 40;
+          top.push(`${x.toFixed(1)} ${yAt(x, hTop).toFixed(1)}`);
+          bot.push(`${x.toFixed(1)} ${yAt(x, -hBot).toFixed(1)}`);
+        }
+        return "M " + top.join(" L ") + " L " + bot.reverse().join(" L ") + " Z";
+      };
+      // pontas (atrás)
+      const tail = (side) => {
+        const dir = side === "l" ? -1 : 1;
+        const xEnd = side === "l" ? X0 : X1;
+        const yEnd = yAt(xEnd, 0);
+        const xIn = xEnd - dir * 46; // escondido atrás da faixa
+        const xOut = xEnd + dir * 54;
+        const notch = xOut - dir * 26;
+        const d = `M ${xIn} ${yEnd - HALF + 26} L ${xOut} ${yEnd - HALF + 38} L ${notch} ${yEnd + 38} L ${xOut} ${yEnd + HALF + 38} L ${xIn} ${yEnd + HALF + 26} Z`;
+        const p = document.createElementNS(NS, "path");
+        p.setAttribute("d", d);
+        p.setAttribute("fill", "url(#tail)");
+        p.setAttribute("stroke", "#fff4e6");
+        p.setAttribute("stroke-width", "7");
+        p.setAttribute("stroke-linejoin", "round");
+        g.appendChild(p);
+        // dobra: triângulo escuro entre a ponta e a faixa
+        const f = document.createElementNS(NS, "path");
+        const yb = yAt(xEnd, -HALF);
+        f.setAttribute("d", `M ${xEnd} ${yb - 2} L ${xEnd + dir * 22} ${yb + 24} L ${xEnd - dir * 2} ${yb + 24} Z`);
+        f.setAttribute("fill", "#3f0301");
+        g.appendChild(f);
+      };
+      tail("l");
+      tail("r");
+      const band = document.createElementNS(NS, "path");
+      band.setAttribute("d", bandPath(X0, X1, HALF, HALF));
+      band.setAttribute("fill", "url(#ribbon)");
+      band.setAttribute("stroke", "#fff4e6");
+      band.setAttribute("stroke-width", "7");
+      band.setAttribute("stroke-linejoin", "round");
+      g.appendChild(band);
+      // brilho e sombra internos
+      const hi = document.createElementNS(NS, "path");
+      hi.setAttribute("d", bandPath(X0 + 10, X1 - 10, HALF - 9, -(HALF - 18)));
+      hi.setAttribute("fill", "rgba(255,255,255,0.13)");
+      g.appendChild(hi);
+      // texto no arco
+      const tp = document.getElementById("ribbonTextPath");
+      const tx0 = X0 - 40, tx1 = X1 + 40, base = -40;
+      let d = "";
+      for (let i = 0; i <= 40; i++) {
+        const x = tx0 + ((tx1 - tx0) * i) / 40;
+        d += (i ? " L " : "M ") + x.toFixed(1) + " " + yAt(x, base).toFixed(1);
+      }
+      tp.setAttribute("d", d);
+      const t = document.createElementNS(NS, "text");
+      t.setAttribute("class", "ribbon-text");
+      t.setAttribute("text-anchor", "middle");
+      const tpe = document.createElementNS(NS, "textPath");
+      tpe.setAttribute("href", "#ribbonTextPath");
+      tpe.setAttribute("startOffset", "50%");
+      tpe.textContent = "Mamadi";
+      t.appendChild(tpe);
+      g.appendChild(t);
+      document.fonts.ready.then(() => {
+        document.body.dataset.ready = "1";
+      });
+    </script>
+  </body>
+</html>

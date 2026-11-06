@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- Imagem de compartilhamento (1200x630): node scripts/render-og.mjs (com `npm run dev` rodando) -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      html, body { margin: 0; }
+      .og { position: relative; width: 1200px; height: 630px; overflow: hidden; background: #0d0a08; font-family: "Archivo Variable", sans-serif; color: #fff4e3; }
+      .glow { position: absolute; left: -120px; top: -100px; width: 820px; height: 820px; background: radial-gradient(circle, rgba(250,104,18,.55), rgba(250,90,10,.15) 35%, transparent 62%); }
+      .pink { position: absolute; right: -200px; top: -250px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(252,0,160,.22), transparent 60%); }
+      .floor { position: absolute; left: -50%; right: -50%; bottom: 0; height: 110%; transform-origin: 50% 100%; transform: perspective(600px) rotateX(78deg); background: conic-gradient(#0d0a08 25%, #fa5a0a 0 50%, #0d0a08 0 75%, #fa5a0a 0) 0 0 / 80px 80px; opacity: .35; -webkit-mask-image: linear-gradient(to top, #000, transparent 70%); }
+      .cap { position: absolute; left: 70px; top: 85px; width: 460px; filter: drop-shadow(0 30px 40px rgba(0,0,0,.6)); transform: rotate(-8deg); }
+      .text { position: absolute; left: 580px; top: 120px; right: 60px; }
+      .where { font-size: 20px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,244,227,.7); }
+      h1 { margin: 18px 0 0; font-family: "Shrikhand"; font-weight: 400; font-size: 66px; line-height: 1.02; text-shadow: 4px 5px 0 rgba(0,0,0,.6); }
+      .mae { color: #ff7a1a; }
+      .diva { font-family: "Yellowtail"; font-size: 1.22em; color: #ffe3f4; text-shadow: 0 0 6px #fff, 0 0 18px #ff4fbf, 0 0 36px #fc00a0; }
+      .sub { margin-top: 26px; font-size: 26px; line-height: 1.35; color: rgba(255,244,227,.86); }
+      .checker { position: absolute; left: 0; right: 0; bottom: 0; height: 22px; background: conic-gradient(#0d0a08 25%, #fa5a0a 0 50%, #0d0a08 0 75%, #fa5a0a 0) 0 0 / 22px 22px; }
+    </style>
+  </head>
+  <body>
+    <div class="og" id="og">
+      <div class="floor"></div>
+      <div class="glow"></div>
+      <div class="pink"></div>
+      <img class="cap" src="/brand/cap-poster.webp" />
+      <div class="text">
+        <div class="where">Bar Mamadi · Praça Roosevelt</div>
+        <h1>Comida de <span class="mae">mãe</span>,<br />drink de <span class="diva">diva</span>.</h1>
+        <div class="sub">Litrão trincando, copão em promoção, Divas Pop e a comida caseira da Mamadi.</div>
+      </div>
+      <div class="checker"></div>
+    </div>
+    <script type="module">
+      import "@fontsource/shrikhand/latin-400.css";
+      import "@fontsource/yellowtail/latin-400.css";
+      import "@fontsource-variable/archivo/wdth.css";
+      await Promise.all([document.fonts.load('76px "Shrikhand"'), document.fonts.load('76px "Yellowtail"'), document.fonts.load('800 20px "Archivo Variable"')]);
+      await new Promise((r) => (document.querySelector(".cap").complete ? r() : (document.querySelector(".cap").onload = r)));
+      document.body.dataset.ready = "1";
+    </script>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+.fx-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+  overflow: hidden;
+}
+
+.fizz {
+  position: absolute;
+  border-radius: 50%;
+  translate: -50% -50%;
+  opacity: 0;
+  animation: fizz-up 700ms var(--ease-out) forwards;
+  will-change: transform, opacity;
+}
+.fizz--beer {
+  background: radial-gradient(circle at 32% 30%, #fff 0 22%, rgba(255, 236, 196, 0.6) 23% 60%, rgba(246, 162, 30, 0.35) 61%);
+  box-shadow: inset 0 0 0 1.5px rgba(196, 98, 10, 0.55);
+}
+.fizz--pink {
+  background: radial-gradient(circle at 32% 30%, #fff 0 22%, rgba(255, 190, 230, 0.6) 23% 60%, rgba(252, 0, 160, 0.35) 61%);
+  box-shadow: inset 0 0 0 1.5px rgba(196, 0, 120, 0.5);
+}
+.fizz--lime {
+  background: radial-gradient(circle at 32% 30%, #fff 0 22%, rgba(220, 245, 190, 0.6) 23% 60%, rgba(124, 194, 66, 0.35) 61%);
+  box-shadow: inset 0 0 0 1.5px rgba(70, 130, 30, 0.5);
+}
+
+@keyframes fizz-up {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+  15% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+    transform: translate(calc(var(--dx) * 0.8), calc(var(--dy) * 0.85)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(1.6);
+  }
+}
+
+.fly {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  animation: fly-across 1s cubic-bezier(0.45, 0.05, 0.4, 1) forwards;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.18));
+}
+
+@keyframes fly-across {
+  0% {
+    opacity: 0;
+    transform: translate(var(--fx), var(--fy)) rotate(0deg);
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+  }
+}
+
+.glitter {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.glitter__pt {
+  position: absolute;
+  opacity: 0;
+  animation: twinkle 3s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1) rotate(45deg);
+  }
+  60% {
+    opacity: 0.2;
+    transform: scale(0.6) rotate(70deg);
+  }
+}

@@ -1,16 +1,58 @@
-# React + Vite
+# Mamadi · Cardápio digital
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Cardápio do **Bar Mamadi**, em frente à Praça Roosevelt (Rua João Guimarães Rosa, 241, São Paulo).
+Feito para o celular, com cara de app. Comida de mãe, drink de diva.
 
-Currently, two official plugins are available:
+No ar: https://mamadi2026cardapio.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## A experiência
 
-## React Compiler
+- **Abertura com a tampinha**: o logo virou uma tampinha de cerveja em 3D, com um abridor engatado. A pessoa puxa a etiqueta "puxa pra abrir o cardápio" (ou toca, ou desliza pra cima): a tampinha estoura girando, espirra espuma, a cerveja sobe e enche a tela e o cardápio aparece por baixo. O mascote original fica impresso no topo da tampinha, com a faixa nova só com "Mamadi". Tocar na tampinha do topo do app volta para a abertura.
+- **Abas como app**: Início, Beber, Buscar, Comer e A casa (o ícone da casa é a cadeira de plástico vermelha).
+- **Em cartaz**: carrossel automático com promoções, combos e novidades, no estilo dos cartazes de oferta pintados à mão. Gira sozinho, dá para arrastar e pausa quando a pessoa mexe. Os cartazes de dia certo (churrasco no sábado e no domingo, baião no domingo, executivo de quarta a sexta) só aparecem no dia e vão para a frente com "Hoje tem!".
+- **Ficha do item**: abre de baixo, fecha arrastando para baixo e sempre traz **3 sugestões de "Combina com"**, escolhidas à mão e com o motivo (ex.: Baião de Dois → Caipirinha Viva o Nordeste, "Tudo nordestino, tudo nosso").
+- **Divas Pop**: a seção vira uma pista escura, com cada drink numa capa de disco nas cores da fruta. Na ficha, o vinil sai da capa e gira.
+- **Comidinhas da Mamadi**: mostram o dia em que saem e se a cozinha está aberta agora (quarta a domingo, 12h às 19h, no horário de São Paulo).
+- **Busca inteligente por voz e texto**: entende frases como "litrão até 20 conto", "drink da Anitta", "o que combina com coxinha?", "tem coisa vegana?", "pra dividir com a galera", "sem álcool" ou "me surpreende". Também entende gíria (breja, cerva, rango), erro de digitação e correção na fala ("um litrão de original… na verdade amstel"). A voz usa o reconhecimento do próprio navegador (Chrome/Android, Safari/iPhone).
+- **Transições**: bolhas de cerveja que estouram onde a pessoa toca, e rodelas de limão e gelo que cruzam a tela ao entrar em "Beber". Com "reduzir movimento" ligado no celular, tudo fica parado.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Onde mexer
 
-## Expanding the ESLint configuration
+| O quê | Arquivo |
+|---|---|
+| Itens, preços, descrições, sabores e tags | `src/data/menu.ts` (preços em centavos: R$ 29,90 = `R(29.9)`) |
+| Cartazes do carrossel (promoções/novidades) | `src/data/cartaz.ts` |
+| Sugestões "Combina com" | `src/data/pairings.ts` |
+| Endereço, Instagram, iFood, horário | `src/data/casa.ts` |
+| Horário da cozinha | `KITCHEN` em `src/data/menu.ts` |
+| Cores e fontes | `src/styles/global.css` (`:root`) |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Fotos dos itens (próxima etapa)
+
+Cada item aceita `photo: "/fotos/coxinha.webp"`. Com foto, a imagem entra no lugar da ilustração, na lista e na ficha. É só colocar o arquivo em `public/fotos/`.
+
+### Itens para confirmar com o bar
+
+Alguns itens não estão nos PDFs de 06/11/2026 e vieram do cardápio anterior. Estão marcados com `confirmar: true` em `src/data/menu.ts`: **3 Litrão Brahma ou Skol (R$ 45)**, **3 Litrão Original (R$ 60)**, **3 Caipirinhas de limão (R$ 30)** e **Coxinha (4 unidades, R$ 18)**.
+
+## Rodar e publicar
+
+```bash
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # gera dist/
+```
+
+A Vercel publica sozinha a cada push na `main`.
+
+Atalhos de link: `/#/beber`, `/#/comer/porcoes`, `/#/item/coxinha`, `/#/busca` (abrem direto, sem a abertura).
+
+## Arte da marca
+
+- `design/brand/logo-original.png`: logo original enviado pelo bar.
+- `scripts/extract-mascot.py`: recorta o mascote do logo (o disco laranja com o chapéu).
+- `design/brand/cap-print.html` → `scripts/render-brand.mjs`: monta a arte do topo da tampinha (mascote + anéis + estrelas + faixa "Mamadi" + letreiro da borda).
+- `design/render/poster.html` → `scripts/render-poster.mjs`: foto estática da tampinha 3D (primeira imagem da abertura, ícones do app).
+- `design/render/og.html` → `scripts/render-og.mjs`: imagem de prévia do link (WhatsApp, Instagram).
+
+Os scripts de render usam o Playwright e precisam do `npm run dev` rodando.

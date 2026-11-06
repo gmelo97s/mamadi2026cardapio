@@ -1,0 +1,190 @@
+/* ── Barra do topo ───────────────────────────────── */
+.appbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: calc(var(--bar-h) + var(--safe-t));
+  padding: var(--safe-t) 12px 0 10px;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  backdrop-filter: saturate(1.4) blur(10px);
+  transition: box-shadow 0.25s;
+}
+.appbar.is-scrolled {
+  box-shadow: 0 1px 0 var(--line);
+}
+.appbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: auto;
+  padding: 4px 6px 4px 2px;
+  border-radius: 999px;
+}
+.appbar__cap {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  filter: drop-shadow(0 2px 2px rgba(34, 21, 12, 0.35));
+  transition: transform 0.5s var(--ease-spring);
+}
+.appbar__brand:hover .appbar__cap,
+.appbar__brand:focus-visible .appbar__cap {
+  transform: rotate(-24deg);
+}
+.appbar__brand:active .appbar__cap {
+  transform: rotate(-60deg) scale(0.92);
+}
+.appbar__faixa {
+  width: 104px;
+  height: auto;
+  margin-left: -6px;
+  filter: drop-shadow(0 1px 0 rgba(34, 21, 12, 0.35));
+}
+.appbar__title {
+  font-family: var(--font-hand);
+  font-weight: 700;
+  color: var(--orange-ink);
+  font-size: 15px;
+}
+.appbar__search {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: var(--ink);
+  background: var(--paper-2);
+  box-shadow: inset 0 0 0 1.5px var(--line-2);
+  transition: transform 0.2s var(--ease-out);
+}
+.appbar__search svg {
+  width: 21px;
+  height: 21px;
+}
+.appbar__search:active {
+  transform: scale(0.9);
+}
+
+/* ── Menu inferior ───────────────────────────────── */
+.nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  pointer-events: none;
+  padding: 0 10px calc(10px + var(--safe-b));
+}
+.nav__inner {
+  pointer-events: auto;
+  position: relative;
+  max-width: calc(var(--app-w) - 20px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: end;
+  height: var(--nav-h);
+  padding: 0 4px 6px;
+  border-radius: 26px;
+  background: var(--night);
+  color: var(--cream);
+  box-shadow:
+    0 12px 30px -10px rgba(13, 10, 8, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.nav__inner::before {
+  /* xadrez discreto no topo do menu */
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 0;
+  height: 4px;
+  background: var(--checker) 0 0 / 8px 8px;
+  opacity: 0.9;
+  border-radius: 0 0 4px 4px;
+}
+.nav__tab,
+.nav__search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 0 2px;
+  color: rgba(255, 244, 227, 0.62);
+  transition: color 0.2s;
+}
+.nav__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 30px;
+  border-radius: 999px;
+  transition:
+    background 0.25s var(--ease-out),
+    transform 0.3s var(--ease-spring);
+}
+.nav__icon svg {
+  width: 23px;
+  height: 23px;
+}
+.nav__label {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-stretch: 92%;
+}
+.nav__tab.is-active {
+  color: var(--cream);
+}
+.nav__tab.is-active .nav__icon {
+  background: var(--orange);
+  color: var(--night);
+  transform: translateY(-1px);
+}
+.nav__tab:active .nav__icon {
+  transform: scale(0.88);
+}
+.nav__search {
+  color: var(--cream);
+}
+.nav__search-disc {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-top: -26px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--night);
+  box-shadow:
+    0 0 0 4px var(--night),
+    0 10px 20px -6px rgba(250, 90, 10, 0.7);
+  transition: transform 0.25s var(--ease-spring);
+}
+.nav__search:active .nav__search-disc {
+  transform: scale(0.9);
+}
+.nav__search-lupa {
+  width: 26px;
+  height: 26px;
+  stroke-width: 2.4;
+}
+.nav__search-mic {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 17px;
+  height: 17px;
+  padding: 2px;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--night);
+  stroke-width: 2.4;
+}

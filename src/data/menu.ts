@@ -1,772 +1,330 @@
-import { hasMenuPhoto } from "../lib/menuPhoto";
+import type { Item, Section, SectionId } from "./types";
 
-export interface MenuItem {
-  id: string;
-  category: string;
-  name: string;
-  description: string;
-  price?: number; // preço único
-  priceA?: number; // meia / dose / lanche
-  priceB?: number; // inteira / combo
-  labelA?: string; // label do preço A
-  labelB?: string; // label do preço B
-  image: string;
-  badge?: string;
-  obs?: string; // observação adicional
-  /** light = foto com fundo claro (exibe normal + máscara suave); dark = fundo preto na foto (screen) */
-  imageBlend?: "dark" | "light";
-  /** wide = prato largo; pack = lata/garrafa/copo (slot fixo calibrado na lata Skol 350ml) */
-  imageFit?: "default" | "wide" | "pack";
-  /** Escala extra no deck quando imageFit é pack (1 = garrafa Brahma litrão ce01) */
-  imageScale?: number;
-  /** Deslocamento vertical no deck pack, em % (positivo = desce) */
-  imagePackY?: number;
-  /** Item no mix sem foto própria ainda — exibe a arte neon da casa no lugar da foto. */
-  photoPending?: boolean;
-}
+/*
+ * Cardápio do Bar Mamadi.
+ * Fonte: "CARDÁPIO 3 BEBIDAS" e "CARDÁPIO 4 COMIDA" (PDFs de 06/11/2026).
+ * Itens com `confirmar: true` não estão nesses PDFs (vieram do cardápio de outubro):
+ * confirmar preço e se continuam valendo.
+ */
 
-export interface Category {
-  id: string;
-  label: string;
-  emoji: string;
-  gradient: string; // classes tailwind (bg-gradient-to-br)
-  from: string; // hex inicial
-  to: string; // hex final
-  glow: string; // cor do glow
-  cardImage?: string;
-  coverImage?: string;
-}
+const R = (reais: number) => Math.round(reais * 100);
 
-/** Itens ocultos do deck, busca e cardápio (mantidos no código para reativar depois). */
-const HIDDEN_MENU_ITEM_IDS = new Set([
-  "dr01", // GIN TÔNICA — fora do mix
-  "dr08",
-  "dr09",
-  "dr10",
-  "pr10",
-  "la04",
-  // Cervejas fora do mix atual (mix definido em `cervejas`).
-  "ce08",
-  "ce10",
-  "ce11",
-  "ce12",
-  "ce13",
-  "ce14",
-  "ce15",
-  "ce16",
-  "ce17",
-  "ce18",
-  "ce19",
-  "ce20",
-  "ce21",
-]);
-
-/** Categorias ocultas temporariamente — reativar incluindo de volta em `categories`. */
-const HIDDEN_CATEGORY_IDS = new Set(["prontos"]);
-
-function visibleMenuItems(items: MenuItem[]): MenuItem[] {
-  return items.filter(
-    (item) =>
-      (hasMenuPhoto(item.image) || item.photoPending === true) &&
-      !HIDDEN_MENU_ITEM_IDS.has(item.id),
-  );
-}
-
-// ─────────────────────────────────────────────────────────
-// 🍹 DRINKS (ordem do deck)
-// ─────────────────────────────────────────────────────────
-const COPAO_GIN_IMAGE =
-  "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/e_copao_de_gin_jy8t3z.png";
-
-/** 2 copões vodka c/ energético — lote v1782507697 */
-const COPAO_VODKA_IMAGE =
-  "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782507697/2_copao_vodka_yeozq1.png";
-
-/** Lote v1782510374 — Copa / Dangerous Woman / Batata Arianator */
-const DRINK_DANGEROUS_WOMAN_IMAGE =
-  "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782510374/Drink_Dangerous_Woman_qdrjhj.png";
-const COPAO_DA_COPA_IMAGE =
-  "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782510374/2_copao_da_copa_k7gmbx.png";
-const BATATA_ARIANATOR_IMAGE =
-  "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782510374/batata_arianator_sblglm.png";
-
-export const drinks: MenuItem[] = [
-  {
-    id: "dr05",
-    category: "drinks",
-    name: "CAIPIRINHA SABORES copo 550ml",
-    description:
-      "51/Velho Barreiro / Balalaika / Jambu / Saquê. Sabores: Kiwi / Morango / Maracujá / Caju / Limão.",
-    price: 30,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502482/caipirinha_sabores_copo_500ml_fnpwvt.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "dr13",
-    category: "drinks",
-    name: "2 COPÃO DA COPA",
-    description: "Beba com as cores do Brasil!",
-    price: 30,
-    image: COPAO_DA_COPA_IMAGE,
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "🌈 Especial Mamadi",
-  },
-  {
-    id: "dr12",
-    category: "drinks",
-    name: "DRINK DANGEROUS WOMAN",
-    description: "Uma bebida linda, rosa e deliciosa...",
-    price: 25,
-    image: DRINK_DANGEROUS_WOMAN_IMAGE,
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "🌈 Especial Mamadi",
-  },
-  {
-    id: "dr11",
-    category: "drinks",
-    name: "CAIPIRINHA DA MAMADI",
-    description: "Caipirinha de Goiaba com Limão.",
-    price: 30,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502474/caipirinha_da_mamadi_dubapf.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "🌈 Especial Mamadi",
-  },
-  {
-    id: "dr02",
-    category: "drinks",
-    name: "CAIPIRINHA LIMÃO copo 300ml",
-    description: "51/Velho Barreiro.",
-    price: 20,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502482/caiprinha_300ml_agoesr.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "dr07",
-    category: "drinks",
-    name: "COPÃO DE GIN",
-    description: "Copo 770ml. Sabores: Tropical / Melancia / Morango / Maçã Verde.",
-    price: 20,
-    image: COPAO_GIN_IMAGE,
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "dr06",
-    category: "drinks",
-    name: "CHEVETTE",
-    description: "Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.",
-    price: 20,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502481/chevette_wuoo8r.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "dr01",
-    category: "drinks",
-    name: "GIN TÔNICA",
-    description: "GIN Nacional, Água Tônica e Limão Taiti.",
-    price: 25,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781812072/dr01-gin-tonica_rmpvzh.png",
-    badge: "⭐ Destaque",
-  },
-  {
-    id: "dr03",
-    category: "drinks",
-    name: "CAIPILULA copo 300ml",
-    description: "Caipirinha de Gengibre com Mel.",
-    price: 20,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502482/caiprinha_300ml_agoesr.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "dr04",
-    category: "drinks",
-    name: "CAIPIROSKA LIMÃO copo 300ml",
-    description: "Balalaika/Saquê.",
-    price: 22,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502482/caiprinha_300ml_agoesr.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "dr08",
-    category: "drinks",
-    name: "BATIDÃO TROPICAL",
-    description: "Caipirinha de Abacaxi com Hortelã.",
-    price: 30,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr08-batidao-tropical.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "dr09",
-    category: "drinks",
-    name: "MOJITO",
-    description: "Rum, Limão e Hortelã.",
-    price: 30,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr09-mojito.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "dr10",
-    category: "drinks",
-    name: "CUBA LIBRE",
-    description: "Rum, Coca e Limão.",
-    price: 30,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/drinksdr10-cuba-libre.jpg",
-    imageBlend: "dark",
-  },
+export const sections: Section[] = [
+  { id: "cervejas", group: "beber", title: "Litrão & cervejas", short: "Litrão", note: "sempre trincando", art: "litrao",
+    blocks: [
+      { title: "Litrão", from: "litrao-brahma-skol-antarctica" },
+      { title: "Promo de litrão", from: "promo-3-litrao" },
+      { title: "600 ml", from: "heineken-600" },
+      { title: "Long neck & lata", from: "cerveja-long-neck" },
+    ] },
+  { id: "copao", group: "beber", title: "Copão", short: "Copão", note: "um é pouco, dois é promo", art: "copao" },
+  { id: "drinks", group: "beber", title: "Caipirinhas & drinks", short: "Caipis & drinks", note: "feitos na hora, do jeito da Mamadi", art: "caipirinha" },
+  { id: "divas", group: "beber", title: "Divas Pop", short: "Divas Pop", note: "drinks pra quem domina a pista", art: "vinil" },
+  { id: "doses", group: "beber", title: "Doses & cachaças", short: "Doses", note: "uma dose de coragem", art: "dose" },
+  { id: "prontos", group: "beber", title: "Vinhos & prontos", short: "Vinhos & prontos", note: "é só abrir e brindar", art: "vinho" },
+  { id: "sem-alcool", group: "beber", title: "Sem álcool & extras", short: "Sem álcool", note: "pra hidratar entre um litrão e outro", art: "suco" },
+  { id: "pratos", group: "comer", title: "Comidinhas da Mamadi", short: "Comidinhas", note: "caseiras, de quarta a domingo", art: "prato" },
+  { id: "porcoes", group: "comer", title: "Porções", short: "Porções", note: "pra compartilhar", art: "batata" },
+  { id: "lanches", group: "comer", title: "Lanches & burgers", short: "Lanches & burgers", note: "os melhores da região", art: "burger",
+    blocks: [
+      { title: "Lanches", from: "lanche-calabresa" },
+      { title: "Burgers", from: "burger-original" },
+      { title: "Complementos", from: "maionese-barbecue" },
+    ] },
+  { id: "tabuas", group: "comer", title: "Tábuas", short: "Tábuas", note: "esse aqui é pra te sustentar", art: "tabua" },
 ];
 
-// ─────────────────────────────────────────────────────────
-// 🥃 DESTILADOS (Cachaças, Doses, Whiskys, Vodkas, Vinhos)
-// ─────────────────────────────────────────────────────────
-export const destilados: MenuItem[] = [
-  {
-    id: "de01",
-    category: "destilados",
-    name: "JAMBU",
-    description: "Cachaça de Jambu. Dose.",
-    price: 13,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde01-jambu.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de02",
-    category: "destilados",
-    name: "51 / VELHO BARREIRO",
-    description: "Dose de cachaça.",
-    price: 5,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde02-51-velho-barreiro.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de03",
-    category: "destilados",
-    name: "GENGIBRE COM MEL",
-    description: "Dose de cachaça de gengibre com mel.",
-    price: 10,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde03-gengibre-com-mel.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de04",
-    category: "destilados",
-    name: "BANANINHA / CANELINHA",
-    description: "Dose de cachaça de banana ou canela.",
-    price: 10,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde04-bananinha-canelinha.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de05",
-    category: "destilados",
-    name: "KARIRI MEL E LIMÃO",
-    description: "Kariri mel e limão.",
-    priceA: 15,
-    priceB: 25,
-    labelA: "Copo 150ml",
-    labelB: "Copo 550ml",
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde05-kariri-mel-limao.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de06",
-    category: "destilados",
-    name: "DREHER",
-    description: "Dose de Dreher.",
-    price: 13,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde06-dreher.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de07",
-    category: "destilados",
-    name: "DREHER MEL E LIMÃO",
-    description: "Dose de Dreher com mel e limão.",
-    price: 18,
-    image: "https://picsum.photos/seed/drehermell/400/300",
-  },
-  {
-    id: "de08",
-    category: "destilados",
-    name: "TEQUILA OURO José Cuervo",
-    description: "Dose de tequila ouro.",
-    price: 28,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde08-tequila-ouro.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de09",
-    category: "destilados",
-    name: "TEQUILA PRATA José Cuervo",
-    description: "Dose de tequila prata.",
-    price: 28,
-    image: "https://picsum.photos/seed/tequilaprata/400/300",
-  },
-  {
-    id: "de10",
-    category: "destilados",
-    name: "CAMPARI / APEROL",
-    description: "Dose de Campari ou Aperol.",
-    price: 15,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde10-campari-aperol.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de11",
-    category: "destilados",
-    name: "TANQUERAY (DOSE)",
-    description: "Dose de gin Tanqueray.",
-    price: 25,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde11-tanqueray.jpg",
-    imageBlend: "dark",
-    badge: "⭐ Destaque",
-  },
-  {
-    id: "de12",
-    category: "destilados",
-    name: "MASTER GOLD / CHANCELER",
-    description: "Whisky nacional.",
-    priceA: 13,
-    priceB: 22,
-    labelA: "Dose",
-    labelB: "Combo",
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde12-master-gold-chanceler.jpg",
-    imageBlend: "dark",
-    obs: "Combo: Whisky + Energético de Garrafa + Gelo de Sabor",
-  },
-  {
-    id: "de13",
-    category: "destilados",
-    name: "CAVALO BRANCO / PASSPORT",
-    description: "Whisky escocês blend.",
-    priceA: 40,
-    priceB: 50,
-    labelA: "Dose",
-    labelB: "Combo",
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde13-cavalo-branco-passport.jpg",
-    imageBlend: "dark",
-    obs: "Combo: Whisky + Energético de Garrafa + Gelo de Sabor",
-  },
-  {
-    id: "de14",
-    category: "destilados",
-    name: "RED LABEL",
-    description: "Johnnie Walker Red Label.",
-    priceA: 40,
-    priceB: 50,
-    labelA: "Dose",
-    labelB: "Combo",
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde14-red-label.jpg",
-    imageBlend: "dark",
-    obs: "Combo: Whisky + Energético de Garrafa + Gelo de Sabor",
-  },
-  {
-    id: "de15",
-    category: "destilados",
-    name: "JACK DANIEL'S",
-    description: "Tennessee Whiskey.",
-    priceA: 70,
-    priceB: 80,
-    labelA: "Dose",
-    labelB: "Combo",
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde15-jack-daniels.jpg",
-    imageBlend: "dark",
-    badge: "⭐ Destaque",
-    obs: "Combo: Whisky + Energético de Garrafa + Gelo de Sabor",
-  },
-  {
-    id: "de16",
-    category: "destilados",
-    name: "BALALAIKA",
-    description: "Vodka nacional. Dose.",
-    price: 15,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde16-balalaika.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de17",
-    category: "destilados",
-    name: "ABSOLUT",
-    description: "Vodka sueca Absolut. Dose.",
-    price: 25,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde17-absolut.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de18",
-    category: "destilados",
-    name: "SMIRNOFF",
-    description: "Vodka Smirnoff. Dose.",
-    price: 25,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde18-smirnoff.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de19",
-    category: "destilados",
-    name: "VINHO TINTO",
-    description: "Garrafa de vinho tinto.",
-    price: 20,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde19-vinho-tinto.jpg",
-    imageBlend: "dark",
-  },
-  {
-    id: "de20",
-    category: "destilados",
-    name: "VINHO ROSÉ",
-    description: "Garrafa de vinho rosé.",
-    price: 35,
-    image:
-      "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/destiladosde20-vinho-rose.jpg",
-    imageBlend: "dark",
-  },
+const SABORES_COPAO = ["Tradicional", "Tropical", "Melancia", "Morango", "Maçã verde"];
+const ESPUMA = "Finalizada com espuma de gengibre e suspiro no topo.";
+
+export const items: Item[] = [
+  /* ───────────── LITRÃO & CERVEJAS ───────────── */
+  { id: "litrao-brahma-skol-antarctica", section: "cervejas", name: "Litrão Brahma, Skol ou Antarctica", price: R(17), unit: "garrafa de 1 L",
+    options: [{ label: "Escolha", values: ["Brahma Chopp", "Skol", "Antarctica"] }], art: "litrao", color: "#e8332a",
+    keywords: ["brahma", "skol", "antartica", "antarctica", "chopp", "pilsen", "cerveja", "breja", "cerva", "gelada", "litro", "litrao"] },
+  { id: "litrao-petra", section: "cervejas", name: "Litrão Petra", price: R(17), unit: "garrafa de 1 L", art: "litrao", color: "#c8102e",
+    keywords: ["petra", "cerveja", "litro"] },
+  { id: "litrao-amstel", section: "cervejas", name: "Litrão Amstel", price: R(18), unit: "garrafa de 1 L", art: "litrao", color: "#b5121b",
+    keywords: ["amstel", "cerveja", "litro"] },
+  { id: "litrao-budweiser-duplo-malte", section: "cervejas", name: "Litrão Budweiser ou Brahma Duplo Malte", price: R(20), unit: "garrafa de 1 L",
+    options: [{ label: "Escolha", values: ["Budweiser", "Brahma Duplo Malte"] }], art: "litrao", color: "#d1172b",
+    keywords: ["budweiser", "bud", "duplo malte", "brahma", "cerveja", "litro"] },
+  { id: "litrao-original", section: "cervejas", name: "Litrão Original", price: R(24), unit: "garrafa de 1 L", art: "litrao", color: "#f29a1d",
+    keywords: ["original", "cerveja", "litro", "puro malte"] },
+  { id: "promo-3-litrao", section: "cervejas", name: "3 Litrão Brahma ou Skol", price: R(45), unit: "3 garrafas de 1 L", tags: ["promo", "compartilhar"],
+    desc: "Rodada de três: sai a R$ 15 cada.", options: [{ label: "Escolha", values: ["Brahma Chopp", "Skol"] }], art: "litrao", color: "#e8332a",
+    keywords: ["promo", "promocao", "oferta", "combo", "balde", "rodada", "brahma", "skol", "tres", "3"], confirmar: true },
+  { id: "promo-3-litrao-original", section: "cervejas", name: "3 Litrão Original", price: R(60), unit: "3 garrafas de 1 L", tags: ["promo", "compartilhar"],
+    desc: "Três Original geladas: sai a R$ 20 cada.", art: "litrao", color: "#f29a1d",
+    keywords: ["promo", "promocao", "oferta", "combo", "rodada", "original", "tres", "3"], confirmar: true },
+  { id: "heineken-600", section: "cervejas", name: "Heineken 600 ml", price: R(24), unit: "garrafa", art: "garrafa", color: "#1f7a3a",
+    keywords: ["heineken", "cerveja", "600", "verdinha"] },
+  { id: "eisenbahn-600", section: "cervejas", name: "Eisenbahn 600 ml", price: R(15), unit: "garrafa", art: "garrafa", color: "#e2b33c",
+    keywords: ["eisenbahn", "cerveja", "600"] },
+  { id: "cacildis-600", section: "cervejas", name: "Cacildis 600 ml", price: R(15), unit: "garrafa", art: "garrafa", color: "#e0a526",
+    keywords: ["cacildis", "mussum", "cerveja", "600"] },
+  { id: "cerveja-long-neck", section: "cervejas", name: "Cerveja long neck", price: R(15), art: "longneck", color: "#e2b33c",
+    keywords: ["long neck", "longneck", "cerveja", "garrafinha"] },
+  { id: "cerveja-lata", section: "cervejas", name: "Cerveja lata 350 ml", price: R(13), art: "lata", color: "#e8332a",
+    keywords: ["lata", "latinha", "cerveja", "350"] },
+
+  /* ───────────── COPÃO ───────────── */
+  { id: "copao-vodka", section: "copao", name: "2 Copão de Vodka", price: R(15), unit: "2 copões", tags: ["promo", "compartilhar"],
+    desc: "Dois copões de vodka no sabor que você escolher.", options: [{ label: "Sabores", values: SABORES_COPAO }], art: "copao", color: "#ff4f7b",
+    keywords: ["vodka", "copao", "copo", "promo", "dois", "2", "barato", "tropical", "melancia", "morango", "maca verde"] },
+  { id: "copao-gin", section: "copao", name: "2 Copão de Gin", price: R(30), unit: "2 copões", tags: ["promo", "compartilhar"],
+    desc: "Dois copões de gin no sabor que você escolher.", options: [{ label: "Sabores", values: SABORES_COPAO }], art: "copao", color: "#7ed957",
+    keywords: ["gin", "copao", "copo", "promo", "dois", "2", "tropical", "melancia", "morango", "maca verde", "tonica"] },
+  { id: "chevette", section: "copao", name: "Chevette", price: R(10),
+    desc: "O copão mais em conta da casa.", options: [{ label: "Sabores", values: ["Tradicional", "Morango", "Maracujá"] }], art: "copao", color: "#ffd23f",
+    keywords: ["chevette", "chevete", "copao", "barato", "morango", "maracuja"] },
+  { id: "copao-sorrah", section: "copao", name: "Copão da Sorrah", price: R(20),
+    desc: "Dose de Dreher, limão, mel e energético.", art: "copao", color: "#ffb000",
+    keywords: ["sorrah", "sora", "dreher", "conhaque", "energetico", "mel", "limao", "copao"] },
+  { id: "whisky-master-gold", section: "copao", name: "Whisky Master Gold", price: R(15),
+    desc: "Master Gold + gelo de sabor + energético.", art: "copao", color: "#d98c1f",
+    keywords: ["whisky", "uisque", "master gold", "energetico", "gelo de coco", "gelo de sabor", "copao"] },
+
+  /* ───────────── CAIPIRINHAS & DRINKS ───────────── */
+  { id: "caipirinha-viva-o-nordeste", section: "drinks", name: "Caipirinha Viva o Nordeste", price: R(25), tags: ["da-casa"],
+    desc: "Caipirinha com 3 limões (taiti, cravo e siciliano), cachaça 51 e rapadura.", art: "caipirinha", color: "#9bd14b",
+    keywords: ["caipirinha", "caipi", "nordeste", "rapadura", "cachaca", "51", "limao", "siciliano", "cravo"] },
+  { id: "caipilula", section: "drinks", name: "Caipilula", price: R(13), unit: "copo 300 ml", tags: ["da-casa"],
+    desc: "Caipirinha de gengibre com mel e limão.", art: "caipirinha", color: "#f2c14e",
+    keywords: ["caipilula", "lula", "caipirinha", "caipi", "gengibre", "mel", "limao", "barato"] },
+  { id: "choro-da-extrema-direita", section: "drinks", name: "Choro da Extrema Direita", price: R(25), tags: ["novo", "da-casa"],
+    desc: "Caipirinha de cachaça de jambu com maracujá e limão, e uma dose de 25/10/2026.", art: "caipirinha", color: "#ffc300",
+    keywords: ["choro", "extrema direita", "jambu", "maracuja", "caipirinha", "caipi", "eleicao", "25/10"] },
+  { id: "caipirinha-limao", section: "drinks", name: "Caipirinha de limão", price: R(15), unit: "copo 300 ml",
+    options: [{ label: "Cachaça", values: ["51", "Velho Barreiro"] }], art: "caipirinha", color: "#9bd14b",
+    keywords: ["caipirinha", "caipi", "limao", "cachaca", "51", "velho barreiro", "classica"] },
+  { id: "promo-3-caipirinhas", section: "drinks", name: "3 Caipirinhas de limão", price: R(30), unit: "3 copos de 300 ml", tags: ["promo", "compartilhar"],
+    desc: "Três caipirinhas de limão: sai a R$ 10 cada.", art: "caipirinha", color: "#9bd14b",
+    keywords: ["promo", "promocao", "oferta", "combo", "caipirinha", "caipi", "limao", "tres", "3", "rodada"], confirmar: true },
+  { id: "caipirinha-sabores", section: "drinks", name: "Caipirinha de sabores", price: R(25), unit: "copo 550 ml",
+    options: [
+      { label: "Base", values: ["51", "Velho Barreiro", "Balalaika (vodka)", "Jambu", "Saquê"] },
+      { label: "Sabor", values: ["Kiwi", "Morango", "Maracujá", "Caju", "Limão"] },
+    ], art: "caipirinha", color: "#ff5d73",
+    keywords: ["caipirinha", "caipi", "caipiroska", "caipisake", "sake", "saque", "vodka", "balalaika", "jambu", "kiwi", "morango", "maracuja", "caju", "limao", "sabores"] },
+  { id: "mojito", section: "drinks", name: "Mojito", price: R(30), desc: "Rum, limão e hortelã.", art: "longdrink", color: "#b7e4a3",
+    keywords: ["mojito", "rum", "hortela", "menta", "limao", "classico"] },
+  { id: "cuba-libre", section: "drinks", name: "Cuba Libre", price: R(30), desc: "Rum, coca e limão.", art: "longdrink", color: "#5a2a14",
+    keywords: ["cuba libre", "cuba", "rum", "coca", "coca-cola", "limao", "classico"] },
+  { id: "kariri-mel-limao", section: "drinks", name: "Kariri mel e limão",
+    variants: [{ label: "copo 150 ml", price: R(15) }, { label: "copo 550 ml", price: R(25) }],
+    art: "caipirinha", color: "#f4b942",
+    keywords: ["kariri", "cachaca", "mel", "limao"] },
+  { id: "dreher-mel-limao", section: "drinks", name: "Dreher mel e limão", price: R(18), art: "caipirinha", color: "#e09f3e",
+    keywords: ["dreher", "conhaque", "mel", "limao"] },
+
+  /* ───────────── DIVAS POP ───────────── (todos R$ 25) */
+  { id: "batidao-tropical", section: "divas", name: "Batidão Tropical", price: R(25), tags: ["novo"],
+    desc: "Caipiroska de abacaxi com hortelã.", art: "vinil",
+    diva: { artist: "Pabllo Vittar", hook: "Pura refrescância e brasilidade.", colors: ["#ffd43b", "#2fbf71"] },
+    keywords: ["pabllo", "pablo", "vittar", "abacaxi", "hortela", "caipiroska", "vodka", "batidao"] },
+  { id: "bad-romance", section: "divas", name: "Bad Romance", price: R(25), tags: ["novo"],
+    desc: `Caipiroska de morango com um toque de limão. ${ESPUMA}`, art: "vinil",
+    diva: { artist: "Lady Gaga", hook: "A clássica e irresistível.", colors: ["#ff3b5c", "#8f0024"] },
+    keywords: ["lady gaga", "gaga", "morango", "limao", "caipiroska", "vodka"] },
+  { id: "dangerous-woman", section: "divas", name: "Dangerous Woman", price: R(25), tags: ["novo"],
+    desc: "Caipiroska de goiaba com limão. Finalizada com espuma de gengibre e suspiro rosa no topo.", art: "vinil",
+    diva: { artist: "Ariana Grande", hook: "Linda e delicada!", colors: ["#ffb3c6", "#e5386d"] },
+    keywords: ["ariana", "grande", "goiaba", "limao", "caipiroska", "vodka", "suspiro rosa"] },
+  { id: "a-braba", section: "divas", name: "A Braba", price: R(25), tags: ["novo"],
+    desc: `Caipiroska de frutas vermelhas com maracujá. ${ESPUMA}`, art: "vinil",
+    diva: { artist: "Luísa Sonza", hook: "É fácil amar!", colors: ["#c9184a", "#ffb703"] },
+    keywords: ["luisa", "sonza", "braba", "frutas vermelhas", "maracuja", "caipiroska", "vodka"] },
+  { id: "texas-hold-em", section: "divas", name: "Texas Hold 'Em", price: R(25), tags: ["novo"],
+    desc: `Caipiroska de tangerina com manjericão. ${ESPUMA}`, art: "vinil",
+    diva: { artist: "Beyoncé", hook: "Uma mistura imperial e refrescante!", colors: ["#ff8a00", "#24573f"] },
+    keywords: ["beyonce", "texas", "tangerina", "mexerica", "manjericao", "caipiroska", "vodka"] },
+  { id: "envolver", section: "divas", name: "Envolver", price: R(25), tags: ["novo"],
+    desc: `Caipiroska de maracujá com manga. ${ESPUMA}`, art: "vinil",
+    diva: { artist: "Anitta", hook: "Envolvente e poderosa.", colors: ["#ffc300", "#ff5400"] },
+    keywords: ["anitta", "anita", "envolver", "maracuja", "manga", "caipiroska", "vodka"] },
+  { id: "vogue", section: "divas", name: "Vogue", price: R(25), tags: ["novo"],
+    desc: "Caipiroska de melancia com pimenta dedo-de-moça. Coberta com espuma de gengibre e uma pimenta no topo.", art: "vinil",
+    diva: { artist: "Madonna", hook: "Surpreendente, assim como nossa Queen!", colors: ["#ff4d6d", "#1f8a4c"] },
+    keywords: ["madonna", "vogue", "melancia", "pimenta", "picante", "dedo de moca", "caipiroska", "vodka"] },
+  { id: "toxic", section: "divas", name: "Toxic", price: R(25), tags: ["novo"],
+    desc: `Caipirinha com rum (Busca Brisa), kiwi e limão. ${ESPUMA}`, art: "vinil",
+    diva: { artist: "Britney Spears", hook: "Nada tóxico, mas é pra tomar e ficar muito louca.", colors: ["#a7d129", "#1b5e20"] },
+    keywords: ["britney", "spears", "toxic", "toxico", "rum", "busca brisa", "kiwi", "limao", "caipirinha"] },
+  { id: "complicated", section: "divas", name: "Complicated", price: R(25), tags: ["novo"],
+    desc: `Caipiroska de caju com limão. ${ESPUMA}`, art: "vinil",
+    diva: { artist: "Avril Lavigne", hook: "Nada complicado, apenas maravilhoso!", colors: ["#ff9e00", "#9d0208"] },
+    keywords: ["avril", "lavigne", "complicated", "caju", "limao", "caipiroska", "vodka"] },
+  { id: "cool-for-the-summer", section: "divas", name: "Cool for the Summer", price: R(25), tags: ["novo"],
+    desc: `Caipiroska de blueberry (mirtilo) com hortelã e limão. ${ESPUMA}`, art: "vinil",
+    diva: { artist: "Demi Lovato", hook: "Frescor sem igual!", colors: ["#4cc9f0", "#3a0ca3"] },
+    keywords: ["demi", "lovato", "cool for the summer", "blueberry", "mirtilo", "hortela", "limao", "caipiroska", "vodka"] },
+  { id: "diamonds", section: "divas", name: "Diamonds", price: R(25), tags: ["novo"],
+    desc: `Caipirinha com tequila ouro, maracujá e limão. ${ESPUMA}`, art: "vinil",
+    diva: { artist: "Rihanna", hook: "Sofisticada!", colors: ["#ffe066", "#a47148"] },
+    keywords: ["rihanna", "riri", "diamonds", "tequila", "maracuja", "limao", "caipirinha"] },
+  { id: "o-cha", section: "divas", name: "O Chá", price: R(25), tags: ["novo"],
+    desc: `Caipiroska de amora com hortelã e limão. ${ESPUMA}`, art: "vinil",
+    diva: { artist: "Glória Groove", hook: "O chá perfeito da Lady Leste. Que coisa boa!", colors: ["#c77dff", "#3c096c"] },
+    keywords: ["gloria", "groove", "o cha", "amora", "hortela", "limao", "caipiroska", "vodka", "lady leste"] },
+
+  /* ───────────── DOSES & CACHAÇAS ───────────── */
+  { id: "dose-jambu-dreher", section: "doses", name: "Jambu ou Dreher", price: R(13), unit: "dose",
+    options: [{ label: "Escolha", values: ["Cachaça de jambu", "Dreher"] }], art: "dose", color: "#8bc34a",
+    keywords: ["jambu", "dreher", "conhaque", "cachaca", "dose", "treme"] },
+  { id: "dose-51-velho-barreiro", section: "doses", name: "51 ou Velho Barreiro", price: R(5), unit: "dose",
+    options: [{ label: "Escolha", values: ["51", "Velho Barreiro"] }], art: "dose", color: "#f3e9d2",
+    keywords: ["51", "velho barreiro", "cachaca", "pinga", "dose", "barato", "branquinha"] },
+  { id: "dose-gengibre-mel", section: "doses", name: "Gengibre com mel", price: R(10), unit: "dose", art: "dose", color: "#f4b942",
+    keywords: ["gengibre", "mel", "cachaca", "dose", "licor"] },
+  { id: "dose-bananinha-canelinha", section: "doses", name: "Bananinha ou Canelinha", price: R(10), unit: "dose",
+    options: [{ label: "Escolha", values: ["Bananinha", "Canelinha"] }], art: "dose", color: "#e9c46a",
+    keywords: ["bananinha", "banana", "canelinha", "canela", "cachaca", "dose", "licor"] },
+  { id: "dose-licor-43", section: "doses", name: "Licor 43", price: R(30), unit: "dose", art: "dose", color: "#f1b31c",
+    keywords: ["licor 43", "licor", "dose", "doce"] },
+  { id: "dose-tequila-ouro", section: "doses", name: "Tequila ouro", price: R(28), unit: "dose", art: "dose", color: "#f0a202",
+    keywords: ["tequila", "ouro", "gold", "dose", "shot"] },
+  { id: "dose-tequila-prata", section: "doses", name: "Tequila prata", price: R(28), unit: "dose", art: "dose", color: "#e8f1f2",
+    keywords: ["tequila", "prata", "silver", "dose", "shot"] },
+
+  /* ───────────── VINHOS & PRONTOS ───────────── */
+  { id: "vinho-tinto", section: "prontos", name: "Vinho tinto", price: R(30), unit: "garrafa", tags: ["compartilhar"], art: "vinho", color: "#7b1e3a",
+    keywords: ["vinho", "tinto", "garrafa", "wine"] },
+  { id: "vinho-rose", section: "prontos", name: "Vinho rosé", price: R(45), unit: "garrafa", tags: ["compartilhar"], art: "vinho", color: "#f4978e",
+    keywords: ["vinho", "rose", "garrafa", "wine"] },
+  { id: "skol-beats", section: "prontos", name: "Skol Beats", price: R(18), art: "lata", color: "#2b59c3",
+    keywords: ["skol beats", "beats", "pronto", "lata", "ice"] },
+  { id: "xeque-mate", section: "prontos", name: "Xeque Mate", price: R(18), art: "lata", color: "#e9c46a",
+    keywords: ["xeque mate", "xeque-mate", "mate", "rum", "pronto", "lata"] },
+  { id: "draft", section: "prontos", name: "Draft", price: R(20), art: "lata", color: "#f72585",
+    keywords: ["draft", "pronto", "lata"] },
+  { id: "vibes", section: "prontos", name: "Vibes", price: R(13), art: "lata", color: "#7209b7",
+    keywords: ["vibes", "pronto", "lata", "barato"] },
+
+  /* ───────────── SEM ÁLCOOL & EXTRAS ───────────── */
+  { id: "refrigerante", section: "sem-alcool", name: "Refrigerante", price: R(10), tags: ["sem-alcool"], art: "lata", color: "#d62828",
+    keywords: ["refrigerante", "refri", "coca", "guarana", "soda", "sem alcool"] },
+  { id: "suco-natural", section: "sem-alcool", name: "Suco natural", price: R(15), desc: "Diversos sabores.", tags: ["sem-alcool"], art: "suco", color: "#ff9f1c",
+    keywords: ["suco", "natural", "fruta", "sem alcool", "laranja"] },
+  { id: "soda-italiana", section: "sem-alcool", name: "Soda italiana", price: R(15), desc: "Diversos sabores.", tags: ["sem-alcool"], art: "suco", color: "#ff5d8f",
+    keywords: ["soda", "italiana", "sem alcool"] },
+  { id: "agua", section: "sem-alcool", name: "Água ou água com gás", price: R(6), tags: ["sem-alcool"],
+    options: [{ label: "Escolha", values: ["Sem gás", "Com gás"] }], art: "agua", color: "#8ecae6",
+    keywords: ["agua", "com gas", "sem gas", "sem alcool", "hidratar"] },
+  { id: "agua-tonica", section: "sem-alcool", name: "Água tônica", price: R(10), tags: ["sem-alcool"], art: "lata", color: "#e0f2e9",
+    keywords: ["tonica", "agua tonica", "sem alcool"] },
+  { id: "monster", section: "sem-alcool", name: "Monster latão", price: R(18), tags: ["sem-alcool"], art: "lata", color: "#2d6a4f",
+    keywords: ["monster", "energetico", "latao", "energy"] },
+  { id: "red-bull", section: "sem-alcool", name: "Red Bull lata 250 ml", price: R(18), tags: ["sem-alcool"], art: "lata", color: "#1d3557",
+    keywords: ["red bull", "redbull", "energetico", "lata", "energy"] },
+  { id: "gelo-sabor", section: "sem-alcool", name: "Gelo de sabor", price: R(5),
+    options: [{ label: "Sabores", values: ["Coco", "Maracujá", "Morango"] }], art: "gelo", color: "#ffd6e0",
+    keywords: ["gelo", "gelo de coco", "gelo de sabor", "coco", "maracuja", "morango"] },
+  { id: "copo-energetico", section: "sem-alcool", name: "Copo de energético", price: R(5), unit: "300 ml", art: "copao", color: "#ffe14d",
+    keywords: ["energetico", "copo", "energy"] },
+  { id: "copo-gelo-300", section: "sem-alcool", name: "Copo com gelo 300 ml", price: R(2), art: "gelo", color: "#dff3ff",
+    keywords: ["copo", "gelo", "copo com gelo"] },
+  { id: "copo-gelo-770", section: "sem-alcool", name: "Copo com gelo 770 ml", price: R(4), art: "gelo", color: "#dff3ff",
+    keywords: ["copo", "gelo", "copo com gelo", "copao"] },
+  { id: "shot-limao-sal", section: "sem-alcool", name: "Shot de limão + sal", price: R(1), unit: "50 ml", art: "limaosal", color: "#9bd14b",
+    keywords: ["limao", "sal", "shot", "tequila"] },
+
+  /* ───────────── COMIDINHAS DA MAMADI ───────────── */
+  { id: "churrasco-da-mamadi", section: "pratos", name: "Churrasco da Mamadi", price: R(29.9), unit: "individual", tags: ["fds", "da-casa"],
+    desc: "Churrasco bem servido. Acompanha arroz, feijão, farofa e vinagrete.", art: "prato",
+    keywords: ["churrasco", "carne", "prato", "almoco", "sabado", "domingo", "fim de semana", "arroz", "feijao", "farofa", "vinagrete", "pf"] },
+  { id: "prato-executivo", section: "pratos", name: "Prato executivo com 2 espetinhos", price: R(29.99),
+    desc: "Acompanha arroz, feijão, fritas, vinagrete e farofa.",
+    options: [{ label: "Escolha 2 espetinhos", values: ["Carne", "Frango", "Linguiça", "Pão de alho", "Queijo coalho"] }], art: "prato",
+    keywords: ["executivo", "prato", "pf", "prato feito", "almoco", "espetinho", "espeto", "carne", "frango", "linguica", "queijo coalho", "pao de alho", "arroz", "feijao"] },
+  { id: "baiao-de-dois", section: "pratos", name: "Baião de Dois", price: R(59.9), unit: "serve 2 pessoas", tags: ["domingo", "serve2"],
+    desc: "Servido com mandioca frita e tiras de contra-filé.", art: "baiao",
+    keywords: ["baiao", "baiao de dois", "nordestino", "contra-file", "contra file", "mandioca", "domingo", "prato", "dividir", "casal"] },
+  { id: "prato-vegano", section: "pratos", name: "Prato vegano de berinjela", price: R(29.9), tags: ["vegano"],
+    desc: "Arroz, berinjela refogada, feijão, fritas, vinagrete e farofa.", art: "berinjela",
+    keywords: ["vegano", "vegana", "vegan", "vegetariano", "berinjela", "sem carne", "prato", "almoco"] },
+
+  /* ───────────── PORÇÕES ───────────── */
+  { id: "mini-pasteis", section: "porcoes", name: "Mini pastéis", variants: [{ label: "meia", price: R(30) }, { label: "inteira", price: R(55) }],
+    options: [{ label: "Sabor", values: ["Carne", "Queijo", "Misto"] }], tags: ["compartilhar"], art: "pastel",
+    keywords: ["pastel", "pasteis", "pastelzinho", "carne", "queijo", "misto", "porcao", "petisco", "frito"] },
+  { id: "coxinha", section: "porcoes", name: "Coxinha", price: R(18), unit: "4 unidades", tags: ["compartilhar"],
+    options: [{ label: "Recheio", values: ["Frango", "Vegana (brócolis, cenoura e batata)"] }], art: "coxinha",
+    keywords: ["coxinha", "coxinhas", "frango", "vegana", "salgado", "porcao", "petisco", "frito"], confirmar: true },
+  { id: "batata-simples", section: "porcoes", name: "Batata frita", variants: [{ label: "meia", price: R(25) }, { label: "inteira", price: R(45) }],
+    tags: ["compartilhar"], art: "batata", keywords: ["batata", "fritas", "batata frita", "porcao", "simples"] },
+  { id: "batata-cheddar-bacon", section: "porcoes", name: "Batata frita com cheddar e bacon", variants: [{ label: "meia", price: R(35) }, { label: "inteira", price: R(55) }],
+    tags: ["compartilhar"], art: "batata", color: "#f4a300", keywords: ["batata", "fritas", "cheddar", "bacon", "porcao"] },
+  { id: "batata-mamadi", section: "porcoes", name: "Batata Mamadi", variants: [{ label: "meia", price: R(45) }, { label: "inteira", price: R(60) }],
+    desc: "Cheddar, catupiry, bacon e parmesão ralado.", tags: ["compartilhar", "da-casa"], art: "batata", color: "#f4a300",
+    keywords: ["batata", "mamadi", "cheddar", "catupiry", "bacon", "parmesao", "porcao"] },
+  { id: "batata-louca", section: "porcoes", name: "Batata Louca", variants: [{ label: "meia", price: R(48) }, { label: "inteira", price: R(62) }],
+    desc: "Batata rústica com carne de panela temperada e desfiada (a carne louca) e catupiry.", tags: ["compartilhar"], art: "batata", color: "#8d5524",
+    keywords: ["batata", "louca", "rustica", "carne louca", "carne de panela", "catupiry", "porcao"] },
+  { id: "calabresa-acebolada", section: "porcoes", name: "Calabresa acebolada", variants: [{ label: "meia", price: R(38.9) }, { label: "inteira", price: R(79.9) }],
+    tags: ["compartilhar"], art: "calabresa", keywords: ["calabresa", "acebolada", "cebola", "linguica", "porcao", "petisco"] },
+  { id: "mandioca-frita", section: "porcoes", name: "Mandioca frita", variants: [{ label: "meia", price: R(25) }, { label: "inteira", price: R(45) }],
+    tags: ["compartilhar"], art: "mandioca", keywords: ["mandioca", "aipim", "macaxeira", "frita", "porcao"] },
+  { id: "espetinho", section: "porcoes", name: "Espetinho", price: R(16), unit: "1 unidade",
+    options: [{ label: "Sabores", values: ["Carne", "Frango", "Linguiça", "Queijo coalho", "Pão de alho"] }], art: "espeto",
+    keywords: ["espetinho", "espeto", "churrasquinho", "carne", "frango", "linguica", "queijo coalho", "pao de alho"] },
+  { id: "couvert-da-mamadi", section: "porcoes", name: "Couvert da Mamadi", price: R(30), tags: ["compartilhar", "da-casa"],
+    desc: "Sardela, caponata de berinjela, azeitonas, queijo temperado, calabresa curada e pão da casa.", art: "couvert",
+    keywords: ["couvert", "entrada", "sardela", "caponata", "berinjela", "azeitona", "queijo", "pao", "beliscar"] },
+  { id: "porcao-de-pao", section: "porcoes", name: "Porção de pão", price: R(8),
+    desc: "2 pães cortados e temperados com orégano e azeite.", art: "pao", keywords: ["pao", "paes", "oregano", "azeite", "porcao"] },
+
+  /* ───────────── LANCHES & BURGERS ───────────── */
+  { id: "lanche-calabresa", section: "lanches", name: "Lanche de calabresa", price: R(28.9),
+    desc: "Calabresa, queijo e cebola no pão. Acompanha maionese temperada.", art: "lanche",
+    keywords: ["lanche", "sanduiche", "sanduba", "calabresa", "queijo", "cebola"] },
+  { id: "lanche-carne-louca", section: "lanches", name: "Lanche de carne louca", price: R(28.9),
+    desc: "Carne de panela desfiada e temperada no pão. Acompanha maionese temperada.", art: "lanche",
+    keywords: ["lanche", "sanduiche", "carne louca", "carne de panela", "desfiada"] },
+  { id: "lanche-pernil", section: "lanches", name: "Lanche de pernil", price: R(28.9),
+    desc: "Pernil com molho especial e cebola refogada no pão. Acompanha maionese temperada.", art: "lanche",
+    keywords: ["lanche", "sanduiche", "pernil", "porco", "cebola"] },
+  { id: "lanche-vegano", section: "lanches", name: "Lanche vegano", price: R(24.9), tags: ["vegano"],
+    desc: "Berinjela temperada, azeitona, tomate e cebola no pão. Acompanha barbecue (vegano).", art: "lanche",
+    keywords: ["lanche", "vegano", "vegana", "vegan", "vegetariano", "berinjela", "sem carne"] },
+  { id: "burger-original", section: "lanches", name: "Mamadi Original", price: R(29.9),
+    desc: "Pão brioche, 70 g de carne, queijo cheddar e maionese especial.", art: "burger",
+    keywords: ["burger", "hamburguer", "hamburger", "x-burger", "brioche", "cheddar", "original"] },
+  { id: "burger-bacon", section: "lanches", name: "Mamadi Bacon", price: R(32.9),
+    desc: "Pão brioche, 70 g de carne, queijo cheddar, bacon, barbecue e maionese especial.", art: "burger",
+    keywords: ["burger", "hamburguer", "x-bacon", "bacon", "barbecue", "brioche", "cheddar"] },
+  { id: "burger-classico", section: "lanches", name: "Mamadi Clássico", price: R(37.9), tags: ["da-casa"],
+    desc: "Pão australiano, 70 g de carne, queijo cheddar, cebola caramelizada, bacon, barbecue e maionese especial.", art: "burger",
+    keywords: ["burger", "hamburguer", "australiano", "cebola caramelizada", "bacon", "barbecue", "classico"] },
+  { id: "maionese-barbecue", section: "lanches", name: "Maionese temperada ou barbecue", price: R(1), unit: "potinho de 50 ml",
+    options: [{ label: "Escolha", values: ["Maionese temperada", "Barbecue"] }], art: "molho",
+    keywords: ["maionese", "barbecue", "molho", "potinho", "extra"] },
+  { id: "extra-queijo", section: "lanches", name: "Extra queijo", price: R(5), art: "queijo", keywords: ["extra", "queijo", "adicional"] },
+  { id: "extra-abacaxi", section: "lanches", name: "Extra abacaxi", price: R(5), art: "abacaxi", keywords: ["extra", "abacaxi", "adicional"] },
+
+  /* ───────────── TÁBUAS ───────────── */
+  { id: "tabua-espetinhos", section: "tabuas", name: "Tábua de espetinhos", price: R(89.9), tags: ["compartilhar"],
+    desc: "6 espetos: 2 de carne, 1 de frango, 1 de linguiça, 1 de queijo coalho e 1 pão de alho. Acompanha farofa e vinagrete.", art: "espeto",
+    keywords: ["tabua", "espetinho", "espeto", "churrasco", "carne", "frango", "linguica", "queijo coalho", "pao de alho", "galera", "turma"] },
+  { id: "tabua-mista", section: "tabuas", name: "Tábua Mista", price: R(129.9), tags: ["compartilhar"],
+    desc: "Batata frita, calabresa acebolada, contra-filé acebolado, frango acebolado e mandioca frita. Acompanha pão, farofa, vinagrete e maionese temperada.", art: "tabua",
+    keywords: ["tabua", "mista", "contra-file", "frango", "calabresa", "batata", "mandioca", "galera", "turma", "dividir"] },
+  { id: "tabua-dupla-1", section: "tabuas", name: "Tábua Dupla 1", price: R(62.9), tags: ["compartilhar", "serve2"],
+    desc: "Batata frita e calabresa acebolada. Acompanha pão, vinagrete e maionese temperada.", art: "tabua",
+    keywords: ["tabua", "dupla", "calabresa", "batata", "casal", "dois"] },
+  { id: "tabua-dupla-2", section: "tabuas", name: "Tábua Dupla 2", price: R(99.9), tags: ["compartilhar", "serve2"],
+    desc: "Batata frita e contra-filé acebolado. Acompanha pão, vinagrete e maionese temperada.", art: "tabua",
+    keywords: ["tabua", "dupla", "contra-file", "carne", "batata", "casal", "dois"] },
 ];
 
-// ─────────────────────────────────────────────────────────
-// 🍺 CERVEJAS
-// ─────────────────────────────────────────────────────────
-export const cervejas: MenuItem[] = [
-  // Mix atual — ordem do deck.
-  { id: "ce01", category: "cervejas", name: "BRAHMA CHOPP Litrão", description: "Brahma Chopp 1 litro.", price: 17, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781893643/cervejasce01-brahma-chopp-litrao.png_zyeftc.png", imageBlend: "dark" },
-  { id: "ce03", category: "cervejas", name: "AMSTEL Litrão", description: "Amstel 1 litro.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce03-amstel-litrao.png_c2hwjg.png", imageBlend: "dark" },
-  { id: "ce02", category: "cervejas", name: "SKOL PILSEN Litrão", description: "Skol Pilsen 1 litro.", price: 17, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895374/cervejasce02-skol-litrao.png_fgorhw.png", imageBlend: "dark" },
-  { id: "ce09", category: "cervejas", name: "HEINEKEN 600ml", description: "Heineken garrafa verde 600ml.", price: 22, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/cervejasce09-heineken-600ml.png_hgjw0y.png", imageBlend: "dark", badge: "⭐ Destaque" },
-  { id: "ce07", category: "cervejas", name: "ORIGINAL Litrão", description: "Original 1 litro.", price: 23, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
-  { id: "ce22", category: "cervejas", name: "CACILDIS 600ml", description: "Cacildis 600ml.", price: 15, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
-  { id: "ce04", category: "cervejas", name: "ANTÁRTICA Litrão", description: "Antártica 1 litro.", price: 17, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895373/cervejasce04-antartica-litrao.png_fx1u1a.png", imageBlend: "dark" },
-  { id: "ce05", category: "cervejas", name: "BUDWEISER Litrão", description: "Budweiser 1 litro.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895370/cervejasce05-budweiser-litrao.png_vrlzf5.png", imageBlend: "dark" },
-  { id: "ce23", category: "cervejas", name: "MICHELOB Lata", description: "Michelob em lata gelada.", price: 10, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
-  { id: "ce24", category: "cervejas", name: "AMSTEL Lata", description: "Amstel em lata gelada.", price: 10, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
-  { id: "ce25", category: "cervejas", name: "BRAHMA DUPLO MALTE Lata", description: "Brahma Duplo Malte em lata gelada.", price: 10, image: "", photoPending: true, imageBlend: "dark", imageFit: "pack" },
-  { id: "ce06", category: "cervejas", name: "BRAHMA DUPLO MALTE Litrão", description: "Brahma Duplo Malte 1 litro.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781895369/cervejasce06-brahma-duplo-malte-litrao.png_y0iayi.png", imageBlend: "dark" },
+export const itemById = new Map(items.map((it) => [it.id, it]));
+export const sectionById = new Map(sections.map((s) => [s.id, s]));
+export const itemsBySection = (id: SectionId) => items.filter((it) => it.section === id);
 
-  // Fora do mix atual (ocultos em HIDDEN_MENU_ITEM_IDS) — mantidos para reativar.
-  { id: "ce08", category: "cervejas", name: "PETRA Litrão", description: "Petra 1 litro.", price: 13, image: "https://picsum.photos/seed/petra/400/300" },
-  { id: "ce10", category: "cervejas", name: "STELLA 600ml", description: "Stella Artois garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/stella600/400/300" },
-  { id: "ce11", category: "cervejas", name: "BECK'S 600ml", description: "Beck's garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/becks600/400/300" },
-  { id: "ce12", category: "cervejas", name: "SPATEN 600ml", description: "Spaten garrafa verde 600ml.", price: 18, image: "https://picsum.photos/seed/spaten600/400/300" },
-  { id: "ce13", category: "cervejas", name: "AMSTEL 600ml", description: "Amstel 600ml.", price: 15, image: "https://picsum.photos/seed/amstel600/400/300" },
-  { id: "ce14", category: "cervejas", name: "EISENBAHN 600ml", description: "Eisenbahn 600ml.", price: 15, image: "https://picsum.photos/seed/eisenbahn600/400/300" },
-  { id: "ce15", category: "cervejas", name: "ORIGINAL 600ml", description: "Original 600ml.", price: 15, image: "https://picsum.photos/seed/original600/400/300" },
-  { id: "ce16", category: "cervejas", name: "HEINEKEN 330ml", description: "Long neck Heineken.", price: 15, image: "/menu-items/ce16-heineken-330ml.webp" },
-  { id: "ce17", category: "cervejas", name: "BUDWEISER 330ml", description: "Long neck Budweiser.", price: 15, image: "https://picsum.photos/seed/budweiser330/400/300" },
-  { id: "ce18", category: "cervejas", name: "STELLA 330ml", description: "Long neck Stella Artois.", price: 15, image: "https://picsum.photos/seed/stella330/400/300" },
-  { id: "ce19", category: "cervejas", name: "CORONA 330ml", description: "Long neck Corona.", price: 15, image: "https://picsum.photos/seed/corona330/400/300" },
-  { id: "ce20", category: "cervejas", name: "HEINEKEN ZERO 330ml", description: "Long neck Heineken sem álcool.", price: 15, image: "https://picsum.photos/seed/heinekenzero/400/300" },
-  { id: "ce21", category: "cervejas", name: "BUDWEISER ZERO 330ml", description: "Long neck Budweiser sem álcool.", price: 15, image: "https://picsum.photos/seed/budweiserzero/400/300" },
-];
+/** Menor preço do item (para filtros e ordenação). */
+export const minPrice = (it: Item) => (it.variants ? Math.min(...it.variants.map((v) => v.price)) : (it.price ?? 0));
 
-// ─────────────────────────────────────────────────────────
-// 🥤 ABRIR E BEBER
-// ─────────────────────────────────────────────────────────
-export const prontos: MenuItem[] = [
-  { id: "pr01", category: "prontos", name: "SKOL BEATS", description: "Drink pronto Skol Beats.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr01-skol-beats.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.05, imagePackY: 4 },
-  { id: "pr03", category: "prontos", name: "XEQUE MATE", description: "Drink pronto Xeque Mate.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr03-xeque-mate.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 2.55, imagePackY: 6 },
-  { id: "pr04", category: "prontos", name: "DRAFT", description: "Drink pronto Draft.", price: 20, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr04-draft.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 2.25, imagePackY: 5 },
-  { id: "pr05", category: "prontos", name: "VIBES", description: "Drink pronto Vibes.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr05-vibes.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.95, imagePackY: 4 },
-  { id: "pr06", category: "prontos", name: "CERVEJA LATA 350ml", description: "Cerveja em lata 350ml.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr06-cerveja-lata-350ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 0.78, imagePackY: 4 },
-  { id: "pr12", category: "prontos", name: "REFRIGERANTE", description: "Lata 350ml.", price: 7, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502469/refrigerante_jl678v.png", imageBlend: "dark", imageFit: "pack", imageScale: 1.12, imagePackY: 5 },
-  { id: "pr08", category: "prontos", name: "RED BULL lata 250ml", description: "Energético Red Bull 250ml.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr08-red-bull-250ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1, imagePackY: 4 },
-  { id: "pr09", category: "prontos", name: "MONSTER LATÃO", description: "Energético Monster latão.", price: 18, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr09-monster-latao.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.08, imagePackY: 4 },
-  { id: "pr13", category: "prontos", name: "SUCO LATA", description: "Suco em lata.", price: 7, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr13-suco-lata.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1, imagePackY: 4 },
-  { id: "pr14", category: "prontos", name: "ÁGUA ou ÁGUA COM GÁS", description: "Garrafa.", price: 6, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr14-agua.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 2.35, imagePackY: 5 },
-  { id: "pr15", category: "prontos", name: "ÁGUA TÔNICA", description: "Água tônica.", price: 6, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr15-agua-tonica.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.16, imagePackY: 4 },
-  { id: "pr16", category: "prontos", name: "GELO SABORES", description: "Sabores: Coco / Maracujá / Morango.", price: 5, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr16-gelo-sabores.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.82, imagePackY: 5 },
-  { id: "pr02", category: "prontos", name: "51 ICE", description: "Drink pronto 51 Ice.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr02-51-ice.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.28, imagePackY: 4 },
-  { id: "pr07", category: "prontos", name: "SMIRNOFF ICE", description: "Smirnoff Ice long neck.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr07-smirnoff-ice.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.16, imagePackY: 4 },
-  { id: "pr11", category: "prontos", name: "SODA ITALIANA", description: "Diversos sabores.", price: 13, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr11-soda-italiana.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.48, imagePackY: 4 },
-  { id: "pr10", category: "prontos", name: "COPO ENERGÉTICO 300ml", description: "Energético no copo 300ml.", price: 5, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/fundo_preto/prontospr10-copo-energetico-300ml.jpg", imageBlend: "dark", imageFit: "pack", imageScale: 1.42, imagePackY: 4 },
-];
+export const isDrink = (it: Item) => sectionById.get(it.section)?.group === "beber";
 
-// ─────────────────────────────────────────────────────────
-// 🎉 COMBOS & COPÃO (ordem do deck)
-// ─────────────────────────────────────────────────────────
-export const combos: MenuItem[] = [
-  { id: "co09", category: "combos", name: "3 LITRÃO BRAHMA Chopp", description: "Pack com 3 litrões Brahma Chopp.", price: 45, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487997/3_litrao_skol_ou_brahma_tgthmz.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co12", category: "combos", name: "2 COPÃO DA COPA", description: "Beba com as cores do Brasil!", price: 30, image: COPAO_DA_COPA_IMAGE, imageBlend: "dark", imageFit: "pack", badge: "🌈 Especial Mamadi" },
-  { id: "co10", category: "combos", name: "3 LITRÃO SKOL", description: "Pack com 3 litrões Skol.", price: 45, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/3_litrao_skol_qq1ez4.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co11", category: "combos", name: "3 LITRÃO ORIGINAL", description: "Pack com 3 litrões Original.", price: 60, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487999/3_litrao_original_umyxny.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co08", category: "combos", name: "3 HEINEKEN 600ml", description: "Pack com 3 garrafas Heineken 600ml.", price: 60, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487996/3_heineken_600ml_yctyrx.png", imageBlend: "dark", imageFit: "pack", badge: "⭐ Destaque" },
-  { id: "co07", category: "combos", name: "3 ORIGINAL 600ml", description: "Pack com 3 garrafas Original 600ml.", price: 40, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/3_original_600ml_hzczzf.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co06", category: "combos", name: "3 EISENBAHN 600ml", description: "Pack com 3 garrafas Eisenbahn 600ml.", price: 40, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/3_einsenbahn_600ml_kcbmse.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co01", category: "combos", name: "3 CAIPIRINHA LIMÃO", description: "Somente de limão. Copo 300ml. Pack com 3 unidades.", price: 30, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502481/3_caiprinhas_hg9mkg.png", imageBlend: "dark", imageFit: "pack", badge: "🌈 Especial Mamadi" },
-  { id: "co02", category: "combos", name: "2 COPÃO DE GIN", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 30, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/e_copao_de_gin_jy8t3z.png", imageBlend: "dark", imageFit: "pack", badge: "🌈 Especial Mamadi" },
-  { id: "co03", category: "combos", name: "2 CHEVETTE", description: "Dois Chevettes: Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.", price: 35, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/2_chevette_psofcx.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "co05", category: "combos", name: "COPÃO VODKA C/ ENERGÉTICO", description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.", price: 15, image: COPAO_VODKA_IMAGE, imageBlend: "dark", imageFit: "pack", badge: "🌈 Especial Mamadi" },
-];
-
-// ─────────────────────────────────────────────────────────
-// ⭐ SUPER PROMOS — deck secreto (botão estrela)
-// ─────────────────────────────────────────────────────────
-export const SUPER_LIKE_CATEGORY_ID = "superlike";
-
-export const superLikeCategory: Category = {
-  id: SUPER_LIKE_CATEGORY_ID,
-  label: "SUPER PROMOS",
-  emoji: "⭐",
-  gradient: "from-yellow-400 to-purple-600",
-  from: "#FFE500",
-  to: "#AA00FF",
-  glow: "#FFE500",
-  cardImage: "/generated-menu/categories/cat-combos-card.png",
-};
-
-export const superLikeItems = visibleMenuItems([
-  {
-    id: "sl09",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "BATATA ARIANATOR",
-    description:
-      "Aquela batata frita caprichada com cheddar, queijo parmesão ralado, bacon e o icônico Catupiry de 4 Queijos Rosa!",
-    priceA: 45,
-    priceB: 60,
-    labelA: "Pequena",
-    labelB: "Grande",
-    image: BATATA_ARIANATOR_IMAGE,
-    imageBlend: "dark",
-    imageFit: "wide",
-    badge: "🌈 Especial Mamadi",
-  },
-  {
-    id: "sl03",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "2 COPÃO DE GIN",
-    description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.",
-    price: 30,
-    image: COPAO_GIN_IMAGE,
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "🌈 Especial Mamadi",
-  },
-  {
-    id: "sl02",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "2 COPÃO VODKA C/ ENERGÉTICO",
-    description: "Diversos sabores: Tropical / Melancia / Morango / Maçã Verde. Copo 770ml.",
-    price: 30,
-    image: COPAO_VODKA_IMAGE,
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "🌈 Especial Mamadi",
-  },
-  {
-    id: "sl10",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "DRINK DANGEROUS WOMAN",
-    description: "Uma bebida linda, rosa e deliciosa...",
-    price: 25,
-    image: DRINK_DANGEROUS_WOMAN_IMAGE,
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "🌈 Especial Mamadi",
-  },
-  {
-    id: "sl04",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "3 CAIPIRINHA LIMÃO",
-    description: "Somente de limão. Copo 300ml. Pack com 3 unidades.",
-    price: 30,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502481/3_caiprinhas_hg9mkg.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "🌈 Especial Mamadi",
-  },
-  {
-    id: "sl11",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "2 COPÃO DA COPA",
-    description: "Beba com as cores do Brasil!",
-    price: 30,
-    image: COPAO_DA_COPA_IMAGE,
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "🌈 Especial Mamadi",
-  },
-  {
-    id: "sl05",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "3 LITRÃO SKOL ou BRAHMA",
-    description: "Pack com 3 litrões Skol ou 3 litrões Brahma Chopp.",
-    price: 45,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487997/3_litrao_skol_ou_brahma_tgthmz.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "sl06",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "3 HEINEKEN 600ml",
-    description: "Pack com 3 garrafas Heineken 600ml.",
-    price: 60,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487996/3_heineken_600ml_yctyrx.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-    badge: "⭐ Destaque",
-  },
-  {
-    id: "sl07",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "3 LITRÃO ORIGINAL",
-    description: "Pack com 3 litrões Original.",
-    price: 60,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782487999/3_litrao_original_umyxny.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "sl08",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "2 CHEVETTE",
-    description: "Dois Chevettes: Corote de Limão, Suco Mid de Baunilha e Gelo de Coco.",
-    price: 35,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502472/2_chevette_psofcx.png",
-    imageBlend: "dark",
-    imageFit: "pack",
-  },
-  {
-    id: "sl01",
-    category: SUPER_LIKE_CATEGORY_ID,
-    name: "CHURRASCO DA MAMADI",
-    description: "Churrasco Individual. Acompanha: Arroz, Farofa e Vinagrete.",
-    price: 29,
-    image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/churrasco_a_vontade_udj3ye.png",
-    imageBlend: "dark",
-    imageFit: "wide",
-    badge: "⭐ Destaque",
-    obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs",
-  },
-]);
-
-// ─────────────────────────────────────────────────────────
-// 🍟 PORÇÕES (ordem do deck)
-// ─────────────────────────────────────────────────────────
-export const porcoes: MenuItem[] = [
-  { id: "ta02", category: "porcoes", name: "TÁBUA MISTA", description: "Batata Frita Simples + Calabresa Acebolada + Contra-Filé Acebolado + Frango Acebolado + Mandioca Frita. Acompanha Pão + Farofa + Vinagrete + Maionese Temperada.", price: 129.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/t_abua_mista_bbiu5x.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
-  { id: "ta03", category: "porcoes", name: "TÁBUA DUPLA 1", description: "Batata Frita Simples + Calabresa Acebolada. Acompanha Pão + Vinagrete + Maionese Temperada.", price: 62.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502476/t%C3%A1bua_dupla_1_wi2ake.png", imageBlend: "dark", imageFit: "wide" },
-  { id: "ta04", category: "porcoes", name: "TÁBUA DUPLA 2", description: "Batata Frita Simples + Contra-Filé Acebolado. Acompanha Pão + Vinagrete + Maionese Temperada.", price: 99.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502478/t%C3%A1bua_dupla_2_cpncsw.png", imageBlend: "dark", imageFit: "wide" },
-  { id: "po10", category: "porcoes", name: "COUVERT DA MAMADI", description: "Sardela, Caponata de Berinjela, Azeitonas, Queijo Temperado, Calabresa Curada e Pão da Casa.", price: 30, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502477/courvert_dpvi2h.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
-  { id: "po03", category: "porcoes", name: "BATATA FRITA C/ CHEDDAR E BACON", description: "Batata frita com cheddar derretido e bacon.", priceA: 35, priceB: 55, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900276/porcoespo03-batata-cheddar-bacon.png_jxh3x4.png", imageBlend: "dark", imageFit: "wide" },
-  { id: "po11", category: "porcoes", name: "BATATA ARIANATOR", description: "Aquela batata frita caprichada com cheddar, queijo parmesão ralado, bacon e o icônico Catupiry de 4 Queijos Rosa!", priceA: 45, priceB: 60, labelA: "Pequena", labelB: "Grande", image: BATATA_ARIANATOR_IMAGE, imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
-  { id: "po04", category: "porcoes", name: "BATATA MAMADI", description: "Batata com Cheddar, Catupiry, Bacon e Parmesão Ralado.", priceA: 45, priceB: 60, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/batata_da_mamadi_2_cogbhi.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi" },
-  { id: "po02", category: "porcoes", name: "BATATA FRITA SIMPLES", description: "Batata frita crocante.", priceA: 25, priceB: 45, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo02-batata-frita-simples.png_xwi0dc.png", imageBlend: "dark", badge: "⭐ Destaque", imageFit: "wide" },
-  { id: "po05", category: "porcoes", name: "CALABRESA ACEBOLADA", description: "Calabresa grelhada com cebola.", priceA: 38.9, priceB: 79.9, labelA: "Meia", labelB: "Inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326105/z6xbkzwcvh1v5ud6rq5b.jpg", imageBlend: "dark", imageFit: "wide" },
-  { id: "po01", category: "porcoes", name: "MINI PASTÉIS", description: "Sabores: Carne, Queijo ou Misto.", priceA: 30, priceB: 55, labelA: "Meia porção", labelB: "Porção inteira", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900274/porcoespo01-mini-pasteis.png_md4qrg.png", imageBlend: "dark" },
-  { id: "po07", category: "porcoes", name: "COXINHA FRANGO", description: "4 unidades. Vegana: Brócolis, Cenoura e Batata.", priceA: 18, priceB: 18, labelA: "Frango", labelB: "Vegana", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781900275/porcoespo07-coxinha-frango.png_wzu1vh.png", imageBlend: "dark" },
-  { id: "ta01", category: "porcoes", name: "TÁBUA DE ESPETINHOS", description: "6 Espetos: 2 de Carne + 1 de Frango + 1 de Linguiça + 1 de Queijo Coalho + 1 Pão de Alho. Acompanha Farofa e Vinagrete.", price: 89.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326114/kw0tdwzokq3odiwaklcy.jpg", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque" },
-  { id: "po09", category: "porcoes", name: "ESPETINHO", description: "1 unidade. Sabores: Carne, Frango, Linguiça, Queijo Coalho ou Pão de Alho.", price: 16, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326106/ox0aflfbdrwjstlg5btf.jpg", imageBlend: "dark" },
-];
-
-// ─────────────────────────────────────────────────────────
-// 🥪 LANCHES & BURGERS
-// ─────────────────────────────────────────────────────────
-export const lanchesEBurgers: MenuItem[] = [
-  { id: "la01", category: "lanches", name: "LANCHE DE CALABRESA", description: "Calabresa, Queijo e Cebola no Pão. Acompanha Maionese Temperada.", price: 27.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502468/lanche_de_calabresa_l6vaeq.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "la02", category: "lanches", name: "LANCHE DE CARNE LOUCA", description: "Carne de Panela Desfiada e Temperada no Pão. Acompanha Maionese Temperada.", price: 27.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502469/lanche_carne_louca_r25zr7.png", imageBlend: "dark", imageFit: "pack", badge: "⭐ Destaque" },
-  { id: "la03", category: "lanches", name: "LANCHE DE PERNIL", description: "Pernil com Molho Especial, Cebola Refogada no Pão. Acompanha Maionese Temperada.", price: 27.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502467/lanche_de_pernil_w4ccne.png", imageBlend: "dark", imageFit: "pack" },
-  { id: "la04", category: "lanches", name: "LANCHE VEGANO", description: "Berinjela Temperada, Azeitona, Tomate e Cebola no Pão. Acompanha Barbecue. (Vegano)", price: 23.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502467/lanche_vegano_sxxhel.png", imageBlend: "dark", imageFit: "pack", badge: "🌱 Vegano" },
-  { id: "bu01", category: "lanches", name: "MAMADI ORIGINAL", description: "Pão Brioche, 70g de Carne, Queijo Cheddar e Maionese Especial.", priceA: 29.9, priceB: 39.9, labelA: "Lanche", labelB: "Combo", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502468/mamadi_original_twm3sf.png", imageBlend: "dark", imageFit: "pack", obs: "Combo: Lanche + Batata Frita Simples + Refrigerante Lata" },
-  { id: "bu02", category: "lanches", name: "MAMADI BACON", description: "Pão Brioche, 70g de Carne, Queijo Cheddar, Bacon, Barbecue e Maionese Especial.", priceA: 32.9, priceB: 42.9, labelA: "Lanche", labelB: "Combo", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782506917/mamadi_bacon_u4rbjy.png", imageBlend: "dark", imageFit: "pack", badge: "⭐ Destaque", obs: "Combo: Lanche + Batata Frita Simples + Refrigerante Lata" },
-  { id: "bu03", category: "lanches", name: "MAMADI CLÁSSICO", description: "Pão Australiano, 70g de Carne, Queijo Cheddar, Cebola Caramelizada, Bacon, Barbecue e Maionese Especial.", priceA: 37.9, priceB: 47.9, labelA: "Lanche", labelB: "Combo", image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782506917/mamadi_classico_jqtkjq.png", imageBlend: "dark", imageFit: "pack", badge: "🌈 Especial Mamadi", obs: "Combo: Lanche + Batata Frita Simples + Refrigerante Lata" },
-];
-
-// ─────────────────────────────────────────────────────────
-// 🍽️ MENU DA MAMADI (Comidinhas Caseiras)
-// ─────────────────────────────────────────────────────────
-export const menuMamadi: MenuItem[] = [
-  { id: "me01", category: "menu", name: "CAFÉ DA MAMADI", description: "Pão na Chapa + Ovos Mexidos + Bacon + Café Preto.", price: 10, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502475/caf%C3%A9_da_mamadi_hyhjuq.png", imageBlend: "dark", imageFit: "wide", obs: "Disponível de Quarta a Domingo, 10:30 às 21hrs" },
-  { id: "me02", category: "menu", name: "CHURRASCO DA MAMADI", description: "Churrasco Individual. Acompanha: Arroz, Farofa e Vinagrete.", price: 29, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782502479/churrasco_a_vontade_udj3ye.png", imageBlend: "dark", imageFit: "wide", badge: "⭐ Destaque", obs: "Prato de Todo Dia — Quarta a Domingo, 10:30 às 21hrs" },
-  { id: "me03", category: "menu", name: "PRATO EXECUTIVO c/ 2 Espetinhos", description: "Sabores: Carne / Frango / Linguiça / Pão de Alho / Queijo Coalho. Acompanha: Arroz, Feijão, Fritas, Vinagrete e Farofa.", price: 29.99, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326112/ugtdfc420qvoshz5jlnb.png", imageBlend: "dark", imageFit: "wide", obs: "Quarta a Domingo, 10:30 às 21hrs" },
-  { id: "me04", category: "menu", name: "BAIÃO DE DOIS — Prato de Domingo", description: "Baião de Dois servido com Mandioca Frita e Tiras de Contra-Filé. Serve 2 pessoas.", price: 49.9, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326110/sd7zrsbpqzlpqec7fouu.png", imageBlend: "dark", imageFit: "wide", badge: "🌈 Especial Mamadi", obs: "Disponível somente aos Domingos" },
-  { id: "me05", category: "menu", name: "BERINJELA REFOGADA (Vegano)", description: "Arroz, Berinjela Refogada, Feijão, Fritas, Vinagrete e Farofa.", price: 25, image: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1782326085/fjvjxnssbgxhrdhuzkoe.png", imageBlend: "dark", imageFit: "wide", badge: "🌱 Vegano", obs: "Quarta a Domingo, 10:30 às 21hrs" },
-];
-
-// ─────────────────────────────────────────────────────────
-// EXPORT AGRUPADO
-// ─────────────────────────────────────────────────────────
-export const itemsByCategory: Record<string, MenuItem[]> = {
-  drinks: visibleMenuItems(drinks),
-  destilados: visibleMenuItems(destilados),
-  cervejas: visibleMenuItems(cervejas),
-  prontos: visibleMenuItems(prontos),
-  combos: visibleMenuItems(combos),
-  porcoes: visibleMenuItems(porcoes),
-  lanches: visibleMenuItems(lanchesEBurgers),
-  menu: visibleMenuItems(menuMamadi),
-};
-
-export const categories: Category[] = [
-  { id: "cervejas", label: "CERVEJAS", emoji: "🍺", gradient: "from-yellow-400 to-green-400", from: "#FFE500", to: "#00E676", glow: "#FFE500" },
-  { id: "porcoes", label: "PORÇÕES", emoji: "🍟", gradient: "from-purple-600 to-pink-500", from: "#AA00FF", to: "#FF4081", glow: "#AA00FF" },
-  { id: "menu", label: "MENU DA MAMADI", emoji: "🍽️", gradient: "from-orange-400 to-green-500", from: "#FF8C00", to: "#00E676", glow: "#FF8C00" },
-  { id: "drinks", label: "DRINKS", emoji: "🍹", gradient: "from-red-600 to-pink-600", from: "#FF3B3B", to: "#FF4081", glow: "#FF3B3B", cardImage: "https://res.cloudinary.com/du8l3x4rh/image/upload/v1781813232/mamadicategoriasdrinks-card_obncis.png" },
-  { id: "combos", label: "COMBOS & COPÃO", emoji: "🎉", gradient: "from-blue-500 to-purple-600", from: "#2979FF", to: "#AA00FF", glow: "#2979FF" },
-  { id: "prontos", label: "ABRIR E BEBER", emoji: "🥤", gradient: "from-green-400 to-blue-500", from: "#00E676", to: "#2979FF", glow: "#00E676" },
-  { id: "lanches", label: "LANCHES & BURGERS", emoji: "🥪", gradient: "from-red-600 to-orange-500", from: "#FF3B3B", to: "#FF8C00", glow: "#FF3B3B", cardImage: "/categories/cat-lanches-card.png", coverImage: "/categories/cat-lanches-card.png" },
-].filter((category) => !HIDDEN_CATEGORY_IDS.has(category.id));
-
-export const allMenuItems: MenuItem[] = Object.values(itemsByCategory)
-  .flat()
-  .filter((item) => !HIDDEN_CATEGORY_IDS.has(item.category));
-
-export const complementosLanches = [
-  { name: "Maionese Temperada extra", price: 1 },
-  { name: "Pão extra", price: 4 },
-  { name: "Queijo extra", price: 5 },
-  { name: "Abacaxi extra", price: 5 },
-];
-
-export const business = {
-  name: "Mamadi Food",
-  tagline: "Bar LGBTQIA+ Friendly",
-  location: "Santo André, SP",
-  whatsapp: "5511958984481",
-  instagram: "mamadifood",
-  instagramUrl: "https://instagram.com/mamadifood",
-  whatsappUrl: "https://wa.me/5511958984481",
-  ifoodUrl:
-    "https://www.ifood.com.br/delivery/sao-paulo-sp/mamadi-food-consolacao/1d7dc9b1-0e05-4c75-8baf-bbdd8356e60f?UTM_Medium=share&utm_content=link_in_bio&utm_medium=social&utm_source=ig",
-  menuHours: "Comidinhas: Qua a Dom, 10:30 às 21hrs",
-};
-
-export function formatPrice(value: number): string {
-  return `R$ ${value.toFixed(2).replace(".", ",")}`;
-}
-
-export function buildWhatsappOrderUrl(productName: string, price?: string): string {
-  const pricePart = price ? ` - ${price}` : "";
-  const text = `Olá, quero pedir: ${productName}${pricePart}`;
-  return `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(text)}`;
-}
+/** Horário das comidinhas caseiras (PDF): quarta a domingo, 12h às 19h. */
+export const KITCHEN = { days: [3, 4, 5, 6, 0], open: 12, close: 19 };

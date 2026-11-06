@@ -1,0 +1,238 @@
+/* ─────────────────────────────────────────────────────────────
+   Mamadi · sistema visual
+   Cores tiradas do logo e dos cardápios impressos:
+   laranja do letreiro, creme do papel, preto do xadrez,
+   rosa das Divas, vermelho da faixa e da cadeira de plástico.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --paper: #fcf6ea;
+  --paper-2: #f7eedd;
+  --paper-3: #efe2c8;
+  --ink: #22150c;
+  --ink-2: #4d3a2b;
+  --ink-3: #7c6553;
+  --line: rgba(34, 21, 12, 0.12);
+  --line-2: rgba(34, 21, 12, 0.22);
+
+  --orange: #fa5a0a;
+  --orange-2: #ff7a1a;
+  --orange-ink: #c2410a; /* laranja para texto pequeno (contraste) */
+  --orange-soft: #ffe4cf;
+  --red: #e3140b;
+  --chair: #dc0000;
+  --pink: #fc00a0;
+  --pink-2: #ff4fbf;
+  --pink-soft: #ffd6ef;
+  --night: #0d0a08;
+  --night-2: #191210;
+  --night-3: #2a1e18;
+  --cream: #fff4e3;
+  --lime: #8cc63f;
+  --amber: #f6a21e;
+  --beer: #f39a1c;
+
+  --font-display: "Shrikhand", "Georgia", serif;
+  --font-hand: "Kalam", "Comic Sans MS", cursive;
+  --font-ui: "Archivo Variable", "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-logo: "Lilita One", "Archivo Variable", sans-serif;
+  --font-neon: "Yellowtail", "Kalam", cursive;
+
+  --r-s: 10px;
+  --r-m: 16px;
+  --r-l: 24px;
+  --r-xl: 32px;
+
+  --shadow-1: 0 1px 0 rgba(34, 21, 12, 0.06), 0 8px 18px -12px rgba(34, 21, 12, 0.45);
+  --shadow-2: 0 2px 0 rgba(34, 21, 12, 0.08), 0 18px 40px -18px rgba(34, 21, 12, 0.55);
+  --shadow-sticker: 0 0 0 2px var(--ink), 3px 3px 0 0 var(--ink);
+
+  --app-w: 520px;
+  --nav-h: 68px;
+  --bar-h: 56px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* xadrez dos cardápios impressos */
+  --checker: conic-gradient(var(--night) 25%, var(--orange) 0 50%, var(--night) 0 75%, var(--orange) 0);
+  --checker-pink: conic-gradient(var(--night) 25%, var(--pink) 0 50%, var(--night) 0 75%, var(--pink) 0);
+
+  /* grão de papel */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .13 0 0 0 0 .08 0 0 0 0 .05 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--night);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--night);
+  overflow-x: hidden;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body.is-locked {
+  overflow: hidden;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Coluna do app: no celular ocupa a tela; no computador vira uma "tela de app" centralizada */
+.stage {
+  position: relative;
+  min-height: 100dvh;
+}
+
+.app {
+  position: relative;
+  width: 100%;
+  max-width: var(--app-w);
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--paper);
+  isolation: isolate;
+  overflow-x: clip;
+}
+
+.app::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  opacity: 0.09;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (min-width: 640px) {
+  .app {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 40px 120px -20px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* faixa xadrez */
+.checker {
+  height: 16px;
+  background: var(--checker) 0 0 / 16px 16px;
+}
+.checker--thin {
+  height: 10px;
+  background-size: 10px 10px;
+}
+.checker--pink {
+  background-image: var(--checker-pink);
+}
+
+/* letreiro pintado à mão: Shrikhand com sombra deslocada */
+.letreiro {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  color: var(--orange);
+  text-shadow: 0.045em 0.05em 0 var(--ink);
+}
+
+.hand {
+  font-family: var(--font-hand);
+  font-weight: 400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* animações compartilhadas */
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes bubble-rise {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translate(8px, -130px);
+  }
+  100% {
+    transform: translate(-6px, -280px);
+    opacity: 0;
+  }
+}
