@@ -42,9 +42,9 @@
 }
 .hello__chair {
   position: absolute;
-  right: -8px;
+  right: 12px;
   top: 30px;
-  width: 128px;
+  width: 118px;
   height: auto;
   transform: rotate(9deg);
   opacity: 0.95;
@@ -58,8 +58,9 @@
 }
 @media (max-width: 370px) {
   .hello__chair {
-    width: 100px;
+    width: 96px;
     top: 50px;
+    right: 10px;
   }
 }
 
