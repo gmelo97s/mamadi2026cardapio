@@ -33,7 +33,7 @@ export function SectionBlock({ section, highlight }: { section: Section; highlig
   const list = itemsBySection(section.id);
   const blockAt = new Map((section.blocks ?? []).map((b) => [b.from, b.title]));
   return (
-    <section className="sec" id={`sec-${section.id}`} data-section={section.id} aria-labelledby={`t-${section.id}`}>
+    <section className="sec wrap" id={`sec-${section.id}`} data-section={section.id} aria-labelledby={`t-${section.id}`}>
       <SectionHead section={section} />
       <ul className="rows">
         {list.map((it) => (

@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Mamadi · Cardápio</title>
     <meta name="description" content="Cardápio do Bar Mamadi, em frente à Praça Roosevelt: litrão, copão, caipirinhas, Divas Pop e a comida caseira da Mamadi." />
-    <meta name="theme-color" content="#0d0a08" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#0e0a08" />
+    <script>
+      try {
+        document.documentElement.dataset.theme = localStorage.getItem("mamadi:tema") === "light" ? "light" : "dark";
+      } catch (e) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    </script>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Mamadi" />

@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { m } from "motion/react";
 import { EXAMPLES, search, type SearchOutput } from "../../lib/search";
 import { useVoice, voiceSupported } from "../../lib/voice";
-import { haptic, prefersReducedMotion, type Origin } from "../../lib/ui";
-import { IcLupa, IcMic, IcRelogio, IcX } from "../chrome/icons";
+import { haptic, type Origin } from "../../lib/ui";
+import { IcLupa, IcMic, IcX } from "../chrome/icons";
 import { ItemRow } from "../menu/ItemRow";
 import { useTyping } from "./useTyping";
 import "./search.css";
@@ -39,7 +38,8 @@ export default function SearchOverlay({ initialQuery = "", startVoice = false, o
   const [disabled, setDisabled] = useState<Set<string>>(new Set());
   const [spin, setSpin] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [recent] = useState(loadRecent);
+  const [offer, setOffer] = useState<"hidden" | "show" | "dismissed">("hidden");
+  const typingTimer = useRef(0);
   const canVoice = voiceSupported();
   const typing = useTyping(EXAMPLES, !query);
 
@@ -68,6 +68,28 @@ export default function SearchOverlay({ initialQuery = "", startVoice = false, o
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // a pessoa ficou parada sem escolher nada: a Mamadi oferece uma sugestão
+  useEffect(() => {
+    if (query || listening || offer !== "hidden") return;
+    const t = window.setTimeout(() => setOffer("show"), 5500);
+    return () => window.clearTimeout(t);
+  }, [query, listening, offer]);
+  useEffect(() => () => window.clearTimeout(typingTimer.current), []);
+
+  /** digita sozinho na busca, como se alguém estivesse escrevendo */
+  const simulate = (text: string) => {
+    setOffer("dismissed");
+    haptic(8);
+    let n = 0;
+    const tick = () => {
+      n++;
+      setQuery(text.slice(0, n));
+      setDisabled(new Set());
+      if (n < text.length) typingTimer.current = window.setTimeout(tick, 45 + Math.random() * 40);
+    };
+    tick();
+  };
+
   const setQ = (q: string) => {
     setQuery(q);
     setDisabled(new Set());
@@ -75,17 +97,14 @@ export default function SearchOverlay({ initialQuery = "", startVoice = false, o
   };
 
   const o = origin ?? { x: window.innerWidth / 2, y: window.innerHeight - 40 };
-  const reduced = prefersReducedMotion();
 
   return (
-    <m.div
+    <div
       className="search"
       role="dialog"
       aria-modal="true"
       aria-label="Buscar no cardápio"
-      initial={reduced ? { opacity: 0 } : { clipPath: `circle(0px at ${o.x}px ${o.y}px)` }}
-      animate={reduced ? { opacity: 1 } : { clipPath: `circle(150% at ${o.x}px ${o.y}px)` }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      style={{ "--ox": `${o.x}px`, "--oy": `${o.y}px` } as CSSProperties}
     >
       <div className="search__inner">
         <form
@@ -178,29 +197,36 @@ export default function SearchOverlay({ initialQuery = "", startVoice = false, o
                   </span>
                   <span>
                     <strong>Toca e fala o que você quer</strong>
-                    <span className="hand">“um litrão até 20 conto”, “o que combina com a batata?”</span>
+                    <span className="hand">“O que posso comprar até R$20?”</span>
                   </span>
                 </button>
               )}
-              <p className="search__label">Experimenta</p>
+              <p className="search__label">Experimenta perguntar</p>
               <div className="search__chips">
-                {EXAMPLES.map((ex) => (
+                {EXAMPLES.slice(0, 4).map((ex) => (
                   <button key={ex} className="s-chip" onClick={() => setQ(ex)}>
                     {ex}
                   </button>
                 ))}
               </div>
-              {recent.length > 0 && (
-                <>
-                  <p className="search__label">Buscas recentes</p>
-                  <div className="search__chips">
-                    {recent.map((r) => (
-                      <button key={r} className="s-chip s-chip--recent" onClick={() => setQ(r)}>
-                        <IcRelogio /> {r}
-                      </button>
-                    ))}
+              {offer === "show" && (
+                <div className="offer" role="status">
+                  <p className="offer__q letreiro">Posso te sugerir algo?</p>
+                  <div className="offer__btns">
+                    <button className="offer__yes" onClick={() => simulate("Me surpreende, Mamadi!")}>
+                      Sim
+                    </button>
+                    <button
+                      className="offer__no"
+                      onClick={() => {
+                        setOffer("dismissed");
+                        inputRef.current?.focus();
+                      }}
+                    >
+                      Deixa que eu escolho
+                    </button>
                   </div>
-                </>
+                </div>
               )}
             </div>
           )}
@@ -280,7 +306,7 @@ export default function SearchOverlay({ initialQuery = "", startVoice = false, o
           )}
         </div>
       </div>
-    </m.div>
+    </div>
   );
 }
 

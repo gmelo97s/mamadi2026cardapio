@@ -20,6 +20,45 @@ function hasWebGL() {
   }
 }
 
+const FRASES = [
+  { t: "Comida de mãe...", k: "mae" },
+  { t: "Litrão gelado", k: "litrao" },
+  { t: "Maior bar LGBT de SP", k: "lgbt" },
+  { t: "Viva a democracia!", k: "demo" },
+];
+const ARCO = ["#ff3b3b", "#ff9a1f", "#ffe11f", "#3ddc5a", "#3d8bff", "#b04dff"];
+
+/** Frases que se revezam acima da tampinha, letra por letra. */
+function Frases() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const t = window.setInterval(() => setI((n) => (n + 1) % FRASES.length), 2900);
+    return () => window.clearInterval(t);
+  }, []);
+  const f = FRASES[i];
+  let li = 0;
+  return (
+    <div className="frases">
+      <p className="sr-only">{FRASES.map((x) => x.t).join(" ")}</p>
+      <p key={i} className={`frase frase--${f.k}`} aria-hidden="true">
+        {f.t.split(" ").map((w, wi) => (
+          <span key={wi} className="frase__w">
+            {w.split("").map((ch) => {
+              const n = li++;
+              return (
+                <span key={n} className="frase__ch" style={{ "--d": `${n * 38}ms`, "--c": ARCO[n % ARCO.length] } as CSSProperties}>
+                  {ch}
+                </span>
+              );
+            })}
+          </span>
+        ))}
+      </p>
+    </div>
+  );
+}
+
 export default function Intro({ onOpened, onSearch }: { onOpened: () => void; onSearch: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tagRef = useRef<HTMLDivElement>(null);
@@ -55,7 +94,9 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
     if (!use3D || !canvasRef.current) return;
     let disposed = false;
     let scene: CapScene | null = null;
-    import("./capScene").then(({ createCapScene }) => {
+    // o 3D carrega depois da primeira pintura (a foto da tampinha aparece na hora)
+    const start = () =>
+      import("./capScene").then(({ createCapScene }) => {
       if (disposed || !canvasRef.current) return;
       scene = createCapScene({
         canvas: canvasRef.current,
@@ -68,6 +109,9 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
       });
       sceneRef.current = scene;
     });
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+    if (w.requestIdleCallback) w.requestIdleCallback(() => void start(), { timeout: 700 });
+    else window.setTimeout(() => void start(), 200);
     const onResize = () => sceneRef.current?.resize();
     window.addEventListener("resize", onResize);
     return () => {
@@ -185,8 +229,8 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
     const d = dragRef.current;
     if (!d || d.id !== e.pointerId) return;
     dragRef.current = null;
-    const dt = performance.now() - d.t;
-    if (d.dy > 70 || (Math.abs(d.dy) < 10 && dt < 450)) open();
+    // toque simples (mesmo que demore, enquanto o 3D carrega) ou puxada longa abrem
+    if (d.dy > 70 || Math.abs(d.dy) < 12) open();
     else {
       sceneRef.current?.setPull(0);
       placeTag();
@@ -196,12 +240,11 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
   const covered = phase === "covered";
 
   return (
-    <div className={`intro is-${phase}${ready ? " is-ready" : ""}`} role="dialog" aria-label="Abertura do cardápio do Mamadi">
+    <div className={`intro is-${phase}${ready ? " is-ready" : ""}${use3D ? " has-3d" : ""}`} role="dialog" aria-label="Abertura do cardápio do Mamadi">
       {!covered && (
         <>
           <div className="intro__bg" aria-hidden="true">
             <div className="intro__glow" />
-            <div className="intro__floor" />
             <div className="intro__bubbles">
               {Array.from({ length: 16 }, (_, i) => (
                 <span key={i} style={{ "--i": i } as CSSProperties} />
@@ -212,20 +255,14 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
           {use3D && <canvas ref={canvasRef} className="intro__canvas" aria-hidden="true" />}
           <img className="intro__poster" src="/brand/cap-poster.webp" alt="" aria-hidden="true" />
 
-          <header className="intro__top">
-            <p className="intro__where">Em frente à Praça Roosevelt</p>
-            <h1 className="intro__headline">
-              Comida de <span className="intro__mae">mãe</span>,<br />
-              drink de <span className="intro__diva">diva</span>.
-            </h1>
-          </header>
+          <Frases />
 
           <div className="intro__tag" ref={tagRef}>
             <svg className="intro__string" viewBox="-6 -50 12 80" aria-hidden="true">
               <path ref={stringRef} d="M 0 0 C 3 10, -3 18, 0 26" />
             </svg>
             <button
-              className="tag"
+              className="pull-tag"
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
@@ -238,9 +275,9 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
               }}
               aria-label="Abrir o cardápio"
             >
-              <span className="tag__hole" aria-hidden="true" />
-              <span className="tag__small">puxa pra</span>
-              <span className="tag__big">abrir o cardápio</span>
+              <span className="pull-tag__hole" aria-hidden="true" />
+              <span className="pull-tag__small">clique para</span>
+              <span className="pull-tag__big">abrir o cardápio</span>
             </button>
             <span className={`intro__hint${hint && phase === "idle" ? " is-on" : ""}`} aria-hidden="true">
               <span className="intro__hint-line" />

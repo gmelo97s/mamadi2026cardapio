@@ -16,14 +16,15 @@ export const ItemRow = memo(function ItemRow({ item, highlight }: { item: Item; 
   const opts = optionsLine(item);
   return (
     <li className={`row${highlight ? " is-highlight" : ""}`} data-item={item.id}>
-      <button
-        className="row__btn"
-        onClick={(e) => {
-          haptic(5);
-          ui.openItem(item.id, originOf(e.currentTarget.querySelector(".art-tile")));
-        }}
-        aria-label={`${item.name}, ${itemPriceLabel(item)}`}
-      >
+      <div className="row__card">
+        <button
+          className="row__btn"
+          onClick={(e) => {
+            haptic(5);
+            ui.openItem(item.id, originOf(e.currentTarget.parentElement?.querySelector(".art-tile")));
+          }}
+          aria-label={`${item.name}, ${itemPriceLabel(item)}`}
+        />
         <ArtTile item={item} className="row__art" />
         <span className="row__body">
           <span className="row__top">
@@ -49,7 +50,7 @@ export const ItemRow = memo(function ItemRow({ item, highlight }: { item: Item; 
           )}
           <Tags tags={item.tags} className="row__tags" />
         </span>
-      </button>
+      </div>
     </li>
   );
 });

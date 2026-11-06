@@ -7,11 +7,14 @@
 }
 .divas__inner {
   position: relative;
-  padding: 30px 16px 26px;
+  padding: 30px 0 26px;
   overflow: hidden;
   background:
     radial-gradient(120% 60% at 85% 0%, rgba(252, 0, 160, 0.28), transparent 60%),
     radial-gradient(80% 40% at 0% 100%, rgba(252, 0, 160, 0.16), transparent 70%);
+}
+.divas__wrap {
+  position: relative;
 }
 .divas__ball {
   position: absolute;
@@ -269,4 +272,24 @@
 }
 .sleeve--big .sleeve__track {
   font-size: 11px;
+}
+
+@media (min-width: 900px) {
+  .divas__inner {
+    padding: 48px 0 44px;
+  }
+  .divas__head {
+    max-width: 560px;
+  }
+  .divas__grid {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 30px 26px;
+  }
+  .divas__ball {
+    right: 60px;
+  }
+}
+/* a pista é sempre escura; no modo noite ganha um contorno para destacar do fundo */
+:root[data-theme="dark"] .divas {
+  background: #070506;
 }

@@ -137,8 +137,10 @@ function labelTexture() {
 
 export function createCapScene(opts: CapSceneOptions): CapScene {
   const { canvas } = opts;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  // telas de alta densidade não precisam de antialias; limitar a densidade alivia o celular
+  const dpr = window.devicePixelRatio || 1;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: dpr < 2, alpha: true, powerPreference: "high-performance" });
+  renderer.setPixelRatio(Math.min(dpr, opts.capPx ? 1 : 1.6));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1.0;

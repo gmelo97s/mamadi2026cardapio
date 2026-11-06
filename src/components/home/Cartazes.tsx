@@ -7,7 +7,8 @@ import { Glitter } from "../fx/Fx";
 import { Price } from "../menu/bits";
 import "./cartazes.css";
 
-const DURATION = 4600;
+const DURATION = 3000;
+const TITLE = "Promoções e Combos";
 
 /** Cartazes com dia certo (churrasco, baião, executivo) só aparecem no dia, e vão para a frente. */
 function ordered(list: Cartaz[]) {
@@ -27,7 +28,7 @@ function CartazArt({ c }: { c: Cartaz }) {
   );
 }
 
-export function Cartazes() {
+export function Promos() {
   const ui = useUI();
   const list = useMemo(() => ordered(cartazes), []);
   const { weekday } = nowSP();
@@ -103,12 +104,21 @@ export function Cartazes() {
   }, [paused, index]);
 
   return (
-    <section className="cartazes" aria-roledescription="carrossel" aria-label="Promoções e novidades">
-      <div className="cartazes__head">
-        <h2 className="letreiro cartazes__title">Em cartaz</h2>
-        <p className="hand cartazes__note">promoções, combos e novidades</p>
+    <section className="cartazes" aria-roledescription="carrossel" aria-label={TITLE}>
+      <div className="cartazes__head wrap">
+        <h1 className="letreiro cartazes__title" aria-label={TITLE}>
+          {TITLE.split(" ").map((w, wi) => (
+            <span key={wi} className="cartazes__word" aria-hidden="true">
+              {w.split("").map((ch, ci) => (
+                <span key={ci} className="cartazes__ch" style={{ "--d": `${(wi * 9 + ci) * 45}ms` } as CSSProperties}>
+                  {ch}
+                </span>
+              ))}
+            </span>
+          ))}
+        </h1>
       </div>
-      <div className="cartazes__bars" aria-hidden="true">
+      <div className="cartazes__bars wrap" aria-hidden="true">
         {list.map((c, i) => (
           <button
             key={c.id}
@@ -136,7 +146,7 @@ export function Cartazes() {
               onClick={(e) => {
                 haptic(6);
                 if ("item" in c.open) ui.openItem(c.open.item, originOf(e.currentTarget));
-                else ui.goTab("beber", { section: c.open.section as never, origin: originOf(e.currentTarget) });
+                else ui.goTo(c.open.section as never, { origin: originOf(e.currentTarget) });
               }}
             >
               <span className="cartaz__tape" aria-hidden="true" />

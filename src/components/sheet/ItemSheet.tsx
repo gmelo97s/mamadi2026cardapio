@@ -1,10 +1,10 @@
-import { useEffect, useRef, type CSSProperties } from "react";
-import { AnimatePresence, animate, m, useMotionValue } from "motion/react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { itemById, itemsBySection, sectionById } from "../../data/menu";
 import { pairingsFor } from "../../data/pairings";
+import { ingredientsOf } from "../../data/tags";
 import type { Item } from "../../data/types";
 import { brl } from "../../lib/format";
-import { isAvailableToday, kitchenStatus, nowSP } from "../../lib/schedule";
+import { isAvailableToday, kitchenStatus } from "../../lib/schedule";
 import { haptic, originOf, useUI } from "../../lib/ui";
 import { Art } from "../art/Art";
 import { ART_TINT } from "../art/artTint";
@@ -59,7 +59,7 @@ function Body({ item }: { item: Item }) {
           {item.name}
         </h2>
         {item.diva && <p className="sheet__artist">em homenagem a {item.diva.artist}</p>}
-        <Tags tags={item.tags} className="sheet__tags" />
+        <Tags tags={item.tags} ingredients={ingredientsOf(item).slice(0, 6)} className="sheet__tags" />
         {item.diva && <p className="sheet__hook hand">“{item.diva.hook}”</p>}
         {item.desc && <p className="sheet__desc">{item.desc}</p>}
 
@@ -86,14 +86,12 @@ function Body({ item }: { item: Item }) {
 
         {item.options?.map((g) => (
           <div key={g.label} className="sheet__opts">
-            <p className="sheet__opts-label">{g.label}</p>
-            <div className="sheet__opts-list">
-              {g.values.map((v) => (
-                <span key={v} className="opt">
-                  {v}
-                </span>
-              ))}
-            </div>
+            <span className="sheet__opts-label">{g.label}</span>
+            {g.values.map((v) => (
+              <span key={v} className="opt">
+                {v}
+              </span>
+            ))}
           </div>
         ))}
 
@@ -117,7 +115,10 @@ function Body({ item }: { item: Item }) {
                 >
                   <ArtTile item={p.item} className="pair__art" />
                   <span className="pair__name">{p.item.name}</span>
-                  <span className="pair__price">{p.item.variants ? `a partir de ${brl(Math.min(...p.item.variants.map((v) => v.price)))}` : brl(p.item.price ?? 0)}</span>
+                  <span className="pair__price">
+                    {p.item.variants && <small>a partir de</small>}
+                    {brl(p.item.variants ? Math.min(...p.item.variants.map((v) => v.price)) : (p.item.price ?? 0))}
+                  </span>
                   <span className="pair__why hand">{p.reason}</span>
                 </button>
               </li>
@@ -129,14 +130,14 @@ function Body({ item }: { item: Item }) {
   );
 }
 
-/** Puxar para baixo (no topo do conteúdo ou na alça) fecha a ficha. */
+/** Puxar para baixo (no topo do conteúdo) fecha a ficha. */
 function usePullToClose(sheet: React.RefObject<HTMLDivElement | null>, scroller: React.RefObject<HTMLDivElement | null>, onClose: () => void, active: boolean) {
-  const y = useMotionValue(0);
   useEffect(() => {
     const el = sheet.current;
     if (!el || !active) return;
     let startY = 0;
     let pulling = false;
+    let dy = 0;
     let lastY = 0;
     let lastT = 0;
     let vel = 0;
@@ -145,25 +146,30 @@ function usePullToClose(sheet: React.RefObject<HTMLDivElement | null>, scroller:
       lastT = e.timeStamp;
       pulling = false;
       vel = 0;
+      dy = 0;
     };
     const onMove = (e: TouchEvent) => {
+      if (window.innerWidth >= 900) return;
       const cy = e.touches[0].clientY;
-      const dy = cy - startY;
+      dy = cy - startY;
       const atTop = (scroller.current?.scrollTop ?? 0) <= 0;
       if (!pulling && dy > 8 && atTop) pulling = true;
       if (!pulling) return;
       e.preventDefault();
-      y.set(Math.max(0, dy * 0.9));
-      const dt = Math.max(1, e.timeStamp - lastT);
-      vel = ((cy - lastY) / dt) * 1000;
+      el.style.transition = "none";
+      el.style.transform = `translate3d(0, ${Math.max(0, dy * 0.9)}px, 0)`;
+      vel = ((cy - lastY) / Math.max(1, e.timeStamp - lastT)) * 1000;
       lastY = cy;
       lastT = e.timeStamp;
     };
     const onEnd = () => {
       if (!pulling) return;
       pulling = false;
-      if (y.get() > 120 || vel > 800) onClose();
-      else animate(y, 0, { type: "spring", stiffness: 420, damping: 36 });
+      if (dy > 120 || vel > 800) onClose();
+      else {
+        el.style.transition = "transform .3s cubic-bezier(.22,1,.36,1)";
+        el.style.transform = "";
+      }
     };
     el.addEventListener("touchstart", onStart, { passive: true });
     el.addEventListener("touchmove", onMove, { passive: false });
@@ -175,93 +181,72 @@ function usePullToClose(sheet: React.RefObject<HTMLDivElement | null>, scroller:
       el.removeEventListener("touchend", onEnd);
       el.removeEventListener("touchcancel", onEnd);
     };
-  }, [active, onClose, scroller, sheet, y]);
-  return y;
+  }, [active, onClose, scroller, sheet]);
 }
 
 export function ItemSheet({ itemId, onClose }: { itemId: string | null; onClose: () => void }) {
-  const item = itemId ? itemById.get(itemId) : undefined;
+  // mantém o item na tela durante a animação de saída
+  const [shown, setShown] = useState<string | null>(itemId);
+  const [prev, setPrev] = useState<string | null>(itemId);
+  if (itemId !== prev) {
+    setPrev(itemId);
+    if (itemId) setShown(itemId);
+  }
+  const closing = !itemId && !!shown;
+  const item = shown ? itemById.get(shown) : undefined;
+  const open = !!itemId;
   const scrollRef = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
-  const lastFocus = useRef<HTMLElement | null>(null);
-  const open = !!item;
 
   // trava a rolagem da página e fecha no Esc
   useEffect(() => {
     if (!open) return;
-    lastFocus.current = (document.activeElement as HTMLElement) ?? null;
+    const lastFocus = document.activeElement as HTMLElement | null;
     document.body.classList.add("is-locked");
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.classList.remove("is-locked");
       window.removeEventListener("keydown", onKey);
-      lastFocus.current?.focus?.({ preventScroll: true });
+      lastFocus?.focus?.({ preventScroll: true });
     };
   }, [open, onClose]);
 
   useEffect(() => {
-    if (!item) return;
+    if (!itemId) return;
     scrollRef.current?.scrollTo({ top: 0 });
-    const t = window.setTimeout(() => document.getElementById("sheet-title")?.focus({ preventScroll: true }), 280);
+    const t = window.setTimeout(() => document.getElementById("sheet-title")?.focus({ preventScroll: true }), 300);
     return () => window.clearTimeout(t);
-  }, [item]);
+  }, [itemId]);
 
-  const y = usePullToClose(sheetRef, scrollRef, onClose, open);
-  useEffect(() => {
-    if (open) y.set(0);
-  }, [open, y]);
+  usePullToClose(sheetRef, scrollRef, onClose, open);
 
-  const { weekday } = nowSP();
-
+  if (!item) return null;
   return (
-    <AnimatePresence>
-      {item && (
-        <m.div className="sheet-layer" key="layer" initial={{ opacity: 1 }} exit={{ opacity: 1 }}>
-          <m.div
-            className="sheet-backdrop"
-            onClick={onClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-          />
-          <m.div
-            ref={sheetRef}
-            className={`sheet${item.diva ? " sheet--divas" : ""}`}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="sheet-title"
-            data-weekday={weekday}
-            style={{ y }}
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "spring", damping: 32, stiffness: 340, mass: 0.9 }}
-          >
-            <div className="sheet__grab" aria-hidden="true">
-              <span />
-            </div>
-            <button className="sheet__close" onClick={onClose} aria-label="Fechar">
-              <IcX />
-            </button>
-            <div className="sheet__scroll" ref={scrollRef}>
-              <AnimatePresence mode="popLayout" initial={false}>
-                <m.div
-                  key={item.id}
-                  className="sheet__page"
-                  initial={{ opacity: 0, x: 60 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -60 }}
-                  transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <Body item={item} />
-                </m.div>
-              </AnimatePresence>
-            </div>
-          </m.div>
-        </m.div>
-      )}
-    </AnimatePresence>
+    <div className={`sheet-layer${closing ? " is-closing" : ""}`}>
+      <div className="sheet-backdrop" onClick={onClose} />
+      <div
+        ref={sheetRef}
+        className={`sheet${item.diva ? " sheet--divas" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="sheet-title"
+        onAnimationEnd={(e) => {
+          if (closing && e.target === e.currentTarget) setShown(null);
+        }}
+      >
+        <div className="sheet__grab" aria-hidden="true">
+          <span />
+        </div>
+        <button className="sheet__close" onClick={onClose} aria-label="Fechar">
+          <IcX />
+        </button>
+        <div className="sheet__scroll" ref={scrollRef}>
+          <div key={item.id} className="sheet__page">
+            <Body item={item} />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

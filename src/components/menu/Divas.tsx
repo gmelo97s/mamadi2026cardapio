@@ -33,6 +33,7 @@ export function DivasSection() {
       <div className="checker checker--pink checker--thin" />
       <div className="divas__inner">
         <Glitter count={18} />
+        <div className="divas__wrap wrap">
         <div className="divas__ball" aria-hidden="true">
           <Globo className="divas__globo" />
           <span className="divas__beam divas__beam--1" />
@@ -73,6 +74,7 @@ export function DivasSection() {
             </li>
           ))}
         </ul>
+        </div>
       </div>
       <div className="checker checker--pink checker--thin" />
     </section>

@@ -19,7 +19,7 @@ export function PratosSection() {
   const section = sectionById.get("pratos")!;
   const k = kitchenStatus();
   return (
-    <section className="sec sec--pratos" id="sec-pratos" data-section="pratos" aria-labelledby="t-pratos">
+    <section className="sec sec--pratos wrap" id="sec-pratos" data-section="pratos" aria-labelledby="t-pratos">
       <SectionHead
         section={section}
         aside={
@@ -34,14 +34,15 @@ export function PratosSection() {
           const today = isAvailableToday(it.tags) && (it.tags?.includes("fds") || it.tags?.includes("domingo"));
           return (
             <li key={it.id}>
-              <button
-                className="prato"
-                data-item={it.id}
-                onClick={(e) => {
-                  haptic(5);
-                  ui.openItem(it.id, originOf(e.currentTarget.querySelector(".prato__art")));
-                }}
-              >
+              <div className="prato" data-item={it.id}>
+                <button
+                  className="prato__btn"
+                  aria-label={it.name}
+                  onClick={(e) => {
+                    haptic(5);
+                    ui.openItem(it.id, originOf(e.currentTarget.parentElement?.querySelector(".prato__art")));
+                  }}
+                />
                 <span className="prato__when hand">{today ? "hoje tem!" : when(it)}</span>
                 <span className="prato__art">
                   <Art k={it.art} />
@@ -52,10 +53,10 @@ export function PratosSection() {
                   {it.options && <span className="prato__opts">{it.options[0].label}: {it.options[0].values.join(", ")}</span>}
                   <span className="prato__foot">
                     <Price cents={it.price!} className="prato__price" />
-                    <Tags tags={it.tags?.filter((t) => t === "vegano" || t === "serve2")} />
+                    <Tags tags={it.tags?.filter((t) => t === "vegano" || t === "serve2")} className="prato__tags" />
                   </span>
                 </span>
-              </button>
+              </div>
             </li>
           );
         })}

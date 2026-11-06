@@ -13,7 +13,6 @@ export default defineConfig({
         // O 3D da tampinha fica num pedaço separado: o cardápio carrega primeiro.
         manualChunks(id) {
           if (id.includes("node_modules/three")) return "three";
-          if (id.includes("node_modules/motion") || id.includes("node_modules/framer-motion")) return "motion";
         },
       },
     },

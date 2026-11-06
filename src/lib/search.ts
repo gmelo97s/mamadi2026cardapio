@@ -9,6 +9,7 @@ import { items, isDrink, minPrice, sectionById } from "../data/menu";
 import { pairingsFor } from "../data/pairings";
 import type { Item, SectionId, Tag } from "../data/types";
 import { norm } from "./format";
+import { itemsForTag } from "../data/tags";
 
 export type ChipKind = "price" | "tag" | "concept" | "neg" | "sort" | "pair" | "note";
 export interface Chip {
@@ -42,7 +43,7 @@ const STOP = new Set(
     "ate coisa coisas tem tenho voces vcs voce me mostra mostre mostrar ver opcao opcoes no na nos nas em por favor bem muito bom boa " +
     "gostoso gostosa delicioso deliciosa tipo so ai hoje agora aqui la isso esse essa quais qual como pode ser mais menos to estou " +
     "ou r$ reais real conto pila preco valor custa custando pessoa pessoas verdade oi ola mamadi bar cardapio menu tomar beber comer " +
-    "vou vamos quer pedir peco pede traz traga manda mandar desce sai ve da um dois tres"
+    "vou vamos quer pedir peco pede traz traga manda mandar desce sai ve da um dois tres posso comprar compro gastar gasto levar borba aqui ali outro outra lugar bar do que mais"
   ).split(" "),
 );
 
@@ -278,6 +279,11 @@ export function search(raw: string, disabled: Set<string> = new Set()): SearchOu
 
 function run(raw: string, opts: { disabled?: Set<string>; noSpecial?: boolean }): SearchOutput {
   const disabled = opts.disabled ?? new Set<string>();
+  // "#vegano", "#queijo": tags que pesquisam
+  if (raw.trim().startsWith("#")) {
+    const t = itemsForTag(raw.trim(), items);
+    if (t) return { chips: [{ k: "tag", label: `#${t.label}` }], results: t.items.map((item) => ({ item, score: 1 })), relaxed: false, suggestion: null };
+  }
   let q = clean(raw);
   const chips: Chip[] = [];
   const allergy = ALLERGY_RE.test(q);
@@ -379,7 +385,7 @@ function run(raw: string, opts: { disabled?: Set<string>; noSpecial?: boolean })
 
   if (allergy) chips.push({ k: "note", label: "Alergias: confirme com a equipe" });
 
-  const hasAny = groups.length || termGroups.length || tagFilters.length || price || neg.length;
+  const hasAny = groups.length || termGroups.length || tagFilters.length || price || neg.length || sort;
   if (!hasAny) return { chips, results: [], relaxed: false, suggestion: null, allergy };
 
   const strict: Result[] = [];
@@ -467,12 +473,11 @@ function run(raw: string, opts: { disabled?: Set<string>; noSpecial?: boolean })
 
 /** Exemplos que aparecem na busca vazia (e no letreiro digitando da abertura). */
 export const EXAMPLES = [
-  "litrão até 20 conto",
+  "O que tem de mais barato do que na Borba?",
+  "O que posso comprar até R$20?",
   "drink da Anitta",
   "o que combina com coxinha?",
   "tem coisa vegana?",
   "pra dividir com a galera",
-  "caipirinha de morango",
-  "sem álcool",
   "me surpreende",
 ];

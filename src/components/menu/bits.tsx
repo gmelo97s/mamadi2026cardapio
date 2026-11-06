@@ -2,26 +2,30 @@ import type { Cents, Item, Tag } from "../../data/types";
 import { priceParts } from "../../lib/format";
 import { Art } from "../art/Art";
 import { ART_TINT } from "../art/artTint";
+import { TAG_LABEL } from "../../data/tags";
+import { haptic, originOf, useUI } from "../../lib/ui";
 
-const TAG_LABEL: Partial<Record<Tag, string>> = {
-  promo: "promo",
-  novo: "novidade",
-  vegano: "vegano",
-  serve2: "serve 2",
-  fds: "sáb e dom",
-  domingo: "domingo",
-  "da-casa": "da casa",
-};
-
-export function Tags({ tags, className = "" }: { tags?: Tag[]; className?: string }) {
+/** Tags que pesquisam: tocar abre a busca com todos os itens da tag. */
+export function Tags({ tags, ingredients, className = "" }: { tags?: Tag[]; ingredients?: { key: string; label: string }[]; className?: string }) {
+  const ui = useUI();
   const shown = (tags ?? []).filter((t) => TAG_LABEL[t]);
-  if (!shown.length) return null;
+  if (!shown.length && !ingredients?.length) return null;
+  const go = (e: React.MouseEvent, q: string) => {
+    e.stopPropagation();
+    haptic(6);
+    ui.openSearch({ query: q, origin: originOf(e.currentTarget) });
+  };
   return (
     <span className={`tags ${className}`}>
       {shown.map((t) => (
-        <span key={t} className={`tag tag--${t}`}>
+        <button key={t} className={`tag tag--${t}`} onClick={(e) => go(e, `#${TAG_LABEL[t]}`)} aria-label={`Ver tudo com a tag ${TAG_LABEL[t]}`}>
           {TAG_LABEL[t]}
-        </span>
+        </button>
+      ))}
+      {ingredients?.map((g) => (
+        <button key={g.key} className="tag tag--ing" onClick={(e) => go(e, `#${g.label}`)} aria-label={`Ver tudo com ${g.label}`}>
+          {g.label}
+        </button>
       ))}
     </span>
   );

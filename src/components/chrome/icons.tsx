@@ -114,3 +114,24 @@ export const IcGota = (p: SVGProps<SVGSVGElement>) => (
     <path d="M12 3.4s5.6 6.2 5.6 10.2a5.6 5.6 0 0 1-11.2 0C6.4 9.6 12 3.4 12 3.4z" />
   </svg>
 );
+
+/** Cardápio aberto */
+export const IcCardapio = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M12 6.2C10.2 4.8 7.4 4.2 3.8 4.4v14c3.6-.2 6.4.4 8.2 1.8 1.8-1.4 4.6-2 8.2-1.8v-14c-3.6-.2-6.4.4-8.2 1.8z" />
+    <path d="M12 6.2v14M6.6 8.6c1.4 0 2.6.3 3.4.8M6.6 12c1.4 0 2.6.3 3.4.8M14 9.4c.8-.5 2-.8 3.4-.8M14 12.8c.8-.5 2-.8 3.4-.8" />
+  </svg>
+);
+
+export const IcSol = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.5 1.5M17.1 17.1l1.5 1.5M5.4 18.6l1.5-1.5M17.1 6.9l1.5-1.5" />
+  </svg>
+);
+
+export const IcLua = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M20 14.4A8 8 0 0 1 9.6 4a8 8 0 1 0 10.4 10.4z" />
+  </svg>
+);

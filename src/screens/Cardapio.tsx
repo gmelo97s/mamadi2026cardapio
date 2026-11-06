@@ -1,19 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { sections } from "../data/menu";
-import type { Group, SectionId } from "../data/types";
+import type { SectionId } from "../data/types";
 import { Art } from "../components/art/Art";
 import { SectionBlock } from "../components/menu/SectionBlock";
 import { DivasSection } from "../components/menu/Divas";
 import { PratosSection } from "../components/menu/Pratos";
 import "./screens.css";
 
-const COPY: Record<Group, { title: string; note: string }> = {
-  beber: { title: "Beber", note: "o forte da casa: litrão, copão e caipirinha" },
-  comer: { title: "Comer", note: "porção, lanche, tábua e a comida da Mamadi" },
-};
+const list = sections;
 
-export function MenuScreen({ group, focus, focusNonce }: { group: Group; focus?: SectionId; focusNonce?: number }) {
-  const list = sections.filter((s) => s.group === group);
+/** O cardápio inteiro em sequência, com as categorias fixas no topo (como no Botanikafe). */
+export function Cardapio() {
   const [active, setActive] = useState<SectionId>(list[0].id);
   const chipsRef = useRef<HTMLDivElement>(null);
   const lockUntil = useRef(0);
@@ -52,7 +49,7 @@ export function MenuScreen({ group, focus, focusNonce }: { group: Group; focus?:
       window.removeEventListener("resize", on);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [group]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   // chip ativo sempre visível
   useEffect(() => {
@@ -64,13 +61,6 @@ export function MenuScreen({ group, focus, focusNonce }: { group: Group; focus?:
     }
   }, [active]);
 
-  // ir direto para uma seção (vindo do início, da busca ou de link)
-  useEffect(() => {
-    if (!focus) return;
-    const el = document.getElementById(`sec-${focus}`);
-    if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" }));
-  }, [focus, focusNonce]);
-
   const go = (id: SectionId, at: number) => {
     setActive(id);
     lockUntil.current = at + 1600;
@@ -78,14 +68,14 @@ export function MenuScreen({ group, focus, focusNonce }: { group: Group; focus?:
   };
 
   return (
-    <div className={`menu menu--${group}`}>
-      <header className="menu__hero">
-        <h1 className="letreiro menu__title">{COPY[group].title}</h1>
-        <p className="hand menu__note">{COPY[group].note}</p>
+    <div className="menu" id="cardapio">
+      <header className="menu__hero wrap">
+        <h2 className="letreiro menu__title">Cardápio</h2>
+        <p className="menu__note">Toque num item para ver os detalhes e o que combina com ele.</p>
       </header>
 
       <div className="chips" ref={chipsRef}>
-        <div className="chips__scroll" role="tablist" aria-label="Categorias">
+        <div className="chips__scroll wrap" role="tablist" aria-label="Categorias">
           {list.map((s) => (
             <button
               key={s.id}
@@ -103,17 +93,9 @@ export function MenuScreen({ group, focus, focusNonce }: { group: Group; focus?:
       </div>
 
       {list.map((s) =>
-        s.id === "divas" ? (
-          <DivasSection key={s.id} />
-        ) : s.id === "pratos" ? (
-          <PratosSection key={s.id} />
-        ) : (
-          <SectionBlock key={s.id} section={s} />
-        ),
+        s.id === "divas" ? <DivasSection key={s.id} /> : s.id === "pratos" ? <PratosSection key={s.id} /> : <SectionBlock key={s.id} section={s} />,
       )}
-      <p className="menu__end hand">
-        {group === "beber" ? "Bebeu? Não dirija. E não esquece da água!" : "Feito com carinho pela Mamadi."}
-      </p>
+      <p className="menu__end hand">Bebeu? Não dirija. E não esquece da água!</p>
     </div>
   );
 }

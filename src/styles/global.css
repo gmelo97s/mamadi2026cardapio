@@ -13,6 +13,15 @@
   --ink-3: #7c6553;
   --line: rgba(34, 21, 12, 0.12);
   --line-2: rgba(34, 21, 12, 0.22);
+  --surface: var(--surface);
+  --outline: #22150c;
+  --outline-s: #22150c;
+  --letter-shadow: #22150c;
+  --fixed-ink: #22150c;
+  --bar-bg: #fcf6ea;
+  --grain-o: 0.09;
+  --solid: #22150c;
+  --solid-text: #fff4e3;
 
   --orange: #fa5a0a;
   --orange-2: #ff7a1a;
@@ -44,7 +53,7 @@
 
   --shadow-1: 0 1px 0 rgba(34, 21, 12, 0.06), 0 8px 18px -12px rgba(34, 21, 12, 0.45);
   --shadow-2: 0 2px 0 rgba(34, 21, 12, 0.08), 0 18px 40px -18px rgba(34, 21, 12, 0.55);
-  --shadow-sticker: 0 0 0 2px var(--ink), 3px 3px 0 0 var(--ink);
+  --shadow-sticker: 0 0 0 2px var(--outline), 3px 3px 0 0 var(--outline-s);
 
   --app-w: 520px;
   --nav-h: 68px;
@@ -67,6 +76,29 @@
   text-size-adjust: 100%;
 }
 
+/* Noite (padrão): preto e laranja, como o logo */
+:root[data-theme="dark"] {
+  --paper: #0e0a08;
+  --paper-2: #1c1411;
+  --paper-3: #2b1f19;
+  --ink: #fff4e3;
+  --ink-2: rgba(255, 244, 227, 0.78);
+  --ink-3: rgba(255, 244, 227, 0.56);
+  --line: rgba(255, 244, 227, 0.1);
+  --line-2: rgba(255, 244, 227, 0.2);
+  --orange-ink: #ff8a3d;
+  --orange-soft: #3a1d0c;
+  --surface: #17100d;
+  --outline: rgba(255, 122, 26, 0.38);
+  --outline-s: #000;
+  --letter-shadow: #000;
+  --bar-bg: #0e0a08;
+  --grain-o: 0.05;
+  --solid: #fa5a0a;
+  --solid-text: #0e0a08;
+  color-scheme: dark;
+}
+
 *,
 *::before,
 *::after {
@@ -74,18 +106,18 @@
 }
 
 html {
-  background: var(--night);
+  background: var(--paper);
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
   margin: 0;
+  background: var(--paper);
   min-height: 100dvh;
   font-family: var(--font-ui);
   font-size: 16px;
   line-height: 1.45;
   color: var(--ink);
-  background: var(--night);
   overflow-x: hidden;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
@@ -140,7 +172,7 @@ svg {
   border: 0;
 }
 
-/* Coluna do app: no celular ocupa a tela; no computador vira uma "tela de app" centralizada */
+/* Página única, do celular ao computador */
 .stage {
   position: relative;
   min-height: 100dvh;
@@ -149,9 +181,7 @@ svg {
 .app {
   position: relative;
   width: 100%;
-  max-width: var(--app-w);
   min-height: 100dvh;
-  margin: 0 auto;
   background: var(--paper);
   isolation: isolate;
   overflow-x: clip;
@@ -159,19 +189,23 @@ svg {
 
 .app::before {
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
   background-image: var(--grain);
-  opacity: 0.09;
+  opacity: var(--grain-o);
   pointer-events: none;
   z-index: -1;
 }
 
-@media (min-width: 640px) {
-  .app {
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.05),
-      0 40px 120px -20px rgba(0, 0, 0, 0.8);
+.wrap {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+@media (min-width: 900px) {
+  .wrap {
+    padding-inline: 32px;
   }
 }
 
@@ -195,7 +229,7 @@ svg {
   line-height: 0.95;
   letter-spacing: 0.005em;
   color: var(--orange);
-  text-shadow: 0.045em 0.05em 0 var(--ink);
+  text-shadow: 0.045em 0.05em 0 var(--letter-shadow);
 }
 
 .hand {
