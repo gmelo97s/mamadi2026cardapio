@@ -57,7 +57,7 @@ export const items: Item[] = [
   { id: "promo-3-litrao-original", section: "cervejas", name: "3 Litrão Original", price: R(60), unit: "3 garrafas de 1 L", tags: ["promo", "compartilhar"],
     desc: "Três Original geladas: sai a R$ 20 cada.", art: "litrao", color: "#f29a1d",
     keywords: ["promo", "promocao", "oferta", "combo", "rodada", "original", "tres", "3"], confirmar: true },
-  { id: "heineken-600", section: "cervejas", name: "Heineken 600 ml", price: R(24), unit: "garrafa", art: "garrafa", color: "#1f7a3a",
+  { id: "heineken-600", photo: "/fotos/heineken.webp", section: "cervejas", name: "Heineken 600 ml", price: R(24), unit: "garrafa", art: "garrafa", color: "#1f7a3a",
     keywords: ["heineken", "cerveja", "600", "verdinha"] },
   { id: "eisenbahn-600", section: "cervejas", name: "Eisenbahn 600 ml", price: R(15), unit: "garrafa", art: "garrafa", color: "#e2b33c",
     keywords: ["eisenbahn", "cerveja", "600"] },
@@ -69,10 +69,10 @@ export const items: Item[] = [
     keywords: ["lata", "latinha", "cerveja", "350"] },
 
   /* ───────────── COPÃO ───────────── */
-  { id: "copao-vodka", section: "copao", name: "2 Copão de Vodka", price: R(15), unit: "2 copões", tags: ["promo", "compartilhar"],
+  { id: "copao-vodka", photo: "/fotos/copao-vodka.webp", section: "copao", name: "2 Copão de Vodka", price: R(15), unit: "2 copões", tags: ["promo", "compartilhar"],
     desc: "Dois copões de vodka no sabor que você escolher.", options: [{ label: "Sabores", values: SABORES_COPAO }], art: "copao", color: "#ff4f7b",
     keywords: ["vodka", "copao", "copo", "promo", "dois", "2", "barato", "tropical", "melancia", "morango", "maca verde"] },
-  { id: "copao-gin", section: "copao", name: "2 Copão de Gin", price: R(30), unit: "2 copões", tags: ["promo", "compartilhar"],
+  { id: "copao-gin", photo: "/fotos/copao-gin.webp", section: "copao", name: "2 Copão de Gin", price: R(30), unit: "2 copões", tags: ["promo", "compartilhar"],
     desc: "Dois copões de gin no sabor que você escolher.", options: [{ label: "Sabores", values: SABORES_COPAO }], art: "copao", color: "#7ed957",
     keywords: ["gin", "copao", "copo", "promo", "dois", "2", "tropical", "melancia", "morango", "maca verde", "tonica"] },
   { id: "chevette", section: "copao", name: "Chevette", price: R(10),
@@ -98,7 +98,7 @@ export const items: Item[] = [
   { id: "caipirinha-limao", section: "drinks", name: "Caipirinha de limão", price: R(15), unit: "copo 300 ml",
     options: [{ label: "Cachaça", values: ["51", "Velho Barreiro"] }], art: "caipirinha", color: "#9bd14b",
     keywords: ["caipirinha", "caipi", "limao", "cachaca", "51", "velho barreiro", "classica"] },
-  { id: "promo-3-caipirinhas", section: "drinks", name: "3 Caipirinhas de limão", price: R(30), unit: "3 copos de 300 ml", tags: ["promo", "compartilhar"],
+  { id: "promo-3-caipirinhas", photo: "/fotos/3-caipirinhas.webp", section: "drinks", name: "3 Caipirinhas de limão", price: R(30), unit: "3 copos de 300 ml", tags: ["promo", "compartilhar"],
     desc: "Três caipirinhas de limão: sai a R$ 10 cada.", art: "caipirinha", color: "#9bd14b",
     keywords: ["promo", "promocao", "oferta", "combo", "caipirinha", "caipi", "limao", "tres", "3", "rodada"], confirmar: true },
   { id: "caipirinha-sabores", section: "drinks", name: "Caipirinha de sabores", price: R(25), unit: "copo 550 ml",
@@ -281,7 +281,7 @@ export const items: Item[] = [
   { id: "lanche-carne-louca", section: "lanches", name: "Lanche de carne louca", price: R(28.9),
     desc: "Carne de panela desfiada e temperada no pão. Acompanha maionese temperada.", art: "lanche",
     keywords: ["lanche", "sanduiche", "carne louca", "carne de panela", "desfiada"] },
-  { id: "lanche-pernil", section: "lanches", name: "Lanche de pernil", price: R(28.9),
+  { id: "lanche-pernil", photo: "/fotos/lanche-pernil.webp", section: "lanches", name: "Lanche de pernil", price: R(28.9),
     desc: "Pernil com molho especial e cebola refogada no pão. Acompanha maionese temperada.", art: "lanche",
     keywords: ["lanche", "sanduiche", "pernil", "porco", "cebola"] },
   { id: "lanche-vegano", section: "lanches", name: "Lanche vegano", price: R(24.9), tags: ["vegano"],
@@ -303,7 +303,7 @@ export const items: Item[] = [
   { id: "extra-abacaxi", section: "lanches", name: "Extra abacaxi", price: R(5), art: "abacaxi", keywords: ["extra", "abacaxi", "adicional"] },
 
   /* ───────────── TÁBUAS ───────────── */
-  { id: "tabua-espetinhos", section: "tabuas", name: "Tábua de espetinhos", price: R(89.9), tags: ["compartilhar"],
+  { id: "tabua-espetinhos", photo: "/fotos/tabua-espetinhos.webp", section: "tabuas", name: "Tábua de espetinhos", price: R(89.9), tags: ["compartilhar"],
     desc: "6 espetos: 2 de carne, 1 de frango, 1 de linguiça, 1 de queijo coalho e 1 pão de alho. Acompanha farofa e vinagrete.", art: "espeto",
     keywords: ["tabua", "espetinho", "espeto", "churrasco", "carne", "frango", "linguica", "queijo coalho", "pao de alho", "galera", "turma"] },
   { id: "tabua-mista", section: "tabuas", name: "Tábua Mista", price: R(129.9), tags: ["compartilhar"],

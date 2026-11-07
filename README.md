@@ -8,11 +8,12 @@ No ar: https://mamadi2026cardapio.vercel.app
 ## A experiência
 
 - **Abertura com a tampinha**: o logo virou uma tampinha de cerveja em 3D, com um abridor engatado. A pessoa puxa a etiqueta "puxa pra abrir o cardápio" (ou toca, ou desliza pra cima): a tampinha estoura girando, espirra espuma, a cerveja sobe e enche a tela e o cardápio aparece por baixo. O mascote original fica impresso no topo da tampinha, com a faixa nova só com "Mamadi". Tocar na tampinha do topo do app volta para a abertura.
-- **Frases animadas na abertura**: "Comida de mãe...", "Litrão gelado", "Maior bar LGBT de SP" (em neon com as cores do orgulho) e "Viva a democracia!".
+- **Puxar o abridor**: segurar e arrastar para baixo na tampinha ou na etiqueta puxa o abridor de verdade (vibra a cada terço) e, passando da metade, estoura a tampinha.
+- **Frases animadas na abertura** (palavra por palavra, saindo do desfoque, com brilho passando): "Comida de mãe...", "Litrão gelado", "Maior bar LGBT de SP" (em neon com as cores do orgulho) e "Viva a democracia!".
 - **Página única e fluida** (como o Botanikafe): Promoções e Combos → cardápio inteiro com as categorias fixas no topo → informações da casa. No computador ocupa a tela toda, em colunas.
 - **Modo noite (preto e laranja, padrão) e modo dia**, no botão do topo.
 - **Menu inferior (celular)**: Início, Cardápio, Pesquisa, iFood e Instagram.
-- **Promoções e Combos**: carrossel automático e rápido, no estilo dos cartazes de oferta pintados à mão. Os cartazes de dia certo (churrasco no sábado e no domingo, baião no domingo, executivo de quarta a sexta) só aparecem no dia e vão para a frente com "Hoje tem!".
+- **Promoções e Combos**: cards no formato das Novidades do Botanikafe (foto, selo, nome, descrição, preço e "Ver"), girando em loop contínuo; dá para arrastar e desacelera com o mouse em cima. Os cartazes de dia certo (churrasco no sábado e no domingo, baião no domingo, executivo de quarta a sexta) só aparecem no dia e vão para a frente com "Hoje tem!".
 - **Tags que pesquisam**: tocar em "vegano", "promo", "#queijo", "#maracujá"… (na lista ou na ficha) abre a busca com todos os itens daquela tag.
 - **Ficha do item**: cabe inteira na tela, no celular e no computador, sem precisar rolar para ver as **3 sugestões de "Combina com"**, escolhidas à mão e com o motivo (ex.: Baião de Dois → Caipirinha Viva o Nordeste, "Tudo nordestino, tudo nosso").
 - **Divas Pop**: a seção vira uma pista escura, com cada drink numa capa de disco nas cores da fruta. Na ficha, o vinil sai da capa e gira.
@@ -31,7 +32,9 @@ No ar: https://mamadi2026cardapio.vercel.app
 | Horário da cozinha | `KITCHEN` em `src/data/menu.ts` |
 | Cores e fontes | `src/styles/global.css` (`:root`) |
 
-### Fotos dos itens (próxima etapa)
+### Fotos dos itens
+
+Seis itens já usam fotos do site anterior, como teste (`public/fotos/`): Heineken 600 ml, 3 Caipirinhas de limão, 2 Copão de Gin, 2 Copão de Vodka, Tábua de espetinhos e Lanche de pernil. A foto da tábua é de banco de imagens (Adobe Stock, com marca d'água): trocar por uma foto da casa antes de divulgar.
 
 Cada item aceita `photo: "/fotos/coxinha.webp"`. Com foto, a imagem entra no lugar da ilustração, na lista e na ficha. É só colocar o arquivo em `public/fotos/`.
 

@@ -348,100 +348,155 @@ body.is-intro {
   display: none;
 }
 
-/* frases que se revezam acima da tampinha */
+/* frases que se revezam acima da tampinha (palavra por palavra, saindo do desfoque) */
 .frases {
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(var(--safe-t) + 7dvh);
-  display: flex;
-  justify-content: center;
-  padding: 0 18px;
+  top: calc(var(--safe-t) + 6.5dvh);
+  padding: 0 20px;
   pointer-events: none;
 }
 @media (max-height: 739.98px) {
   .frases {
-    top: calc(var(--safe-t) + 4dvh);
+    top: calc(var(--safe-t) + 3.5dvh);
   }
 }
+.frases__stage {
+  display: grid;
+  justify-items: center;
+}
 .frase {
+  grid-area: 1 / 1;
   margin: 0;
+  max-width: 13ch;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  column-gap: 0.28em;
-  font-family: var(--font-display);
-  font-size: clamp(30px, 9vw, 56px);
-  line-height: 1.05;
+  column-gap: 0.22em;
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-stretch: 100%;
+  font-size: clamp(34px, 9.6vw, 68px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
   text-align: center;
-  color: var(--cream);
-  text-shadow: 0.05em 0.06em 0 rgba(0, 0, 0, 0.6);
-  animation: frase-out 0.35s ease-in 2.5s forwards;
 }
 .frase__w {
-  display: inline-flex;
-  white-space: nowrap;
-}
-.frase__ch {
+  --g: linear-gradient(100deg, #fff4e3 0%, #fff4e3 38%, #ffffff 48%, #ffc896 56%, #fff4e3 66%, #fff4e3 100%);
   display: inline-block;
-  animation: frase-in 0.55s var(--ease-spring) both;
-  animation-delay: var(--d);
+  padding-bottom: 0.06em;
+  background: var(--g);
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    word-in 1.05s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+    shine 3.4s linear infinite;
+  animation-delay: calc(var(--w) * 95ms), calc(var(--w) * 95ms + 0.5s);
 }
-@keyframes frase-in {
+@keyframes word-in {
   from {
     opacity: 0;
-    filter: blur(6px);
-    transform: translateY(0.45em) scale(0.7) rotate(-6deg);
+    filter: blur(16px);
+    transform: translateY(0.4em) scale(0.94);
   }
 }
-@keyframes frase-out {
+@keyframes shine {
+  from {
+    background-position: 130% 0;
+  }
+  to {
+    background-position: -130% 0;
+  }
+}
+.frase.is-out .frase__w {
+  animation: word-out 0.75s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: calc(var(--w) * 45ms);
+}
+@keyframes word-out {
   to {
     opacity: 0;
-    filter: blur(4px);
-    transform: translateY(-0.25em);
+    filter: blur(14px);
+    transform: translateY(-0.3em) scale(1.03);
   }
 }
-.frase--litrao {
-  color: var(--orange-2);
+.frase--mae .frase__w {
+  --g: linear-gradient(100deg, #fff4e3 0%, #fff4e3 36%, #ffffff 46%, #ff9a52 56%, #fff4e3 68%, #fff4e3 100%);
 }
-.frase--demo .frase__ch {
-  color: var(--cream);
+.frase--litrao .frase__w {
+  --g: linear-gradient(100deg, #ffc35a 0%, #ffd98a 36%, #fff6dc 48%, #ff8a1f 58%, #ffc35a 70%, #ffc35a 100%);
 }
-.frase--demo {
-  text-shadow:
-    0.05em 0.06em 0 rgba(0, 0, 0, 0.6),
-    0 0 22px rgba(250, 90, 10, 0.45);
-}
-/* "Maior bar LGBT de SP": neon com as cores do orgulho */
-.frase--lgbt {
-  font-family: var(--font-neon);
-  font-size: clamp(40px, 12vw, 74px);
-  column-gap: 0.22em;
-  text-shadow: none;
-}
-.frase--lgbt .frase__ch {
-  color: #fff;
-  text-shadow:
-    0 0 3px #fff,
-    0 0 10px var(--c),
-    0 0 22px var(--c),
-    0 0 40px var(--c);
+/* "Maior bar LGBT de SP": neon com as cores do orgulho, correndo pelas letras */
+.frase--lgbt .frase__w {
+  --g: linear-gradient(90deg, #ff4d5e, #ff9f1c, #ffe14d, #3ddc84, #4d9bff, #b65cff, #ff4d5e);
+  background-size: 300% 100%;
+  filter: drop-shadow(0 0 8px rgba(255, 140, 210, 0.55)) drop-shadow(0 0 22px rgba(120, 150, 255, 0.4));
   animation:
-    frase-in 0.55s var(--ease-spring) both,
-    neon-buzz 2.2s steps(1) 0.9s infinite;
-  animation-delay: var(--d), calc(var(--d) + 0.6s);
+    word-in 1.05s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+    pride-flow 3s linear infinite;
+  animation-delay: calc(var(--w) * 95ms), 0s;
 }
-@keyframes neon-buzz {
-  0%,
-  100% {
-    opacity: 1;
+@keyframes pride-flow {
+  from {
+    background-position: 0% 0;
   }
-  47% {
-    opacity: 0.55;
+  to {
+    background-position: 300% 0;
   }
-  49% {
-    opacity: 1;
+}
+.frase--demo .frase__w {
+  --g: linear-gradient(100deg, #fff4e3 0%, #fff4e3 38%, #ffffff 48%, #ffd27a 56%, #fff4e3 66%, #fff4e3 100%);
+}
+
+/* o fundo acompanha a frase: luz do orgulho atrás da tampinha */
+.intro__pride {
+  position: absolute;
+  left: 50%;
+  top: 41%;
+  width: 120vmin;
+  height: 120vmin;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #ff4d5e, #ff9f1c, #ffe14d, #3ddc84, #4d9bff, #b65cff, #ff4d5e);
+  filter: blur(70px);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  animation: pride-spin 14s linear infinite;
+}
+.intro__bg[data-f="lgbt"] .intro__pride {
+  opacity: 0.32;
+}
+.intro__glow {
+  transition: filter 1.2s ease;
+}
+.intro__bg[data-f="litrao"] .intro__glow {
+  filter: hue-rotate(18deg) saturate(1.2);
+}
+@keyframes pride-spin {
+  to {
+    rotate: 360deg;
   }
+}
+
+/* área de puxar o abridor (maior que a etiqueta) */
+.pull-zone {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 240px;
+  touch-action: none;
+  cursor: grab;
+}
+.pull-zone:active {
+  cursor: grabbing;
+}
+.intro__tag {
+  transition: transform 0.18s ease-out;
+}
+.intro__tag.is-pulling {
+  transition: none;
 }
 
 /* com 3D, a etiqueta só aparece quando o abridor está na tela */

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { sections } from "../data/menu";
 import type { SectionId } from "../data/types";
-import { Art } from "../components/art/Art";
 import { SectionBlock } from "../components/menu/SectionBlock";
 import { DivasSection } from "../components/menu/Divas";
 import { PratosSection } from "../components/menu/Pratos";
@@ -85,7 +84,6 @@ export function Cardapio() {
               className={`chip${active === s.id ? " is-active" : ""}${s.id === "divas" ? " chip--divas" : ""}`}
               onClick={(e) => go(s.id, e.timeStamp)}
             >
-              <Art k={s.art} className="chip__art" />
               {s.short}
             </button>
           ))}

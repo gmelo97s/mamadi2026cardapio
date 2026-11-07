@@ -26,35 +26,28 @@ const FRASES = [
   { t: "Maior bar LGBT de SP", k: "lgbt" },
   { t: "Viva a democracia!", k: "demo" },
 ];
-const ARCO = ["#ff3b3b", "#ff9a1f", "#ffe11f", "#3ddc5a", "#3d8bff", "#b04dff"];
 
-/** Frases que se revezam acima da tampinha, letra por letra. */
-function Frases() {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-    const t = window.setInterval(() => setI((n) => (n + 1) % FRASES.length), 2900);
-    return () => window.clearInterval(t);
-  }, []);
-  const f = FRASES[i];
-  let li = 0;
+function Frase({ f, out }: { f: (typeof FRASES)[number]; out?: boolean }) {
+  return (
+    <p className={`frase frase--${f.k}${out ? " is-out" : ""}`}>
+      {f.t.split(" ").map((w, wi) => (
+        <span key={wi} className="frase__w" style={{ "--w": wi } as CSSProperties}>
+          {w}
+        </span>
+      ))}
+    </p>
+  );
+}
+
+/** Frases que se revezam acima da tampinha: palavra por palavra, saindo do desfoque, com um brilho que passa. */
+function Frases({ i, prev }: { i: number; prev: number | null }) {
   return (
     <div className="frases">
       <p className="sr-only">{FRASES.map((x) => x.t).join(" ")}</p>
-      <p key={i} className={`frase frase--${f.k}`} aria-hidden="true">
-        {f.t.split(" ").map((w, wi) => (
-          <span key={wi} className="frase__w">
-            {w.split("").map((ch) => {
-              const n = li++;
-              return (
-                <span key={n} className="frase__ch" style={{ "--d": `${n * 38}ms`, "--c": ARCO[n % ARCO.length] } as CSSProperties}>
-                  {ch}
-                </span>
-              );
-            })}
-          </span>
-        ))}
-      </p>
+      <div className="frases__stage" aria-hidden="true">
+        {prev !== null && <Frase key={`o${prev}-${i}`} f={FRASES[prev]} out />}
+        <Frase key={`i${i}`} f={FRASES[i]} />
+      </div>
     </div>
   );
 }
@@ -76,6 +69,21 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
   const [reduced] = useState(prefersReducedMotion);
   const [use3D] = useState(() => !reduced && hasWebGL());
   const typing = useTyping(EXAMPLES, phase === "idle");
+  const zoneRef = useRef<HTMLDivElement>(null);
+  const [fr, setFr] = useState<{ i: number; prev: number | null }>({ i: 0, prev: null });
+  useEffect(() => {
+    if (reduced) return;
+    let clear = 0;
+    const t = window.setInterval(() => {
+      setFr((s) => ({ i: (s.i + 1) % FRASES.length, prev: s.i }));
+      window.clearTimeout(clear);
+      clear = window.setTimeout(() => setFr((s) => ({ ...s, prev: null })), 1000);
+    }, 3300);
+    return () => {
+      window.clearInterval(t);
+      window.clearTimeout(clear);
+    };
+  }, [reduced]);
 
   // posiciona a etiqueta pendurada no furo do abridor
   const placeTag = useCallback(() => {
@@ -83,10 +91,18 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
     const tag = tagRef.current;
     if (!a || !tag) return;
     const pull = dragRef.current ? Math.max(0, dragRef.current.dy) : 0;
-    const extra = Math.min(46, pull * 0.25);
+    // a etiqueta acompanha o dedo, com um elástico no fim
+    const extra = pull < 140 ? pull * 0.55 : 77 + (pull - 140) * 0.2;
     tag.style.transform = `translate3d(${a.x}px, ${a.y + extra}px, 0)`;
     const p = stringRef.current;
     if (p) p.setAttribute("d", `M 0 ${-extra} C 3 ${10 - extra * 0.5}, -3 18, 0 26`);
+    // área de puxar: do meio da tampinha até abaixo da etiqueta
+    const zone = zoneRef.current;
+    if (zone) {
+      const capY = capLayout(window.innerWidth, window.innerHeight).centerY * window.innerHeight;
+      zone.style.transform = `translate3d(${a.x - 120}px, ${capY}px, 0)`;
+      zone.style.height = `${Math.max(120, a.y + 150 - capY)}px`;
+    }
   }, []);
 
   // cena 3D (carrega o Three.js sob demanda)
@@ -207,21 +223,33 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
   }, [open]);
 
   // puxar a etiqueta = alavanca do abridor
+  // segurar e arrastar para baixo = puxar o abridor (no celular e no computador)
+  const PULL = 170;
+  const ticks = useRef(0);
   const onPointerDown = (e: React.PointerEvent) => {
-    if (phaseRef.current !== "idle") return;
+    if (phaseRef.current !== "idle" || e.button > 0) return;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     dragRef.current = { y: e.clientY, t: performance.now(), id: e.pointerId, dy: 0 };
+    ticks.current = 0;
+    tagRef.current?.classList.add("is-pulling");
     setHint(false);
   };
   const onPointerMove = (e: React.PointerEvent) => {
     const d = dragRef.current;
     if (!d || d.id !== e.pointerId) return;
     d.dy = e.clientY - d.y;
-    const p = Math.max(0, d.dy) / 150;
+    const p = Math.max(0, d.dy) / PULL;
     sceneRef.current?.setPull(p);
     placeTag();
+    // "tec, tec": vibra a cada terço do caminho
+    const step = Math.min(3, Math.floor(p * 3));
+    if (step > ticks.current) {
+      ticks.current = step;
+      haptic(7);
+    }
     if (p >= 1) {
       dragRef.current = null;
+      tagRef.current?.classList.remove("is-pulling");
       open();
     }
   };
@@ -229,12 +257,19 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
     const d = dragRef.current;
     if (!d || d.id !== e.pointerId) return;
     dragRef.current = null;
-    // toque simples (mesmo que demore, enquanto o 3D carrega) ou puxada longa abrem
-    if (d.dy > 70 || Math.abs(d.dy) < 12) open();
+    tagRef.current?.classList.remove("is-pulling");
+    // toque simples (mesmo que demore, enquanto o 3D carrega) ou puxada passando da metade abrem
+    if (d.dy > PULL * 0.45 || Math.abs(d.dy) < 12) open();
     else {
       sceneRef.current?.setPull(0);
       placeTag();
     }
+  };
+  const pullHandlers = {
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
+    onPointerCancel: onPointerUp,
   };
 
   const covered = phase === "covered";
@@ -243,8 +278,9 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
     <div className={`intro is-${phase}${ready ? " is-ready" : ""}${use3D ? " has-3d" : ""}`} role="dialog" aria-label="Abertura do cardápio do Mamadi">
       {!covered && (
         <>
-          <div className="intro__bg" aria-hidden="true">
+          <div className="intro__bg" data-f={FRASES[fr.i].k} aria-hidden="true">
             <div className="intro__glow" />
+            <div className="intro__pride" />
             <div className="intro__bubbles">
               {Array.from({ length: 16 }, (_, i) => (
                 <span key={i} style={{ "--i": i } as CSSProperties} />
@@ -255,7 +291,9 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
           {use3D && <canvas ref={canvasRef} className="intro__canvas" aria-hidden="true" />}
           <img className="intro__poster" src="/brand/cap-poster.webp" alt="" aria-hidden="true" />
 
-          <Frases />
+          <Frases i={fr.i} prev={fr.prev} />
+
+          <div className="pull-zone" ref={zoneRef} {...pullHandlers} aria-hidden="true" />
 
           <div className="intro__tag" ref={tagRef}>
             <svg className="intro__string" viewBox="-6 -50 12 80" aria-hidden="true">
@@ -263,10 +301,7 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
             </svg>
             <button
               className="pull-tag"
-              onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={onPointerUp}
-              onPointerCancel={onPointerUp}
+              {...pullHandlers}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();

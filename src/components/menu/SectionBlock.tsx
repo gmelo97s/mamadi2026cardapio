@@ -1,7 +1,6 @@
 import { Fragment } from "react";
 import { itemsBySection } from "../../data/menu";
 import type { Section } from "../../data/types";
-import { Art } from "../art/Art";
 import { ItemRow } from "./ItemRow";
 import "./menu.css";
 
@@ -24,7 +23,6 @@ export function SectionHead({ section, aside }: { section: Section; aside?: Reac
         <p className="hand sec-head__note">{section.note}</p>
         {aside}
       </div>
-      <Art k={section.art} className="sec-head__art" />
     </header>
   );
 }

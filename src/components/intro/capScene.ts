@@ -202,13 +202,14 @@ export function createCapScene(opts: CapSceneOptions): CapScene {
   root.add(opener);
   const hookAngle = THREE.MathUtils.degToRad(-76);
   opener.position.set(Math.cos(hookAngle) * 0.98, Math.sin(hookAngle) * 0.98, 0.16);
+  const openerY = opener.position.y;
   opener.rotation.z = THREE.MathUtils.degToRad(11);
   opener.scale.setScalar(0.88);
   const swing = new THREE.Group();
   opener.add(swing);
   const lever = new THREE.Group();
   swing.add(lever);
-  const steel = new THREE.MeshStandardMaterial({ color: 0xdcdde3, metalness: 1, roughness: 0.26 });
+  const steel = new THREE.MeshStandardMaterial({ color: 0xdcdde3, metalness: 1, roughness: 0.26, envMapIntensity: 0.55 });
   const openerGeo = new THREE.ExtrudeGeometry(openerShape(), { depth: 0.05, bevelEnabled: true, bevelThickness: 0.016, bevelSize: 0.016, bevelSegments: 3, curveSegments: 40 });
   openerGeo.translate(0, 0, -0.025);
   const openerMesh = new THREE.Mesh(openerGeo, steel);
@@ -322,12 +323,15 @@ export function createCapScene(opts: CapSceneOptions): CapScene {
       root.rotation.x = -ty * 0.28 + Math.sin(t * 0.9) * 0.03;
       root.rotation.y = tx * 0.38 + Math.sin(t * 0.7) * 0.05;
       root.rotation.z = Math.sin(t * 0.6) * 0.025;
-      swing.rotation.z = Math.sin(t * 1.7 + 0.6) * 0.05 * (1 - pullShown);
-      lever.rotation.x = -pullShown * 0.95;
-      cap.rotation.x = -pullShown * 0.16;
-      cap.rotation.y = -pullShown * 0.1;
-      cap.position.z = pullShown * 0.08;
-      cap.position.y = pullShown * 0.05;
+      swing.rotation.z = Math.sin(t * 1.7 + 0.6) * 0.05 * Math.max(0, 1 - pullShown * 2);
+      // puxar: o abridor desce e gira como alavanca, a borda da tampinha levanta
+      opener.position.y = openerY - pullShown * 0.42;
+      lever.rotation.x = -pullShown * 0.22;
+      cap.rotation.x = -pullShown * 0.14;
+      cap.rotation.y = -pullShown * 0.06;
+      cap.rotation.z = Math.sin(t * 0.6) * 0.025 + pullShown * 0.05;
+      cap.position.z = pullShown * 0.1;
+      cap.position.y = pullShown * 0.07;
     }
 
     if (popping && !flying) {
