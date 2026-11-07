@@ -25,7 +25,7 @@ function badgeOf(c: Cartaz, weekday: number) {
 
 function Media({ c }: { c: Cartaz }) {
   const photo = "item" in c.open ? itemById.get(c.open.item)?.photo : undefined;
-  if (photo) return <img className="ncard__img" src={photo} alt="" loading="lazy" decoding="async" draggable={false} />;
+  if (photo) return <img className="ncard__img ncard__img--photo" src={photo} alt="" loading="lazy" decoding="async" draggable={false} />;
   const n = c.count ?? 1;
   return (
     <span className={`ncard__art ncard__art--${c.paper}`}>

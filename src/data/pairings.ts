@@ -112,7 +112,7 @@ const CURATED: Record<string, Pair[]> = {
 
   // Tábuas
   "tabua-espetinhos": [["promo-3-litrao-original", "Tábua pede rodada"], ["caipirinha-limao", "Clássico de churrasquinho"], ["refrigerante", "Pra quem tá de boa"]],
-  "tabua-mista": [["promo-3-litrao", "Pra galera toda"], ["copao-gin", "Gin pra equilibrar"], ["promo-3-caipirinhas", "Uma caipi pra cada"]],
+  "tabua-mista": [["litrao-original", "Original gelada pra mesa"], ["caipirinha-viva-o-nordeste", "A caipirinha da casa pra brindar"], ["promo-3-litrao", "Pra galera toda"]],
   "tabua-dupla-1": [["litrao-brahma-skol-antarctica", "Um litrão pra dupla"], ["copao-vodka", "Dois copões pra dois"], ["caipirinha-limao", "Clássico brasileiro"]],
   "tabua-dupla-2": [["vinho-tinto", "Contra-filé com tinto"], ["litrao-original", "Um litrão pra dupla"], ["caipirinha-sabores", "Caipi pra acompanhar"]],
 };
@@ -136,29 +136,118 @@ const DRINK_FALLBACK: Pair[] = [
   ["litrao-original", "Gelada pra acompanhar"],
 ];
 
+/*
+ * Promoção junto: bebida que tem promoção parecida sugere 2 comidas + a promoção dela
+ * (litrão → 3 litrões, caipirinha → 3 caipirinhas, copão → 2 copões, energético → copão de vodka).
+ */
+const P3L: Pair = ["promo-3-litrao", "Na rodada de 3 sai R$ 15 cada (Brahma ou Skol)"];
+const P3C: Pair = ["promo-3-caipirinhas", "Rodada de caipirinha: 3 por R$ 30"];
+const PCV: Pair = ["copao-vodka", "Promo: 2 copões de vodka por R$ 15"];
+const PCG: Pair = ["copao-gin", "Promo: 2 copões de gin por R$ 30"];
+const P3O: Pair = ["promo-3-litrao-original", "Na rodada de 3 sai R$ 20 cada"];
+
+const DRINK_PROMO: Record<string, Pair> = {
+  "litrao-brahma-skol-antarctica": ["promo-3-litrao", "Na rodada de 3 sai R$ 15 cada"],
+  "litrao-petra": P3L,
+  "litrao-amstel": P3L,
+  "litrao-budweiser-duplo-malte": P3L,
+  "litrao-original": P3O,
+  "heineken-600": ["promo-3-litrao", "Mais cerveja por menos: 3 litrões por R$ 45"],
+  "eisenbahn-600": ["promo-3-litrao", "Mais cerveja por menos: 3 litrões por R$ 45"],
+  "cacildis-600": ["promo-3-litrao", "Mais cerveja por menos: 3 litrões por R$ 45"],
+  "cerveja-long-neck": ["promo-3-litrao", "Mais cerveja por menos: 3 litrões por R$ 45"],
+  "cerveja-lata": ["promo-3-litrao", "Mais cerveja por menos: 3 litrões por R$ 45"],
+  "caipirinha-limao": ["promo-3-caipirinhas", "Leva 3 por R$ 30 e sai R$ 10 cada"],
+  "caipilula": ["promo-3-caipirinhas", "Rodada de caipirinha: 3 por R$ 30"],
+  "caipirinha-viva-o-nordeste": P3C,
+  "choro-da-extrema-direita": P3C,
+  "caipirinha-sabores": P3C,
+  "kariri-mel-limao": P3C,
+  "dreher-mel-limao": P3C,
+  "dose-51-velho-barreiro": ["promo-3-caipirinhas", "Caipirinha de 51: 3 por R$ 30"],
+  "chevette": PCV,
+  "copao-sorrah": PCV,
+  "whisky-master-gold": PCV,
+  "copao-vodka": ["copao-gin", "Prefere gin? 2 copões por R$ 30"],
+  "copao-gin": ["copao-vodka", "Ou de vodka: 2 copões por R$ 15"],
+  "monster": ["copao-vodka", "Vodka com energético: 2 copões por R$ 15"],
+  "red-bull": ["copao-vodka", "Vodka com energético: 2 copões por R$ 15"],
+  "copo-energetico": ["copao-vodka", "Vodka com energético: 2 copões por R$ 15"],
+  "gelo-sabor": ["copao-vodka", "Gelo de sabor no copão: 2 por R$ 15"],
+  "agua-tonica": ["copao-gin", "Gin tônica no copão: 2 por R$ 30"],
+};
+
+/* Comida sugere 2 bebidas + uma das promoções mais pedidas da casa. */
+const FOOD_PROMO: Record<string, Pair> = {
+  "mini-pasteis": ["promo-3-litrao", "Pastel pede rodada: 3 litrões por R$ 45"],
+  "coxinha": PCV,
+  "batata-simples": P3L,
+  "batata-cheddar-bacon": PCG,
+  "batata-mamadi": ["promo-3-litrao", "A batata da casa pede rodada: 3 litrões por R$ 45"],
+  "batata-louca": PCV,
+  "calabresa-acebolada": ["promo-3-litrao", "Calabresa e rodada de litrão: 3 por R$ 45"],
+  "mandioca-frita": P3C,
+  "espetinho": P3O,
+  "couvert-da-mamadi": P3C,
+  "porcao-de-pao": P3C,
+  "churrasco-da-mamadi": P3O,
+  "prato-executivo": P3C,
+  "baiao-de-dois": ["promo-3-caipirinhas", "Caipirinha pra mesa: 3 por R$ 30"],
+  "prato-vegano": P3C,
+  "lanche-calabresa": P3L,
+  "lanche-carne-louca": PCV,
+  "lanche-pernil": P3L,
+  "lanche-vegano": P3C,
+  "burger-original": PCV,
+  "burger-bacon": P3L,
+  "burger-classico": PCG,
+  "tabua-espetinhos": P3O,
+  "tabua-mista": ["promo-3-litrao", "Pra galera toda: 3 litrões por R$ 45"],
+  "tabua-dupla-1": PCV,
+  "tabua-dupla-2": PCG,
+};
+
 function hash(s: string) {
   let h = 0;
   for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return h;
 }
 
+const isPromo = (it: Item) => !!it.tags?.includes("promo");
+/** a promoção já é desse produto: não sugerir o mesmo produto avulso junto */
+const SAME_AS_PROMO: Record<string, string> = {
+  "promo-3-litrao": "litrao-brahma-skol-antarctica",
+  "promo-3-litrao-original": "litrao-original",
+  "promo-3-caipirinhas": "caipirinha-limao",
+};
+
 export function pairingsFor(it: Item): Pairing[] {
   const out: Pairing[] = [];
   const seen = new Set([it.id]);
-  const push = ([id, reason]: Pair) => {
-    if (out.length >= 3 || seen.has(id)) return;
+  const push = ([id, reason]: Pair, ok: (x: Item) => boolean = () => true, limit = 3) => {
+    if (out.length >= limit || seen.has(id)) return;
     const target = itemById.get(id);
-    if (!target) return;
+    if (!target || !ok(target)) return;
     seen.add(id);
     out.push({ item: target, reason });
   };
-  (CURATED[it.id] ?? []).forEach(push);
-  if (out.length < 3) {
-    const pool = isDrink(it) ? FOOD_FALLBACK : DRINK_FALLBACK;
-    // cada item começa num ponto diferente da lista, para as Divas não sugerirem todas a mesma coisa
-    const start = hash(it.id) % pool.length;
-    for (let i = 0; i < pool.length && out.length < 3; i++) push(pool[(start + i) % pool.length]);
+  const drink = isDrink(it);
+  const promo = (drink ? DRINK_PROMO : FOOD_PROMO)[it.id];
+  const promoItem = promo && itemById.get(promo[0]);
+  const curated = CURATED[it.id] ?? [];
+  const pool = drink ? FOOD_FALLBACK : DRINK_FALLBACK;
+  const start = hash(it.id) % pool.length;
+
+  if (promoItem) {
+    // 2 do outro tipo (comida para bebida, bebida para comida), sem promoção, e a promoção por último
+    const other = (x: Item) => isDrink(x) !== drink && !isPromo(x) && x.id !== SAME_AS_PROMO[promo[0]];
+    curated.forEach((p) => push(p, other, 2));
+    for (let i = 0; i < pool.length && out.length < 2; i++) push(pool[(start + i) % pool.length], other, 2);
+    push(promo);
   }
+  // sem promoção relacionada (Divas, doses, vinhos, extras…): as sugestões escolhidas à mão
+  curated.forEach((p) => push(p));
+  for (let i = 0; i < pool.length && out.length < 3; i++) push(pool[(start + i) % pool.length]);
   return out;
 }
 

@@ -34,7 +34,7 @@ function Hero({ item }: { item: Item }) {
     );
   }
   return (
-    <div className="sheet__hero" style={{ "--tint": ART_TINT[item.art] ?? "var(--paper-2)" } as CSSProperties}>
+    <div className={`sheet__hero${item.photo ? " sheet__hero--photo" : ""}`} style={{ "--tint": ART_TINT[item.art] ?? "var(--paper-2)" } as CSSProperties}>
       <span className="sheet__bubbles" aria-hidden="true">
         {Array.from({ length: 9 }, (_, i) => (
           <span key={i} style={{ "--i": i } as CSSProperties} />

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { EXAMPLES, search, type SearchOutput } from "../../lib/search";
+import { EXAMPLES, search, SUGGESTIONS, type SearchOutput } from "../../lib/search";
 import { useVoice, voiceSupported } from "../../lib/voice";
 import { haptic, type Origin } from "../../lib/ui";
 import { IcLupa, IcMic, IcX } from "../chrome/icons";
@@ -197,13 +197,13 @@ export default function SearchOverlay({ initialQuery = "", startVoice = false, o
                   </span>
                   <span>
                     <strong>Toca e fala o que você quer</strong>
-                    <span className="hand">“O que posso comprar até R$20?”</span>
+                    <span className="hand">“drink do Lula”, “2 copões de gin”</span>
                   </span>
                 </button>
               )}
               <p className="search__label">Experimenta perguntar</p>
               <div className="search__chips">
-                {EXAMPLES.slice(0, 4).map((ex) => (
+                {SUGGESTIONS.map((ex) => (
                   <button key={ex} className="s-chip" onClick={() => setQ(ex)}>
                     {ex}
                   </button>

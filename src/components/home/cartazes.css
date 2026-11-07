@@ -118,6 +118,16 @@
 .ncard__img {
   object-fit: cover;
 }
+/* foto de produto em fundo preto infinito: aparece inteira, sem corte */
+.ncard__img--photo {
+  width: 100%;
+  object-fit: contain;
+  background: #000;
+  transform: none;
+}
+.ncard__media:has(.ncard__img--photo) {
+  background: #000;
+}
 .ncard__art {
   position: relative;
   background: radial-gradient(70% 70% at 50% 45%, rgba(255, 255, 255, 0.55), transparent 70%), var(--bg, #f3e6cc);

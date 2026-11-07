@@ -471,13 +471,29 @@ function run(raw: string, opts: { disabled?: Set<string>; noSpecial?: boolean })
   return { chips, results: list.slice(0, 40), relaxed, suggestion, allergy };
 }
 
-/** Exemplos que aparecem na busca vazia (e no letreiro digitando da abertura). */
+/** Exemplos que se digitam sozinhos na barra de busca (abertura e busca). */
 export const EXAMPLES = [
+  "drink do Lula",
+  "promoção de caipirinha",
+  "2 copões de gin",
+  "2 copões de vodka",
+  "drink da eleição",
+  "promoção de litrão",
   "O que tem de mais barato do que na Borba?",
   "O que posso comprar até R$20?",
   "drink da Anitta",
   "o que combina com coxinha?",
-  "tem coisa vegana?",
-  "pra dividir com a galera",
   "me surpreende",
+];
+
+/** Sugestões tocáveis na busca vazia: os mais pedidos e os da eleição. */
+export const SUGGESTIONS = [
+  "drink do Lula",
+  "promoção de caipirinha",
+  "2 copões de gin",
+  "2 copões de vodka",
+  "drink da eleição",
+  "promoção de litrão",
+  "O que tem de mais barato do que na Borba?",
+  "O que posso comprar até R$20?",
 ];

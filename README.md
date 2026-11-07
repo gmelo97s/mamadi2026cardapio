@@ -34,9 +34,15 @@ No ar: https://mamadi2026cardapio.vercel.app
 
 ### Fotos dos itens
 
-Seis itens já usam fotos do site anterior, como teste (`public/fotos/`): Heineken 600 ml, 3 Caipirinhas de limão, 2 Copão de Gin, 2 Copão de Vodka, Tábua de espetinhos e Lanche de pernil. A foto da tábua é de banco de imagens (Adobe Stock, com marca d'água): trocar por uma foto da casa antes de divulgar.
+Por enquanto todos os itens usam as ilustrações. Para colocar foto num item: `photo: "/fotos/copao-vodka.webp"` em `src/data/menu.ts` e o arquivo em `public/fotos/`.
 
-Cada item aceita `photo: "/fotos/coxinha.webp"`. Com foto, a imagem entra no lugar da ilustração, na lista e na ficha. É só colocar o arquivo em `public/fotos/`.
+A foto aparece **inteira, sobre fundo preto** (sem corte) no card de promoção, na linha do cardápio, na ficha e nas sugestões. Para ficar bem enquadrada em todos esses lugares:
+
+- quadrada (1:1), 1600 × 1600 px (mínimo 1200 × 1200);
+- fundo preto infinito puro (#000000), sem textura nem degradê;
+- produto centralizado ocupando cerca de 70% da altura (≈ 1120 px) e no máximo 80% da largura, com pelo menos 12% de folga em cima e embaixo (≈ 190 px) e 10% nas laterais: nada encostando nas bordas.
+
+Tamanhos em que a foto aparece hoje: card de promoção 192×173 (iPhone SE) a 264×238 (computador); linha 58×58; sugestões 36×36 a 44×44; ficha no celular = largura da tela × 62 a 300 px de altura; ficha no computador 392×660.
 
 ### Itens para confirmar com o bar
 
