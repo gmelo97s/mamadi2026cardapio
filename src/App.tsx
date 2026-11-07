@@ -8,11 +8,11 @@ import { ItemSheet } from "./components/sheet/ItemSheet";
 import { Promos } from "./components/home/Cartazes";
 import { Cardapio } from "./screens/Cardapio";
 import { Footer } from "./screens/Footer";
+import Intro from "./components/intro/Intro";
 import { hashFor, parseHash } from "./lib/route";
 import { spotId, UIContext, type Origin, type Theme, type UI } from "./lib/ui";
 
 const SearchOverlay = lazy(() => import("./components/search/SearchOverlay"));
-const Intro = lazy(() => import("./components/intro/Intro"));
 
 const THEME_KEY = "mamadi:tema";
 function initialTheme(): Theme {
@@ -150,17 +150,15 @@ export default function App() {
           {search.open && <SearchOverlay key={search.n} initialQuery={search.query} startVoice={search.voice} origin={search.origin} onClose={closeSearch} />}
         </Suspense>
 
-        <Suspense fallback={null}>
-          {introOpen && (
-            <Intro
-              onOpened={() => {
-                setIntroOpen(false);
-                window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
-              }}
-              onSearch={() => openSearch()}
-            />
-          )}
-        </Suspense>
+        {introOpen && (
+          <Intro
+            onOpened={() => {
+              setIntroOpen(false);
+              window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+            }}
+            onSearch={() => openSearch()}
+          />
+        )}
 
         <FlyLayer sprites={sprites} />
         <FizzLayer bursts={bursts} />

@@ -69,6 +69,11 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
   const [reduced] = useState(prefersReducedMotion);
   const [use3D] = useState(() => !reduced && hasWebGL());
   const typing = useTyping(EXAMPLES, phase === "idle");
+  // a abertura já está na tela: tira a tela de carregamento do HTML (mesmo desenho, sem piscar)
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => document.documentElement.classList.remove("boot"));
+    return () => cancelAnimationFrame(raf);
+  }, []);
   const zoneRef = useRef<HTMLDivElement>(null);
   const [fr, setFr] = useState<{ i: number; prev: number | null }>({ i: 0, prev: null });
   useEffect(() => {

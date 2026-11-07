@@ -60,7 +60,7 @@
 }
 .nloop__track {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   width: max-content;
   padding-left: 16px;
   will-change: transform;
@@ -69,13 +69,13 @@
 .ncard {
   position: relative;
   flex: none;
-  width: 74vw;
-  max-width: 300px;
+  width: 60vw;
+  max-width: 240px;
   display: flex;
   flex-direction: column;
   text-align: left;
   color: var(--ink);
-  border-radius: 24px;
+  border-radius: 20px;
   background: var(--surface);
   box-shadow:
     0 0 0 1px var(--line-2),
@@ -101,7 +101,7 @@
 .ncard__media {
   position: relative;
   display: block;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 0.9;
   overflow: hidden;
   background: var(--paper-3);
 }
@@ -149,7 +149,6 @@
   width: 62%;
   height: 62%;
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 14px 14px rgba(34, 21, 12, 0.22));
 }
 .ncard__ill--2-0 {
   width: 54%;
@@ -208,18 +207,18 @@
 }
 .ncard__body {
   display: grid;
-  gap: 6px;
-  padding: 14px 16px 16px;
+  gap: 5px;
+  padding: 12px 14px 14px;
 }
 .ncard__name {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: 19px;
   line-height: 1.05;
   letter-spacing: 0.005em;
 }
 .ncard__desc {
-  font-size: 14px;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 1.38;
   color: var(--ink-2);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -234,12 +233,12 @@
   margin-top: 4px;
 }
 .ncard__price {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 750;
   font-variant-numeric: tabular-nums;
 }
 .ncard__price small {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--ink-3);
 }
@@ -263,7 +262,7 @@
 
 @media (min-width: 760px) {
   .ncard {
-    width: 300px;
+    width: 250px;
   }
 }
 @media (min-width: 900px) {
@@ -277,7 +276,7 @@
 }
 @media (min-width: 1024px) {
   .ncard {
-    width: 320px;
+    width: 264px;
     max-width: none;
   }
 }

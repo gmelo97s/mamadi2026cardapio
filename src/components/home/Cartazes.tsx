@@ -48,7 +48,7 @@ function useLoop(el: React.RefObject<HTMLDivElement | null>, track: React.RefObj
     const tr = track.current;
     if (!box || !tr) return;
     const reduced = prefersReducedMotion();
-    const SPEED = window.innerWidth < 760 ? 38 : 50; // px/s
+    const SPEED = window.innerWidth < 760 ? 58 : 70; // px/s
     let items: HTMLElement[] = [];
     let medias: HTMLElement[] = [];
     let x = 0;
@@ -90,7 +90,8 @@ function useLoop(el: React.RefObject<HTMLDivElement | null>, track: React.RefObj
     document.fonts?.ready.then(measure);
     const frame = (t: number) => {
       raf = requestAnimationFrame(frame);
-      const dt = Math.min(0.05, (t - (prev || t)) / 1000);
+      // sem "freio" em celular mais lento: o passo acompanha o tempo real (até 1/8 s)
+      const dt = Math.min(0.125, (t - (prev || t)) / 1000);
       prev = t;
       if (!dragging) {
         const stopped = reduced || pressed || focus || pausedRef.current || t < resumeAt;
@@ -225,7 +226,7 @@ export function Promos() {
   // o conjunto se repete até ficar mais largo que a tela (o loop não pode ter buraco)
   const [reps] = useState(() => {
     const w = window.innerWidth;
-    const cardW = (w >= 1024 ? 320 : w >= 760 ? 300 : Math.min(300, w * 0.74)) + 14;
+    const cardW = (w >= 1024 ? 264 : w >= 760 ? 250 : Math.min(240, w * 0.6)) + 12;
     return Math.max(1, Math.ceil((w + cardW) / (list.length * cardW)));
   });
   const set = useMemo(() => Array.from({ length: reps }, () => list).flat(), [reps, list]);
