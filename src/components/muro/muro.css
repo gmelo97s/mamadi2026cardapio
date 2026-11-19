@@ -436,17 +436,17 @@
 .fala {
   position: absolute;
   z-index: 8;
-  right: 62%;
-  bottom: 46%;
+  right: 58%;
+  top: 10%;
   width: min(262px, 74vw);
   padding: 11px 13px 12px;
   color: #1a120c;
   background: #fff7ea;
-  border-radius: 16px 16px 4px 16px;
+  border-radius: 16px 4px 16px 16px;
   box-shadow:
     0 0 0 2.5px #120d0a,
     5px 5px 0 0 var(--cor);
-  transform-origin: 100% 100%;
+  transform-origin: 100% 0%;
   animation: fala-in 0.34s var(--ease-spring);
   text-align: left;
 }
@@ -842,4 +842,13 @@
   .turma__fig {
     animation: none;
   }
+}
+
+/* falando: o personagem e o balão passam por cima do título */
+.sec-head--dono > .dono.is-talking,
+.divas__dono.is-talking {
+  z-index: 6;
+}
+.divas__dono.is-talking {
+  position: relative;
 }

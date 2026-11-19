@@ -21,6 +21,26 @@ No ar: https://mamadi2026cardapio.vercel.app
 - **Busca inteligente por voz e texto**: entende frases como "O que tem de mais barato do que na Borba?", "O que posso comprar até R$20?", "drink da Anitta", "o que combina com coxinha?", "tem coisa vegana?", "pra dividir com a galera", "sem álcool" ou "me surpreende". Também entende gíria (breja, cerva, rango), erro de digitação e correção na fala ("um litrão de original… na verdade amstel"). A voz usa o reconhecimento do próprio navegador (Chrome/Android, Safari/iPhone). Se a pessoa fica parada sem escolher, aparece "Posso te sugerir algo?".
 - **Transições**: bolhas de cerveja que estouram onde a pessoa toca, e rodelas de limão e gelo que cruzam a tela ao entrar em "Beber". Com "reduzir movimento" ligado no celular, tudo fica parado.
 
+
+## O muro da fachada no cardápio
+
+- **A turma do muro**: os personagens pintados na fachada (arte de @dupont.br) foram recortados à mão das fotos e recriados em estilo pôster (cores chapadas, traço reforçado, borda de adesivo). Ficam em `public/muro/` (versão grande e `-mini`).
+- **Cada um manda numa categoria** (`src/data/crew.ts`): Breja (litrão), Skate (copão), Rainha (caipis), DJ Fita (Divas), Pista (doses), Gole (prontos), Na Moral (porções), Burgão (lanches, desenhado em vetor) e Saúde (tábuas). Entram como num jogo de rua dos anos 2000, respiram e têm efeitos (espuma, som, gole, brilho). Tocar no personagem mostra a fala, as barrinhas de atributo e o pedido da casa.
+- **Fundo de muro** (tema escuro): reboco, emendas das placas e as garrafinhas pintadas a spray flutuando em parallax (uma máscara só, `public/muro/garrafa.webp`, colorida pelo CSS).
+- **Abertura**: a garrafa com olho do muro, redesenhada em vetor (`src/components/intro/garrafa-olho.svg`, gerada por script), com a tampinha 3D no gargalo. O olho pisca, passeia, segue o dedo, olha para a etiqueta quando você puxa e arregala quando a tampa estoura (com as bolhas do muro). A tela de carregamento desenha a mesma garrafa (plugin no `vite.config.ts`), então não pisca.
+- **Rodapé**: a turma lado a lado (toque leva à categoria) e o crédito do artista.
+
+## Sinuca valendo drink
+
+Veio da sinuca do Outs Pub (mesma física, mira e regras), com a cara do Mamadi: pano verde-petróleo com o logo da casa, madeira preta, taco laranja e luzes laranja e rosa.
+
+- 1 × 1 ou 2 × 2 no mesmo celular; cada lado escolhe um personagem do muro (tela de VS ao começar).
+- Encaçapou, joga de novo; bola 8 vale 2; branca na caçapa é falta e as bolas da tacada vão para o outro lado.
+- A cada 2 bolas de um lado, a roleta sorteia uma bebida do cardápio (litrão, copão, caipis, Divas, doses e prontos; as rodadas de 3 ficam de fora) e o outro lado paga. Teto: até R$ 20, até R$ 30 ou qualquer uma.
+- "A conta" guarda os sorteios; dá para fechar o jogo, pedir e voltar com a partida guardada.
+- Onde abre: cartaz "Sinuca valendo drink" na página inicial, link "Sinuca" no topo (computador), busca ("sinuca", "jogo"...) e o endereço `#/sinuca`.
+- Regras em `src/components/sinuca/match.ts`; mesa e física em `src/pool3d/`.
+
 ## Onde mexer
 
 | O quê | Arquivo |
