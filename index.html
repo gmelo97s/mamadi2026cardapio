@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Mamadi · Cardápio</title>
     <meta name="description" content="Cardápio do Bar Mamadi, em frente à Praça Roosevelt: litrão, copão, caipirinhas, Divas Pop e a comida caseira da Mamadi." />
-    <meta name="theme-color" content="#0e0a08" />
+    <meta name="theme-color" content="#111318" />
     <script>
       try {
         document.documentElement.dataset.theme = localStorage.getItem("mamadi:tema") === "light" ? "light" : "dark";
@@ -16,51 +16,71 @@
       if (!/^#\/(item|busca|cardapio|beber|comer)/.test(location.hash)) document.documentElement.classList.add("boot");
     </script>
     <style>
-      /* tela de abertura desenhada antes do JavaScript: mesmo fundo, luz e tampinha da abertura */
+      /* tela de abertura desenhada antes do JavaScript: o mesmo muro, garrafa do olho e tampinha da abertura */
       #boot {
         display: none;
       }
       html.boot,
       html.boot body {
-        background: #0d0a08;
+        background: #111318;
         overflow: hidden;
       }
       html.boot #boot {
+        --cap-d: min(44vw, 19.5dvh, 240px);
+        --cap-y: 27dvh;
         display: block;
         position: fixed;
         inset: 0;
         z-index: 200;
         overflow: hidden;
-        background: #0d0a08;
+        background: #111318;
+      }
+      @media (max-height: 739.98px) {
+        html.boot #boot {
+          --cap-d: min(42vw, 20dvh, 230px);
+        }
       }
       #boot::before {
         content: "";
         position: absolute;
         left: 50%;
-        top: 41%;
+        top: calc(var(--cap-y) + var(--cap-d) * 0.4);
         width: 150vmin;
         height: 150vmin;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%) scale(0.94);
+        opacity: 0.8;
         background:
           radial-gradient(circle, rgba(250, 104, 18, 0.55) 0, rgba(250, 90, 10, 0.18) 28%, transparent 56%),
           radial-gradient(circle at 70% 30%, rgba(252, 0, 160, 0.12), transparent 50%);
       }
+      #boot .boot-garrafa {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--cap-y) + var(--cap-d) * 0.1);
+        width: calc(var(--cap-d) * 3);
+        height: calc(var(--cap-d) * 7);
+        margin: calc(var(--cap-d) * -0.4) 0 0 calc(var(--cap-d) * -1.5);
+        transform-origin: 50% calc(var(--cap-d) * 0.4);
+        transform: rotate(9deg);
+      }
+      #boot .boot-garrafa svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
+      }
+      #boot .go-palpebra {
+        transform: translateY(-86px);
+        transform-box: fill-box;
+      }
       #boot img {
         position: absolute;
         left: 50%;
-        top: 41%;
-        width: min(56vw, 27dvh, 290px);
+        top: var(--cap-y);
+        width: var(--cap-d);
         transform: translate(-50%, -50%);
         filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.5));
-      }
-      @media (max-height: 739.98px) {
-        #boot::before,
-        #boot img {
-          top: 36%;
-        }
-        #boot img {
-          width: min(46vw, 21.5dvh, 250px);
-        }
       }
     </style>
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -76,7 +96,7 @@
     <link rel="preload" href="/brand/cap-poster.webp" as="image" type="image/webp" />
   </head>
   <body>
-    <div id="boot" aria-hidden="true"><img src="/brand/cap-poster.webp" alt="" /></div>
+    <div id="boot" aria-hidden="true"><div class="boot-garrafa"><!--garrafa-olho--></div><img src="/brand/cap-poster.webp" alt="" /></div>
     <div id="root"></div>
     <noscript><style>#boot{display:none!important}html.boot,html.boot body{overflow:auto}</style>Ative o JavaScript para ver o cardápio do Mamadi.</noscript>
     <script type="module" src="/src/main.tsx"></script>

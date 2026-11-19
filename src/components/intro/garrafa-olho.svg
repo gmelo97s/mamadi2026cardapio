@@ -1,0 +1,66 @@
+<svg class="garrafa-olho" viewBox="-150 -40 300 700" aria-hidden="true">
+  <defs>
+    <linearGradient id="gid-vidro" x1="-124" y1="0" x2="124" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4c210d"/><stop offset=".1" stop-color="#7e3c1b"/><stop offset=".28" stop-color="#a95c2e"/>
+      <stop offset=".4" stop-color="#bb6b37"/><stop offset=".6" stop-color="#9d5329"/><stop offset=".84" stop-color="#743619"/><stop offset="1" stop-color="#431c0b"/>
+    </linearGradient>
+    <linearGradient id="gid-brilho" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffd6b0" stop-opacity="0"/><stop offset=".5" stop-color="#ffd6b0" stop-opacity=".55"/><stop offset="1" stop-color="#ffd6b0" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="gid-branco" cx="6" cy="240" r="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff1cf"/><stop offset=".55" stop-color="#f6dca3"/><stop offset="1" stop-color="#d9b06c"/>
+    </radialGradient>
+    <radialGradient id="gid-iris" cx="0" cy="240" r="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a77446"/><stop offset=".45" stop-color="#7b4c2b"/><stop offset=".82" stop-color="#4d2c18"/><stop offset="1" stop-color="#24140b"/>
+    </radialGradient>
+    <radialGradient id="gid-orbita" cx="0" cy="240" r="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d8894f" stop-opacity=".75"/><stop offset=".6" stop-color="#c0743f" stop-opacity=".35"/><stop offset="1" stop-color="#c0743f" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="gid-olho"><path d="M-86 244 C-58 204 40 192 86 236 C52 278 -40 282 -86 244 Z"/></clipPath>
+    <filter id="gid-spray" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g class="go-garrafa" filter="url(#gid-spray)">
+    <path class="go-corpo" d="M-44 0H44Q47 0 47 3V12Q47 15 42 16V24L54 104C62 120 110 128 118 150L124 660H-124L-118 150C-110 128-62 120-54 104L-42 24V16Q-47 15-47 12V3Q-47 0-44 0Z" fill="url(#gid-vidro)" stroke="#170c08" stroke-width="3"/>
+    <path d="M-42 16H42M-42 24H42" stroke="#3a1a0c" stroke-width="2.4" opacity=".7"/>
+    <path d="M-27 30C-31 56-35 80-38 100" stroke="#ffe2c4" stroke-width="9" stroke-linecap="round" opacity=".42" fill="none"/>
+    <path d="M-30 5h16" stroke="#fff3e4" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+    <rect x="-98" y="178" width="34" height="440" rx="17" fill="url(#gid-brilho)" opacity=".7"/>
+    <g stroke="#2e140a" stroke-width="1.3" opacity=".5" fill="none">
+      <path d="M2 34V100M-16 60H18M-22 88H22M-40 172C-10 166 30 168 60 178M70 308C40 322-30 324-66 312"/>
+    </g>
+    <path class="go-sobrancelha" d="M-114 160C-74 132 70 132 114 160" stroke="#23110a" stroke-width="20" stroke-linecap="round" fill="none"/>
+    <path d="M-100 148C-60 130 60 128 98 146" stroke="#4a2414" stroke-width="5" stroke-linecap="round" fill="none" opacity=".6"/>
+  </g>
+  <g class="go-olho">
+    <ellipse cx="0" cy="242" rx="122" ry="78" fill="url(#gid-orbita)"/>
+    <path class="go-vinco" d="M-80 214C-46 170 48 166 92 210" stroke="#2a150c" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".85"/>
+    <path class="go-branco" d="M-86 244 C-58 204 40 192 86 236 C52 278 -40 282 -86 244 Z" fill="url(#gid-branco)"/>
+    <g clip-path="url(#gid-olho)">
+      <g class="go-mira">
+        <g class="go-iris">
+          <circle cx="0" cy="240" r="34" fill="url(#gid-iris)"/>
+          <path d="M16.0 240.0 L32.0 240.0 M15.4 244.5 L30.7 249.0 M13.5 248.7 L26.9 257.3 M10.5 252.1 L21.0 264.2 M6.6 254.6 L13.3 269.1 M2.3 255.8 L4.6 271.7 M-2.3 255.8 L-4.6 271.7 M-6.6 254.6 L-13.3 269.1 M-10.5 252.1 L-21.0 264.2 M-13.5 248.7 L-26.9 257.3 M-15.4 244.5 L-30.7 249.0 M-16.0 240.0 L-32.0 240.0 M-15.4 235.5 L-30.7 231.0 M-13.5 231.3 L-26.9 222.7 M-10.5 227.9 L-21.0 215.8 M-6.6 225.4 L-13.3 210.9 M-2.3 224.2 L-4.6 208.3 M2.3 224.2 L4.6 208.3 M6.6 225.4 L13.3 210.9 M10.5 227.9 L21.0 215.8 M13.5 231.3 L26.9 222.7 M15.4 235.5 L30.7 231.0" stroke="#2a170c" stroke-width="1.1" opacity=".38"/>
+          <circle cx="0" cy="240" r="34" fill="none" stroke="#1a0e08" stroke-width="2.4"/>
+          <circle class="go-pupila" cx="0" cy="240" r="14" fill="#130a06"/>
+          <ellipse cx="11" cy="228" rx="7.5" ry="5.5" fill="#fff" opacity=".95" transform="rotate(-25 11 228)"/>
+          <ellipse cx="-12" cy="252" rx="3.2" ry="2.2" fill="#fff" opacity=".75"/>
+        </g>
+      </g>
+      <path d="M-86 244 C-58 204 40 192 86 236 L86 210 L-86 210 Z" fill="#b98747" opacity=".35"/>
+      <g class="go-palpebra" transform="translate(0 -86)"><path d="M-120 120H120V234C60 290-60 290-120 244Z" fill="#a85b2d"/></g>
+    </g>
+    <g class="go-borda" stroke="#170d08" fill="none" stroke-linecap="round">
+      <path d="M-86 244 C-58 204 40 192 86 236" stroke-width="4.8"/>
+      <path d="M-73.1 230.9 Q-77.8 224.8 -83.4 219.8 M-65.2 225.5 Q-69.5 218.3 -74.6 212.3 M-56.4 220.9 Q-60.2 212.6 -64.4 205.9 M-46.7 216.9 Q-50.0 207.8 -53.3 200.4 M-36.4 213.6 Q-39.0 203.9 -41.2 196.0 M-25.5 211.0 Q-27.5 200.9 -28.5 192.7 M-14.2 209.2 Q-15.5 198.9 -15.3 190.4 M-2.7 208.3 Q-3.2 197.8 -1.8 189.3 M9.0 208.1 Q9.2 197.8 11.8 189.3 M20.6 208.8 Q21.6 198.8 25.3 190.5 M32.1 210.4 Q33.9 200.8 38.7 193.0 M43.4 213.0 Q45.8 204.0 51.5 196.7 M54.2 216.5 Q58.4 205.3 67.4 196.1 M64.5 221.0 Q69.5 210.9 79.4 202.7 M74.0 226.5 Q79.7 217.9 90.2 210.8" stroke-width="2.4"/>
+    </g>
+    <path d="M-86 244 C-40 282 52 278 86 236" stroke="#f9e2b4" stroke-width="3" fill="none" opacity=".8" transform="translate(0 -3)"/>
+    <path d="M-86 244 C-40 282 52 278 86 236" stroke="#1a0f09" stroke-width="2.6" fill="none"/>
+    <path d="M-35.0 267.0 l0.6 6.3 M-18.2 269.5 l1.4 6.8 M-1.2 270.2 l2.2 7.0 M15.7 269.1 l2.9 6.9 M32.1 266.3 l3.5 6.5 M47.6 261.7 l4.0 5.9 M61.7 255.4 l4.4 5.0 M74.2 247.5 l4.5 3.9" stroke="#1a0f09" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+    <ellipse cx="-81" cy="244" rx="6.5" ry="5" fill="#c86a7c"/>
+    <ellipse cx="-83" cy="242" rx="2" ry="1.4" fill="#fff" opacity=".7"/>
+    <path class="go-faisca" d="M104 182v18M95 191h18" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+  </g>
+</svg>

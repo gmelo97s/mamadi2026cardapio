@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { itemsBySection } from "../../data/menu";
 import type { Section } from "../../data/types";
+import { crewBySection, type Crew } from "../../data/crew";
+import { Dono } from "../muro/Dono";
 import { ItemRow } from "./ItemRow";
 import "./menu.css";
 
@@ -13,9 +15,9 @@ export function Squiggle({ className = "" }: { className?: string }) {
   );
 }
 
-export function SectionHead({ section, aside }: { section: Section; aside?: React.ReactNode }) {
+export function SectionHead({ section, aside, dono }: { section: Section; aside?: React.ReactNode; dono?: Crew }) {
   return (
-    <header className="sec-head">
+    <header className={`sec-head${dono ? " sec-head--dono" : ""}`}>
       <div className="sec-head__titles">
         <h2 className="letreiro sec-head__title" id={`t-${section.id}`}>
           {section.title}
@@ -23,6 +25,7 @@ export function SectionHead({ section, aside }: { section: Section; aside?: Reac
         <p className="hand sec-head__note">{section.note}</p>
         {aside}
       </div>
+      {dono && <Dono crew={dono} />}
     </header>
   );
 }
@@ -30,9 +33,10 @@ export function SectionHead({ section, aside }: { section: Section; aside?: Reac
 export function SectionBlock({ section, highlight }: { section: Section; highlight?: string }) {
   const list = itemsBySection(section.id);
   const blockAt = new Map((section.blocks ?? []).map((b) => [b.from, b.title]));
+  const dono = crewBySection.get(section.id);
   return (
-    <section className="sec wrap" id={`sec-${section.id}`} data-section={section.id} aria-labelledby={`t-${section.id}`}>
-      <SectionHead section={section} />
+    <section className={`sec wrap${dono ? " sec--dono" : ""}`} id={`sec-${section.id}`} data-section={section.id} aria-labelledby={`t-${section.id}`}>
+      <SectionHead section={section} dono={dono} />
       <ul className="rows">
         {list.map((it) => (
           <Fragment key={it.id}>

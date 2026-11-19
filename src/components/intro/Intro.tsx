@@ -7,6 +7,8 @@ import { useTyping } from "../search/useTyping";
 import type { Anchor, CapScene } from "./capScene";
 import { Pour } from "./Pour";
 import { capLayout } from "./layout";
+import garrafaSvg from "./garrafa-olho.svg?raw";
+import { CORES_MURO } from "../../data/crew";
 import "./intro.css";
 
 type Phase = "idle" | "popping" | "pouring" | "covered";
@@ -25,6 +27,33 @@ const FRASES = [
   { t: "Litrão gelado", k: "litrao" },
   { t: "Maior bar LGBT de SP", k: "lgbt" },
   { t: "Viva a democracia!", k: "demo" },
+];
+
+/** a mesma garrafa da tela de carregamento, com ids próprios (as duas ficam na página por um instante) */
+const GARRAFA_SVG = garrafaSvg.replaceAll("gid-", "gir-");
+
+/** garrafinhas do muro em volta da garrafa do olho (como na fachada) */
+const HERO_GARRAFAS = [
+  { x: 8, y: 14, s: 30, r: -24, c: 1 },
+  { x: 84, y: 9, s: 26, r: 18, c: 0 },
+  { x: 4, y: 52, s: 34, r: 16, c: 2 },
+  { x: 88, y: 46, s: 36, r: -14, c: 1 },
+  { x: 78, y: 70, s: 28, r: 30, c: 3 },
+  { x: 14, y: 80, s: 24, r: -40, c: 4 },
+];
+
+/** as bolhas brancas que saem do gargalo quando a tampinha estoura (as do muro) */
+const BOLHAS = [
+  { x: -0.067, y: -1.000, s: 0.307, d: 0, r: "48% 52% 45% 55%" },
+  { x: 0.227, y: -1.533, s: 0.387, d: 0.06, r: "55% 45% 52% 48%" },
+  { x: -0.307, y: -1.733, s: 0.253, d: 0.1, r: "42% 58% 50% 50%" },
+  { x: 0.067, y: -2.200, s: 0.467, d: 0.12, r: "50% 50% 40% 60%" },
+  { x: 0.413, y: -0.800, s: 0.187, d: 0.04, r: "50%" },
+  { x: -0.427, y: -0.733, s: 0.160, d: 0.08, r: "50%" },
+  { x: -0.133, y: -2.667, s: 0.293, d: 0.16, r: "58% 42% 55% 45%" },
+  { x: 0.360, y: -2.400, s: 0.240, d: 0.18, r: "46% 54% 50% 50%" },
+  { x: -0.467, y: -2.267, s: 0.200, d: 0.2, r: "50%" },
+  { x: 0.160, y: -0.533, s: 0.133, d: 0.02, r: "50%" },
 ];
 
 function Frase({ f, out }: { f: (typeof FRASES)[number]; out?: boolean }) {
@@ -71,10 +100,14 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
   const typing = useTyping(EXAMPLES, phase === "idle");
   // a abertura já está na tela: tira a tela de carregamento do HTML (mesmo desenho, sem piscar)
   useEffect(() => {
-    const raf = requestAnimationFrame(() => document.documentElement.classList.remove("boot"));
+    const raf = requestAnimationFrame(() => {
+      document.documentElement.classList.remove("boot");
+      document.getElementById("boot")?.remove();
+    });
     return () => cancelAnimationFrame(raf);
   }, []);
   const zoneRef = useRef<HTMLDivElement>(null);
+  const garrafaRef = useRef<HTMLDivElement>(null);
   const [fr, setFr] = useState<{ i: number; prev: number | null }>({ i: 0, prev: null });
   useEffect(() => {
     if (reduced) return;
@@ -164,12 +197,26 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
     return () => window.clearTimeout(t);
   }, []);
 
+  // o olho da garrafa acompanha o dedo/mouse
+  const lookAt = useCallback((x: number, y: number) => {
+    const box = garrafaRef.current;
+    const iris = box?.querySelector(".go-iris");
+    if (!box || !iris) return;
+    const r = iris.getBoundingClientRect();
+    const dx = Math.max(-1, Math.min(1, (x - (r.left + r.width / 2)) / 220));
+    const dy = Math.max(-1, Math.min(1, (y - (r.top + r.height / 2)) / 260));
+    box.style.setProperty("--lx", dx.toFixed(3));
+    box.style.setProperty("--ly", dy.toFixed(3));
+    box.classList.add("is-olhando");
+  }, []);
+
   // inclinação: dedo/mouse e giroscópio
   useEffect(() => {
     if (!use3D) return;
     const onMove = (e: PointerEvent) => {
       if (dragRef.current) return;
       sceneRef.current?.setTilt((e.clientX / window.innerWidth) * 2 - 1, (e.clientY / window.innerHeight) * 2 - 1);
+      lookAt(e.clientX, e.clientY);
     };
     const onOrient = (e: DeviceOrientationEvent) => {
       if (e.gamma == null || e.beta == null) return;
@@ -181,7 +228,7 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("deviceorientation", onOrient);
     };
-  }, [use3D]);
+  }, [use3D, lookAt]);
 
   const open = useCallback(() => {
     if (phaseRef.current !== "idle") return;
@@ -237,6 +284,7 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
     dragRef.current = { y: e.clientY, t: performance.now(), id: e.pointerId, dy: 0 };
     ticks.current = 0;
     tagRef.current?.classList.add("is-pulling");
+    garrafaRef.current?.classList.add("is-puxando");
     setHint(false);
   };
   const onPointerMove = (e: React.PointerEvent) => {
@@ -252,6 +300,7 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
       ticks.current = step;
       haptic(7);
     }
+    garrafaRef.current?.style.setProperty("--puxa", Math.min(1, p).toFixed(3));
     if (p >= 1) {
       dragRef.current = null;
       tagRef.current?.classList.remove("is-pulling");
@@ -263,6 +312,8 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
     if (!d || d.id !== e.pointerId) return;
     dragRef.current = null;
     tagRef.current?.classList.remove("is-pulling");
+    garrafaRef.current?.classList.remove("is-puxando");
+    garrafaRef.current?.style.setProperty("--puxa", "0");
     // toque simples (mesmo que demore, enquanto o 3D carrega) ou puxada passando da metade abrem
     if (d.dy > PULL * 0.45 || Math.abs(d.dy) < 12) open();
     else {
@@ -286,9 +337,25 @@ export default function Intro({ onOpened, onSearch }: { onOpened: () => void; on
           <div className="intro__bg" data-f={FRASES[fr.i].k} aria-hidden="true">
             <div className="intro__glow" />
             <div className="intro__pride" />
+            {HERO_GARRAFAS.map((g, i) => (
+              <i
+                key={i}
+                className="garrafa intro__garrafinha"
+                style={{ left: `${g.x}%`, top: `${g.y}%`, width: `${g.s}px`, "--r": `${g.r}deg`, "--c": CORES_MURO[g.c], "--t": `${7 + i}s`, "--d": `${-i * 1.3}s` } as CSSProperties}
+              />
+            ))}
             <div className="intro__bubbles">
               {Array.from({ length: 16 }, (_, i) => (
                 <span key={i} style={{ "--i": i } as CSSProperties} />
+              ))}
+            </div>
+          </div>
+
+          <div className="intro__garrafa" ref={garrafaRef} aria-hidden="true">
+            <div className="intro__svg" dangerouslySetInnerHTML={{ __html: GARRAFA_SVG }} />
+            <div className="intro__bolhas">
+              {BOLHAS.map((b, i) => (
+                <i key={i} style={{ "--x": b.x, "--y": b.y, "--s": b.s, "--d": `${b.d}s`, "--r": b.r } as CSSProperties} />
               ))}
             </div>
           </div>

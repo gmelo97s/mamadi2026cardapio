@@ -1,0 +1,845 @@
+/* ─────────────────────────────────────────────────────────────
+   O muro: fundo pintado, garrafinhas a spray e a turma da fachada
+   ───────────────────────────────────────────────────────────── */
+
+/* reboco escuro com as emendas das placas do muro de verdade */
+:root[data-theme="dark"] .app {
+  background-color: var(--wall);
+  background-image:
+    var(--reboco),
+    repeating-linear-gradient(90deg, transparent 0 calc(var(--placa) - 1px), rgba(255, 255, 255, 0.035) calc(var(--placa) - 1px) var(--placa)),
+    repeating-linear-gradient(180deg, transparent 0 calc(var(--placa) * 1.6 - 1px), rgba(0, 0, 0, 0.35) calc(var(--placa) * 1.6 - 1px) calc(var(--placa) * 1.6));
+  background-size:
+    320px 320px,
+    auto,
+    auto;
+}
+
+.muro {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+.muro__layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 200%;
+  will-change: transform;
+}
+.muro__layer--far {
+  opacity: var(--garrafa-o-far, 0.34);
+}
+.muro__layer--near {
+  opacity: var(--garrafa-o-near, 0.5);
+}
+:root:not([data-theme="dark"]) .muro__layer--far {
+  --garrafa-o-far: 0.2;
+}
+:root:not([data-theme="dark"]) .muro__layer--near {
+  --garrafa-o-near: 0.26;
+}
+
+/* garrafinha pintada a spray: uma máscara só, colorida pelo CSS */
+.garrafa {
+  position: absolute;
+  display: block;
+  aspect-ratio: 112 / 272;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--c) 100%, #fff 12%), var(--c) 45%, color-mix(in srgb, var(--c) 78%, #000));
+  -webkit-mask: url("/muro/garrafa.webp") center / 100% 100% no-repeat;
+  mask: url("/muro/garrafa.webp") center / 100% 100% no-repeat;
+  rotate: var(--r, 0deg);
+  animation: garrafa-boia var(--t, 8s) var(--d, 0s) ease-in-out infinite alternate;
+}
+@keyframes garrafa-boia {
+  from {
+    translate: 0 -7px;
+  }
+  to {
+    translate: 4px 9px;
+  }
+}
+
+/* ── O dono da categoria ───────────────────────────────────── */
+.dono {
+  --h: 178px;
+  --wmax: 205px;
+  position: relative;
+  display: block;
+  height: min(var(--h), calc(var(--wmax) * var(--hw, 1)));
+  aspect-ratio: var(--ar);
+  max-width: var(--wmax);
+}
+.dono__spray {
+  position: absolute;
+  inset: 6% -10% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--cor) 60%, transparent), color-mix(in srgb, var(--cor) 18%, transparent) 55%, transparent 76%);
+  scale: 0.2;
+  opacity: 0;
+  transition:
+    scale 0.9s var(--ease-out),
+    opacity 0.9s ease;
+  pointer-events: none;
+}
+.dono.is-in .dono__spray {
+  scale: 1;
+  opacity: 0.5;
+}
+:root:not([data-theme="dark"]) .dono.is-in .dono__spray {
+  opacity: 0.32;
+}
+.dono__fig {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border-radius: 18px;
+  translate: 0 34%;
+  scale: 0.88;
+  opacity: 0;
+  transition:
+    translate 0.75s var(--ease-spring),
+    scale 0.75s var(--ease-spring),
+    opacity 0.35s ease;
+  -webkit-touch-callout: none;
+}
+.dono.is-in .dono__fig {
+  translate: 0 0;
+  scale: 1;
+  opacity: 1;
+}
+.dono__fig:focus-visible {
+  outline: 3px solid var(--cor);
+  outline-offset: 4px;
+}
+.dono__hop {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.dono__hop.is-jump {
+  animation: dono-pulo 0.6s var(--ease-out);
+  transform-origin: 50% 100%;
+}
+.dono__body {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  container-type: size;
+  transform-origin: 50% 100%;
+}
+.dono.is-in.is-live .dono__body {
+  animation: dono-respira var(--beat) ease-in-out infinite;
+}
+.dono__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.45));
+  user-select: none;
+  -webkit-user-drag: none;
+}
+@keyframes dono-respira {
+  0%,
+  100% {
+    transform: scale(1, 1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.012, 1.024) rotate(-0.7deg);
+  }
+}
+/* a DJ balança a cabeça no ritmo */
+.dono--dj.is-in.is-live .dono__body {
+  animation-name: dono-batida;
+  animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+}
+@keyframes dono-batida {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-4px) rotate(-1.2deg);
+  }
+  60% {
+    transform: translateY(1px) rotate(0.6deg);
+  }
+}
+@keyframes dono-pulo {
+  0% {
+    transform: scale(1.07, 0.9);
+  }
+  35% {
+    transform: translateY(-16px) scale(0.95, 1.06) rotate(-2deg);
+  }
+  70% {
+    transform: translateY(0) scale(1.05, 0.95);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* plaquinha com o nome, como nos jogos de rua do PS2 */
+.dono__plate {
+  position: absolute;
+  z-index: 3;
+  right: 10%;
+  bottom: 16%;
+  display: grid;
+  gap: 2px;
+  padding: 5px 12px 6px 10px;
+  color: #fff;
+  background: #0b0c10;
+  border-left: 4px solid var(--cor);
+  box-shadow:
+    0 0 0 1.5px rgba(255, 255, 255, 0.14),
+    4px 4px 0 0 color-mix(in srgb, var(--cor) 70%, #000);
+  transform: skewX(-12deg);
+  opacity: 0;
+  translate: -34px 0;
+  transition:
+    opacity 0.3s 0.28s,
+    translate 0.55s 0.28s var(--ease-out);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.dono.is-in .dono__plate {
+  opacity: 1;
+  translate: 0 0;
+}
+.dono__plate b {
+  font-family: var(--font-ui);
+  font-size: 17px;
+  font-weight: 900;
+  font-stretch: 75%;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow:
+    1.5px 0 rgba(255, 0, 110, 0.75),
+    -1.5px 0 rgba(0, 220, 255, 0.75);
+}
+.dono__plate small {
+  font-size: 9.5px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cor);
+  filter: brightness(1.25);
+}
+
+/* ── Efeitos ───────────────────────────────────────────────── */
+.fx-espuma,
+.fx-som,
+.fx-faisca,
+.fx-brilho {
+  position: absolute;
+  pointer-events: none;
+}
+.fx-espuma {
+  width: 0;
+  height: 0;
+}
+.fx-espuma i {
+  position: absolute;
+  left: var(--dx);
+  top: 0;
+  width: 8px;
+  height: 8px;
+  margin: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  animation: fx-bolha 2.8s calc(var(--i) * -0.4s) linear infinite;
+}
+@keyframes fx-bolha {
+  0% {
+    translate: 0 0;
+    scale: 0.3;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    translate: calc(var(--dx) * 1.6) -74px;
+    scale: 1.25;
+    opacity: 0;
+  }
+}
+.fx-som {
+  width: 0;
+  height: 0;
+}
+.fx-som i {
+  position: absolute;
+  left: -34px;
+  top: -34px;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 2.5px solid var(--cor);
+  opacity: 0;
+  animation: fx-onda 1.9s ease-out infinite;
+}
+.fx-som i:nth-child(2) {
+  animation-delay: 0.63s;
+}
+.fx-som i:nth-child(3) {
+  animation-delay: 1.26s;
+}
+@keyframes fx-onda {
+  from {
+    scale: 0.35;
+    opacity: 0.9;
+  }
+  to {
+    scale: 2.3;
+    opacity: 0;
+  }
+}
+.fx-nota {
+  position: absolute;
+  left: -40px;
+  top: -30px;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  color: #fff;
+  text-shadow:
+    0 0 8px var(--cor),
+    0 0 2px var(--cor);
+  opacity: 0;
+  animation: fx-nota 2.6s ease-out infinite;
+}
+.fx-nota--2 {
+  left: 30px;
+  animation-delay: 1.3s;
+}
+@keyframes fx-nota {
+  0% {
+    translate: 0 10px;
+    rotate: -10deg;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    translate: 12px -70px;
+    rotate: 14deg;
+    opacity: 0;
+  }
+}
+.fx-gole {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fx-gole i {
+  position: absolute;
+  left: calc(var(--x1) * 1%);
+  top: calc(var(--y1) * 1%);
+  width: 7px;
+  height: 7px;
+  margin: -3.5px;
+  border-radius: 50%;
+  background: rgba(220, 255, 230, 0.85);
+  box-shadow: 0 0 6px rgba(160, 255, 200, 0.8);
+  opacity: 0;
+  animation: fx-glug 1.7s calc(var(--i) * -0.28s) cubic-bezier(0.5, 0, 0.6, 1) infinite;
+}
+@keyframes fx-glug {
+  0% {
+    translate: 0 0;
+    opacity: 0;
+    scale: 0.5;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 0.9;
+  }
+  100% {
+    translate: calc((var(--x2) - var(--x1)) * 1cqw) calc((var(--y2) - var(--y1)) * 1cqh);
+    opacity: 0;
+    scale: 1;
+  }
+}
+.fx-brilho {
+  height: 9%;
+  overflow: hidden;
+  border-radius: 40%;
+  translate: -50% 0;
+  mix-blend-mode: screen;
+}
+.fx-brilho i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 28%, rgba(255, 255, 255, 0.95) 50%, transparent 72%);
+  translate: -120% 0;
+  animation: fx-reflexo 4.2s ease-in-out infinite;
+}
+@keyframes fx-reflexo {
+  0%,
+  58% {
+    translate: -120% 0;
+  }
+  86%,
+  100% {
+    translate: 120% 0;
+  }
+}
+.fx-faisca {
+  font-size: 20px;
+  line-height: 1;
+  color: #fff;
+  text-shadow:
+    0 0 10px var(--cor),
+    0 0 3px #fff;
+  translate: -50% -50%;
+  scale: 0;
+  animation: fx-pisca 2.8s ease-in-out infinite;
+}
+@keyframes fx-pisca {
+  0%,
+  68%,
+  100% {
+    scale: 0;
+    rotate: 0deg;
+    opacity: 0;
+  }
+  80% {
+    scale: 1.25;
+    rotate: 50deg;
+    opacity: 1;
+  }
+  90% {
+    scale: 0.7;
+    opacity: 0.8;
+  }
+}
+
+/* ── A fala (toque no personagem) ──────────────────────────── */
+.fala {
+  position: absolute;
+  z-index: 8;
+  right: 62%;
+  bottom: 46%;
+  width: min(262px, 74vw);
+  padding: 11px 13px 12px;
+  color: #1a120c;
+  background: #fff7ea;
+  border-radius: 16px 16px 4px 16px;
+  box-shadow:
+    0 0 0 2.5px #120d0a,
+    5px 5px 0 0 var(--cor);
+  transform-origin: 100% 100%;
+  animation: fala-in 0.34s var(--ease-spring);
+  text-align: left;
+}
+@keyframes fala-in {
+  from {
+    scale: 0.6;
+    opacity: 0;
+    translate: 20px 10px;
+  }
+}
+.fala__who {
+  margin: 0 0 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.fala__who b {
+  font-size: 15px;
+  font-weight: 900;
+  font-stretch: 75%;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.fala__who small {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7c6553;
+}
+.fala__txt {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: 16.5px;
+  line-height: 1.22;
+}
+.stats {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 9px;
+}
+.stat {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.stat__k {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.stat__bar {
+  display: flex;
+  gap: 2px;
+  transform: skewX(-14deg);
+}
+.stat__bar i {
+  flex: 1;
+  height: 9px;
+  background: rgba(26, 18, 12, 0.12);
+}
+.stat__bar i.is-on {
+  background: var(--cor);
+  animation: stat-liga 0.4s calc(var(--n, 0) * 1s) both;
+}
+.stat__bar i:nth-child(1) {
+  --n: 0.05;
+}
+.stat__bar i:nth-child(2) {
+  --n: 0.08;
+}
+.stat__bar i:nth-child(3) {
+  --n: 0.11;
+}
+.stat__bar i:nth-child(4) {
+  --n: 0.14;
+}
+.stat__bar i:nth-child(5) {
+  --n: 0.17;
+}
+.stat__bar i:nth-child(6) {
+  --n: 0.2;
+}
+.stat__bar i:nth-child(7) {
+  --n: 0.23;
+}
+.stat__bar i:nth-child(8) {
+  --n: 0.26;
+}
+.stat__bar i:nth-child(9) {
+  --n: 0.29;
+}
+.stat__bar i:nth-child(10) {
+  --n: 0.32;
+}
+@keyframes stat-liga {
+  from {
+    opacity: 0;
+    scale: 1 0.2;
+  }
+}
+.fala__pick {
+  display: grid;
+  gap: 1px;
+  width: 100%;
+  padding: 8px 10px 9px;
+  text-align: left;
+  color: #fff4e3;
+  background: #120d0a;
+  border-radius: 10px;
+}
+.fala__pick span {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cor);
+  filter: brightness(1.3);
+}
+.fala__pick strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+.fala__pick:active {
+  scale: 0.97;
+}
+
+/* ── Burgão (vetor) ────────────────────────────────────────── */
+.burgao {
+  overflow: visible;
+}
+.burgao__l {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.dono.is-in .burgao__l {
+  animation: burgao-cai 0.62s var(--ease-spring) both;
+}
+.dono.is-in .burgao__l--3 {
+  animation-delay: 0.1s;
+}
+.dono.is-in .burgao__l--2 {
+  animation-delay: 0.2s;
+}
+.dono.is-in .burgao__l--1 {
+  animation-delay: 0.3s;
+}
+@keyframes burgao-cai {
+  from {
+    transform: translateY(-90px);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+}
+.dono--burgao.is-in.is-live .dono__body {
+  animation-name: burgao-amassa;
+}
+@keyframes burgao-amassa {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  45% {
+    transform: scale(1.04, 0.95);
+  }
+  70% {
+    transform: scale(0.98, 1.03);
+  }
+}
+
+/* ── Cabeçalho de seção com dono ───────────────────────────── */
+.sec-head--dono {
+  position: relative;
+  min-height: 150px;
+  margin-bottom: 0;
+  padding-right: 34%;
+}
+.sec-head--dono .sec-head__titles {
+  position: relative;
+  z-index: 2;
+}
+:root[data-theme="dark"] .sec-head--dono .sec-head__title {
+  text-shadow:
+    0 2px 0 #0b0c10,
+    0 0 18px rgba(11, 12, 16, 0.9);
+}
+.sec-head--dono > .dono {
+  position: absolute;
+  right: -6px;
+  bottom: -26px;
+  z-index: 1;
+}
+/* o painel dos itens fica na frente do personagem, como um balcão */
+.sec--dono > .rows {
+  position: relative;
+  z-index: 2;
+  margin-top: 0;
+  padding: 2px 14px;
+  border-radius: 20px;
+  background: var(--painel);
+  box-shadow:
+    0 0 0 1px var(--painel-borda),
+    0 22px 40px -26px rgba(0, 0, 0, 0.9);
+}
+.sec--dono {
+  position: relative;
+}
+.sec--dono:has(.fala) {
+  z-index: 5;
+}
+@media (min-width: 900px) {
+  .dono {
+    --h: 236px;
+    --wmax: 300px;
+  }
+  .sec-head--dono {
+    min-height: 196px;
+    padding-right: 320px;
+  }
+  .sec-head--dono > .dono {
+    right: 10px;
+    bottom: -30px;
+  }
+  .sec--dono > .rows {
+    padding: 6px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .garrafa,
+  .dono__body,
+  .dono__hop,
+  .fx-espuma i,
+  .fx-som i,
+  .fx-nota,
+  .fx-gole i,
+  .fx-brilho i,
+  .fx-faisca,
+  .burgao__l {
+    animation: none !important;
+  }
+  .dono__fig {
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+/* a DJ embaixo do globo, nas Divas */
+.divas__head:has(.divas__dono) {
+  max-width: none;
+  display: flow-root;
+}
+.divas__head:has(.divas__dono) .divas__intro {
+  max-width: 560px;
+}
+.divas__dono {
+  float: right;
+  margin: 58px -8px 4px 8px;
+  --h: 170px;
+}
+@media (min-width: 900px) {
+  .divas__dono {
+    margin: 64px 40px 0 24px;
+  }
+}
+
+/* ── A turma do muro (rodapé) ──────────────────────────────── */
+.turma {
+  padding: 34px 0 30px;
+  overflow: hidden;
+}
+.turma__title {
+  margin: 0;
+  font-size: clamp(30px, 8.6vw, 40px);
+  line-height: 1;
+}
+.turma__note {
+  margin: 6px 0 0;
+  font-size: 17px;
+  color: var(--ink-2);
+}
+.turma__list {
+  list-style: none;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  margin: 14px 0 0;
+  padding: 26px 16px 18px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding: 0 16px;
+  scrollbar-width: none;
+}
+.turma__list::-webkit-scrollbar {
+  display: none;
+}
+.turma__list li {
+  flex: none;
+  scroll-snap-align: start;
+}
+.turma__card {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding: 0 4px;
+}
+.turma__fig {
+  display: block;
+  height: 132px;
+  aspect-ratio: var(--ar);
+  max-width: 170px;
+  transform-origin: 50% 100%;
+  transition: transform 0.35s var(--ease-spring);
+  animation: turma-ola 3.2s calc(var(--i) * 0.22s) ease-in-out infinite;
+}
+.turma__fig img,
+.turma__fig svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.4));
+}
+.turma__card:hover .turma__fig,
+.turma__card:focus-visible .turma__fig {
+  transform: translateY(-8px) rotate(-3deg);
+}
+.turma__card:active .turma__fig {
+  transform: scale(0.94);
+}
+@keyframes turma-ola {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -4px;
+  }
+}
+.turma__plate {
+  display: grid;
+  justify-items: center;
+  margin-top: -14px;
+  padding: 4px 10px 5px;
+  color: #fff;
+  background: #0b0c10;
+  border-bottom: 3px solid var(--cor);
+  transform: skewX(-12deg);
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+}
+.turma__plate b {
+  font-size: 14px;
+  font-weight: 900;
+  font-stretch: 75%;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.turma__plate small {
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cor);
+  filter: brightness(1.3);
+}
+.turma__credito {
+  margin: 4px auto 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ink-3);
+}
+.turma__credito a {
+  color: var(--orange-ink);
+  font-weight: 700;
+}
+@media (min-width: 900px) {
+  .turma__list {
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+  .turma__fig {
+    height: 160px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .turma__fig {
+    animation: none;
+  }
+}

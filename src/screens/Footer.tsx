@@ -1,10 +1,12 @@
 import { casa } from "../data/casa";
 import { IcInsta, IcMoto, IcPin, IcSeta } from "../components/chrome/icons";
+import { Turma } from "../components/muro/Turma";
 import "./screens.css";
 
 export function Footer() {
   return (
     <footer className="casa" id="casa" aria-label="Informações da casa">
+      <Turma />
       <div className="checker checker--thin" />
       <div className="casa__inner wrap">
         <img className="casa__logo" src="/brand/logo-256.webp" alt="Logo do Bar Mamadi" width="140" height="140" loading="lazy" />

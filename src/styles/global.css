@@ -22,6 +22,12 @@
   --grain-o: 0.09;
   --solid: #22150c;
   --solid-text: #fff4e3;
+  /* o muro (no claro vira parede caiada) */
+  --wall: var(--paper);
+  --placa: 240px;
+  --painel: rgba(255, 251, 243, 0.94);
+  --painel-borda: rgba(34, 21, 12, 0.1);
+  --reboco: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23r)'/%3E%3C/svg%3E");
 
   --orange: #fa5a0a;
   --orange-2: #ff7a1a;
@@ -78,9 +84,9 @@
 
 /* Noite (padrão): preto e laranja, como o logo */
 :root[data-theme="dark"] {
-  --paper: #0e0a08;
-  --paper-2: #1c1411;
-  --paper-3: #2b1f19;
+  --paper: #111318;
+  --paper-2: #1b1d24;
+  --paper-3: #272a33;
   --ink: #fff4e3;
   --ink-2: rgba(255, 244, 227, 0.78);
   --ink-3: rgba(255, 244, 227, 0.56);
@@ -88,14 +94,18 @@
   --line-2: rgba(255, 244, 227, 0.2);
   --orange-ink: #ff8a3d;
   --orange-soft: #3a1d0c;
-  --surface: #17100d;
+  --surface: #171920;
   --outline: rgba(255, 122, 26, 0.38);
   --outline-s: #000;
   --letter-shadow: #000;
-  --bar-bg: #0e0a08;
+  --bar-bg: #0f1015;
   --grain-o: 0.05;
   --solid: #fa5a0a;
   --solid-text: #0e0a08;
+  /* o muro da fachada: preto azulado, como a tinta de verdade */
+  --wall: #111318;
+  --painel: rgba(17, 18, 23, 0.93);
+  --painel-borda: rgba(255, 244, 227, 0.08);
   color-scheme: dark;
 }
 

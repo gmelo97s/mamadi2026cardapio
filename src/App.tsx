@@ -7,6 +7,7 @@ import { useFizz, useFlyover } from "./components/fx/useFx";
 import { ItemSheet } from "./components/sheet/ItemSheet";
 import { Promos } from "./components/home/Cartazes";
 import { Cardapio } from "./screens/Cardapio";
+import { Muro } from "./components/muro/Muro";
 import { Footer } from "./screens/Footer";
 import Intro from "./components/intro/Intro";
 import { hashFor, parseHash } from "./lib/route";
@@ -111,7 +112,7 @@ export default function App() {
     setTheme((t) => {
       const next = t === "dark" ? "light" : "dark";
       document.documentElement.dataset.theme = next;
-      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "dark" ? "#0e0a08" : "#fcf6ea");
+      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "dark" ? "#111318" : "#fcf6ea");
       try {
         localStorage.setItem(THEME_KEY, next);
       } catch {
@@ -135,6 +136,7 @@ export default function App() {
     <UIContext.Provider value={ui}>
       <div className="stage">
         <div className="app" id="topo" aria-hidden={introOpen ? true : undefined}>
+          <Muro />
           <AppBar />
           <main className="page">
             <Promos />

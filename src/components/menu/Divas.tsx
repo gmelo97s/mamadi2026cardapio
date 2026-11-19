@@ -5,6 +5,8 @@ import { haptic, originOf, useUI } from "../../lib/ui";
 import { Globo } from "../art/Decor";
 import { Glitter } from "../fx/Fx";
 import { Price } from "./bits";
+import { crewBySection } from "../../data/crew";
+import { Dono } from "../muro/Dono";
 import "./divas.css";
 
 /** Capa de single: cores da fruta, vinil saindo da capa. */
@@ -28,6 +30,7 @@ export function DivasSection() {
   const ui = useUI();
   const section = sectionById.get("divas")!;
   const list = itemsBySection("divas");
+  const dj = crewBySection.get("divas");
   return (
     <section className="divas" id="sec-divas" data-section="divas" aria-labelledby="t-divas">
       <div className="checker checker--pink checker--thin" />
@@ -40,6 +43,7 @@ export function DivasSection() {
           <span className="divas__beam divas__beam--2" />
         </div>
         <header className="divas__head">
+          {dj && <Dono crew={dj} className="divas__dono" />}
           <p className="divas__kicker">Cardápio</p>
           <h2 className="divas__title" id="t-divas">
             <span className="divas__neon">Divas</span>
