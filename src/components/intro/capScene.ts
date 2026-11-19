@@ -209,7 +209,7 @@ export function createCapScene(opts: CapSceneOptions): CapScene {
   opener.add(swing);
   const lever = new THREE.Group();
   swing.add(lever);
-  const steel = new THREE.MeshStandardMaterial({ color: 0xdcdde3, metalness: 1, roughness: 0.26, envMapIntensity: 0.55 });
+  const steel = new THREE.MeshStandardMaterial({ color: 0xbfc1c8, metalness: 1, roughness: 0.4, envMapIntensity: 0.36 });
   const openerGeo = new THREE.ExtrudeGeometry(openerShape(), { depth: 0.05, bevelEnabled: true, bevelThickness: 0.016, bevelSize: 0.016, bevelSegments: 3, curveSegments: 40 });
   openerGeo.translate(0, 0, -0.025);
   const openerMesh = new THREE.Mesh(openerGeo, steel);
@@ -321,14 +321,16 @@ export function createCapScene(opts: CapSceneOptions): CapScene {
       // parado: flutua de leve e segue o dedo/inclinação
       // a tampinha está encaixada na garrafa: mexe pouco
       root.position.y = Math.sin(t * 1.5) * 0.02;
-      root.rotation.x = -ty * 0.18 + Math.sin(t * 0.9) * 0.025;
+      // inclinar para trás faz o metal refletir o teto claro: limita esse lado
+      root.rotation.x = -clamp(ty, -1, 0.25) * 0.18 + Math.sin(t * 0.9) * 0.02;
       root.rotation.y = tx * 0.24 + Math.sin(t * 0.7) * 0.04;
       root.rotation.z = Math.sin(t * 0.6) * 0.025;
       swing.rotation.z = Math.sin(t * 1.7 + 0.6) * 0.05 * Math.max(0, 1 - pullShown * 2);
       // puxar: o abridor desce e gira como alavanca, a borda da tampinha levanta
       opener.position.y = openerY - pullShown * 0.42;
-      lever.rotation.x = -pullShown * 0.12;
-      cap.rotation.x = -pullShown * 0.08;
+      // girar para o outro lado alinhava o metal com o reflexo da luz principal (ficava branco)
+      lever.rotation.x = pullShown * 0.06;
+      cap.rotation.x = -pullShown * 0.05;
       cap.rotation.y = -pullShown * 0.06;
       cap.rotation.z = Math.sin(t * 0.6) * 0.025 + pullShown * 0.05;
       cap.position.z = pullShown * 0.1;
