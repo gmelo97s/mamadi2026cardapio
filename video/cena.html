@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Mamadi — apresentação do cardápio</title>
+<style>
+@font-face { font-family: "Archivo"; src: url(/proj/node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2) format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+@font-face { font-family: "Shrikhand"; src: url(/proj/node_modules/@fontsource/shrikhand/files/shrikhand-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Kalam"; src: url(/proj/node_modules/@fontsource/kalam/files/kalam-latin-400-normal.woff2) format("woff2"); }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #111318; }
+* { box-sizing: border-box; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Archivo", sans-serif; color: #fff4e3; }
+/* o muro */
+#bg { position: absolute; inset: 0; background-color: #111318;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23r)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(90deg, transparent 0 359px, rgba(255,255,255,.035) 359px 360px),
+    repeating-linear-gradient(180deg, transparent 0 575px, rgba(0,0,0,.35) 575px 576px);
+}
+#glow { position: absolute; left: 540px; top: 1000px; width: 1700px; height: 1700px; margin: -850px 0 0 -850px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(250,104,18,.34) 0, rgba(250,90,10,.1) 30%, transparent 58%), radial-gradient(circle at 70% 28%, rgba(252,0,160,.14), transparent 48%); }
+.gf { position: absolute; display: block; aspect-ratio: 112/272; -webkit-mask: url(/proj/public/muro/garrafa.webp) center/100% 100% no-repeat; mask: url(/proj/public/muro/garrafa.webp) center/100% 100% no-repeat; }
+/* celular */
+#phone { position: absolute; left: 168px; top: 262px; width: 744px; height: 1559px; border-radius: 74px; background: #050507;
+  box-shadow: 0 0 0 3px #2a2c33, 0 0 0 6px #0a0b0e, 0 60px 120px -30px rgba(0,0,0,.95), 0 0 160px rgba(250,90,10,.18); }
+#screen { position: absolute; left: 22px; top: 22px; width: 700px; height: 1515px; border-radius: 52px; overflow: hidden; background: #111318; }
+#screen img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#phoneGlare { position: absolute; inset: 22px; border-radius: 52px; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,.07), transparent 30%); }
+/* legenda: plaquinha de jogo de rua */
+.cap { position: absolute; left: 70px; top: 64px; display: grid; gap: 6px; padding: 18px 34px 20px 26px; background: #0b0c10; border-left: 12px solid var(--cor);
+  transform: skewX(-12deg); box-shadow: 0 0 0 3px rgba(255,255,255,.14), 12px 12px 0 0 var(--cor2); max-width: 940px; will-change: transform, opacity; }
+.cap__k { font-size: 26px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--cor); }
+.cap__t { font-size: 62px; font-weight: 900; font-stretch: 75%; line-height: .95; text-transform: uppercase; letter-spacing: .02em;
+  text-shadow: 3px 0 rgba(255,0,110,.75), -3px 0 rgba(0,220,255,.75); }
+/* adesivos da turma pulando para fora do celular */
+.ad { position: absolute; transform-origin: 50% 100%; filter: drop-shadow(0 18px 24px rgba(0,0,0,.55)); will-change: transform; }
+.ad img { display: block; height: 100%; width: auto; }
+.ad__plate { position: absolute; left: 50%; bottom: -10px; translate: -50% 0; padding: 6px 16px 8px; background: #0b0c10; border-bottom: 6px solid var(--cor); transform: skewX(-12deg); white-space: nowrap;
+  font-size: 30px; font-weight: 900; font-stretch: 75%; letter-spacing: .06em; text-transform: uppercase; box-shadow: 0 0 0 2px rgba(255,255,255,.14); }
+/* cartelas */
+.card { position: absolute; inset: 0; display: block; }
+.card__bg { position: absolute; inset: 0; background: inherit; }
+#title, #end { background: #111318; }
+.logo { position: absolute; left: 540px; width: 520px; height: 520px; margin-left: -260px; filter: drop-shadow(0 40px 50px rgba(0,0,0,.6)); }
+.big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Shrikhand", serif; color: #fa5a0a; text-shadow: 0 8px 0 #000, 0 0 40px rgba(250,90,10,.35); }
+.plate { position: absolute; left: 50%; padding: 14px 40px 18px; background: #0b0c10; border-left: 14px solid #fa5a0a; transform: translateX(-50%) skewX(-12deg);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.14), 14px 14px 0 0 #7a2604; font-size: 96px; font-weight: 900; font-stretch: 75%; text-transform: uppercase; line-height: 1;
+  text-shadow: 4px 0 rgba(255,0,110,.75), -4px 0 rgba(0,220,255,.75); white-space: nowrap; }
+.hand { position: absolute; left: 0; right: 0; text-align: center; font-family: "Kalam", cursive; font-size: 54px; color: #fff4e3; }
+.info { position: absolute; left: 0; right: 0; text-align: center; font-size: 40px; font-weight: 700; color: rgba(255,244,227,.86); }
+.info b { color: #fa5a0a; font-weight: 900; }
+.crew { position: absolute; left: 0; right: 0; top: 1170px; height: 300px; display: flex; justify-content: center; align-items: flex-end; }
+.crew .m { position: relative; height: 255px; margin: 0 -30px; transform-origin: 50% 100%; filter: drop-shadow(0 14px 18px rgba(0,0,0,.5)); }
+.crew .m img { height: 100%; width: auto; display: block; }
+.flash { position: absolute; inset: 0; background: #fff4e3; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"></div>
+  <div id="glow"></div>
+  <div id="bottles"></div>
+  <div id="phone"><div id="screen"><img id="sa" alt=""><img id="sb" alt=""></div><div id="phoneGlare"></div></div>
+  <div id="caps"></div>
+  <div id="ads"></div>
+  <div id="title" class="card"></div>
+  <div id="end" class="card"></div>
+  <div id="flash" class="flash"></div>
+</div>
+<script src="cena.js"></script>
+</body>
+</html>

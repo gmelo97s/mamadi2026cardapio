@@ -217,6 +217,12 @@ export default function Sinuca({ onClose }: { onClose: () => void }) {
     [commit, setStage],
   );
 
+  // só no desenvolvimento: atalho para gravar o vídeo de apresentação (sorteio sem esperar as bolas)
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    (window as unknown as { __sinucaDemo?: (t: Team) => void }).__sinucaDemo = (t) => startDraw(t);
+  }, [startDraw]);
+
   // fim de uma tacada: as bolas pararam
   useEffect(() => {
     onStop.current = () => {

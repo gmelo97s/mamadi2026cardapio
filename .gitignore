@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# vídeo: gravações, quadros e saídas (só os scripts ficam no repositório)
+video/*/
+video/*.wav
+video/*.mp4
+video/roteiro.json
+video/x264*
