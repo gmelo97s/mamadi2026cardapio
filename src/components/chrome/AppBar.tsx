@@ -41,6 +41,7 @@ export function AppBar() {
         <nav className="appbar__links" aria-label="Atalhos">
           <button onClick={() => ui.goTo("topo")}>Promoções</button>
           <button onClick={() => ui.goTo("cardapio")}>Cardápio</button>
+          <button onClick={(e) => ui.openGame(originOf(e.currentTarget))}>Sinuca</button>
           <a href={casa.ifoodUrl} target="_blank" rel="noreferrer">
             iFood
           </a>

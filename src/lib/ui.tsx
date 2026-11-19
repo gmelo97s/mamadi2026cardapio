@@ -18,6 +18,8 @@ export interface UI {
   closeItem: () => void;
   openSearch: (opts?: { query?: string; voice?: boolean; origin?: Origin }) => void;
   closeSearch: () => void;
+  /** sinuca valendo drink */
+  openGame: (origin?: Origin) => void;
   openIntro: () => void;
   fizz: (origin: Origin, opts?: { count?: number; tone?: "beer" | "pink" | "lime" }) => void;
   theme: Theme;
@@ -39,7 +41,7 @@ export function originOf(el: Element | null | undefined): Origin | undefined {
 }
 
 /** Vibração curtinha (Android); no iPhone não faz nada. */
-export function haptic(ms = 8) {
+export function haptic(ms: number | number[] = 8) {
   try {
     if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate(ms);
   } catch {

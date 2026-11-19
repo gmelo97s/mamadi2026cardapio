@@ -3,7 +3,7 @@ import { itemById, sectionById } from "../data/menu";
 
 /*
  * Rotas no hash, para link direto e para o "voltar" do celular fechar a ficha/busca:
- *   #/cardapio/porcoes  #/item/coxinha  #/busca
+ *   #/cardapio/porcoes  #/item/coxinha  #/busca  #/sinuca
  * (#/beber e #/comer, dos links antigos, também levam ao cardápio)
  */
 export interface Route {
@@ -11,6 +11,8 @@ export interface Route {
   menu?: boolean;
   item?: string;
   search?: boolean;
+  /** sinuca valendo drink */
+  game?: boolean;
 }
 
 export function parseHash(hash = location.hash): Route {
@@ -19,6 +21,7 @@ export function parseHash(hash = location.hash): Route {
   const [a, b] = parts;
   if (a === "item" && b && itemById.has(b)) return { item: b, section: itemById.get(b)!.section };
   if (a === "busca") return { search: true };
+  if (a === "sinuca" || a === "jogo") return { game: true };
   if (a === "cardapio" || a === "beber" || a === "comer") {
     const sec = b && sectionById.has(b as SectionId) ? (b as SectionId) : undefined;
     return { menu: true, section: sec };
@@ -29,6 +32,7 @@ export function parseHash(hash = location.hash): Route {
 export function hashFor(r: Route) {
   if (r.item) return `#/item/${r.item}`;
   if (r.search) return "#/busca";
+  if (r.game) return "#/sinuca";
   if (r.section) return `#/cardapio/${r.section}`;
   if (r.menu) return "#/cardapio";
   return location.pathname + location.search;

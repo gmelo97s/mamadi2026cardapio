@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { EXAMPLES, search, SUGGESTIONS, type SearchOutput } from "../../lib/search";
 import { useVoice, voiceSupported } from "../../lib/voice";
-import { haptic, type Origin } from "../../lib/ui";
+import { haptic, useUI, type Origin } from "../../lib/ui";
 import { IcLupa, IcMic, IcX } from "../chrome/icons";
 import { ItemRow } from "../menu/ItemRow";
 import { useTyping } from "./useTyping";
@@ -41,6 +41,8 @@ export default function SearchOverlay({ initialQuery = "", startVoice = false, o
   const [offer, setOffer] = useState<"hidden" | "show" | "dismissed">("hidden");
   const typingTimer = useRef(0);
   const canVoice = voiceSupported();
+  const ui = useUI();
+  const querGame = /\b(sinuca|bilhar|snooker|jogo|jogar|taco|bola 8)\b/i.test(query.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
   const typing = useTyping(EXAMPLES, !query);
 
   const voice = useVoice((text, final) => {
@@ -233,6 +235,12 @@ export default function SearchOverlay({ initialQuery = "", startVoice = false, o
 
           {!listening && out && (
             <div className="search__results">
+              {querGame && (
+                <button className="s-game" onClick={() => ui.openGame()}>
+                  <span className="s-game__k">Sinuca valendo drink</span>
+                  <strong>Quem perde paga · Bora jogar →</strong>
+                </button>
+              )}
               {out.chips.length > 0 && (
                 <div className="intent" aria-label="O que eu entendi">
                   <span className="intent__label hand">entendi:</span>
@@ -272,7 +280,7 @@ export default function SearchOverlay({ initialQuery = "", startVoice = false, o
 
               {out.relaxed && out.results.length > 0 && <p className="search__notice">Não achei exatamente isso. Olha o que chega mais perto:</p>}
 
-              {out.results.length === 0 && out.allergy ? null : out.results.length > 0 ? (
+              {(out.results.length === 0 && out.allergy) || (out.results.length === 0 && querGame) ? null : out.results.length > 0 ? (
                 <ul className="rows search__list">
                   {out.results.map((r, i) => (
                     <li key={r.item.id} className="search__res" style={{ "--i": i } as CSSProperties}>

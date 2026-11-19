@@ -464,3 +464,29 @@
   color: var(--ink-2);
   box-shadow: inset 0 0 0 1.5px var(--line-2);
 }
+
+/* atalho da sinuca na busca */
+.s-game {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  margin: 4px 0 12px;
+  padding: 12px 16px;
+  text-align: left;
+  color: #fff4e3;
+  border-radius: 16px;
+  background: linear-gradient(160deg, #0f7480, #083f47);
+  box-shadow:
+    0 0 0 2px #000,
+    4px 4px 0 0 var(--orange);
+}
+.s-game__k {
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #e2cd3b;
+}
+.s-game strong {
+  font-size: 16px;
+}

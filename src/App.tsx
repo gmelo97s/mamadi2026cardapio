@@ -6,6 +6,7 @@ import { FizzLayer, FlyLayer } from "./components/fx/Fx";
 import { useFizz, useFlyover } from "./components/fx/useFx";
 import { ItemSheet } from "./components/sheet/ItemSheet";
 import { Promos } from "./components/home/Cartazes";
+import { SinucaCard } from "./components/home/SinucaCard";
 import { Cardapio } from "./screens/Cardapio";
 import { Muro } from "./components/muro/Muro";
 import { Footer } from "./screens/Footer";
@@ -14,6 +15,7 @@ import { hashFor, parseHash } from "./lib/route";
 import { spotId, UIContext, type Origin, type Theme, type UI } from "./lib/ui";
 
 const SearchOverlay = lazy(() => import("./components/search/SearchOverlay"));
+const Sinuca = lazy(() => import("./components/sinuca/Sinuca"));
 
 const THEME_KEY = "mamadi:tema";
 function initialTheme(): Theme {
@@ -27,7 +29,8 @@ function scrollToSpot(id: string, smooth: boolean) {
 
 export default function App() {
   const initial = useMemo(() => parseHash(), []);
-  const [introOpen, setIntroOpen] = useState(!initial.menu && !initial.item && !initial.search);
+  const [introOpen, setIntroOpen] = useState(!initial.menu && !initial.item && !initial.search && !initial.game);
+  const [game, setGame] = useState<{ open: boolean; n: number }>({ open: !!initial.game, n: 0 });
   const [itemId, setItemId] = useState<string | null>(initial.item ?? null);
   const [search, setSearch] = useState<{ open: boolean; query?: string; voice?: boolean; origin?: Origin; n: number }>({ open: !!initial.search, n: 0 });
   const [theme, setTheme] = useState<Theme>(initialTheme);
@@ -37,6 +40,13 @@ export default function App() {
   useEffect(() => {
     itemRef.current = itemId;
   }, [itemId]);
+
+  // sem a abertura (link direto), a tela de carregamento sai na hora
+  useEffect(() => {
+    if (introOpen) return;
+    document.documentElement.classList.remove("boot");
+    document.getElementById("boot")?.remove();
+  }, [introOpen]);
 
   // link direto para uma categoria
   useEffect(() => {
@@ -50,6 +60,8 @@ export default function App() {
       const r = parseHash();
       setItemId(r.item ?? null);
       setSearch((s) => (r.search ? (s.open ? s : { open: true, n: s.n + 1 }) : s.open ? { ...s, open: false } : s));
+      // a ficha aberta de dentro da sinuca volta para a sinuca
+      setGame((g) => (r.game ? (g.open ? g : { open: true, n: g.n + 1 }) : g.open && !r.item ? { ...g, open: false } : g));
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
@@ -108,6 +120,23 @@ export default function App() {
 
   const openIntro = useCallback(() => setIntroOpen(true), []);
 
+  const openGame = useCallback<UI["openGame"]>(
+    (origin) => {
+      if (origin) fizz(origin, { count: 10, tone: "lime" });
+      setIntroOpen(false);
+      setGame((g) => (g.open ? g : { open: true, n: g.n + 1 }));
+      if (!history.state?.game) history.pushState({ game: true }, "", hashFor({ game: true }));
+    },
+    [fizz],
+  );
+  const closeGame = useCallback(() => {
+    if (history.state?.game) history.back();
+    else {
+      setGame((g) => ({ ...g, open: false }));
+      history.replaceState(null, "", hashFor({}));
+    }
+  }, []);
+
   const toggleTheme = useCallback(() => {
     setTheme((t) => {
       const next = t === "dark" ? "light" : "dark";
@@ -123,8 +152,8 @@ export default function App() {
   }, []);
 
   const ui = useMemo<UI>(
-    () => ({ introOpen, goTo, openItem, closeItem, openSearch, closeSearch, openIntro, fizz, theme, toggleTheme }),
-    [introOpen, goTo, openItem, closeItem, openSearch, closeSearch, openIntro, fizz, theme, toggleTheme],
+    () => ({ introOpen, goTo, openItem, closeItem, openSearch, closeSearch, openGame, openIntro, fizz, theme, toggleTheme }),
+    [introOpen, goTo, openItem, closeItem, openSearch, closeSearch, openGame, openIntro, fizz, theme, toggleTheme],
   );
 
   // trava a página por baixo da abertura
@@ -140,6 +169,7 @@ export default function App() {
           <AppBar />
           <main className="page">
             <Promos />
+            <SinucaCard />
             <Cardapio />
             <Footer />
           </main>
@@ -150,6 +180,7 @@ export default function App() {
 
         <Suspense fallback={null}>
           {search.open && <SearchOverlay key={search.n} initialQuery={search.query} startVoice={search.voice} origin={search.origin} onClose={closeSearch} />}
+          {game.open && <Sinuca key={`g${game.n}`} onClose={closeGame} />}
         </Suspense>
 
         {introOpen && (
