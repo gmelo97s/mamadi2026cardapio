@@ -32,7 +32,7 @@ No ar: https://mamadi2026cardapio.vercel.app
 
 ## Sinuca valendo drink
 
-Veio da sinuca do Outs Pub (mesma física, mira e regras), com a cara do Mamadi: pano verde-petróleo com o logo da casa, madeira preta, taco laranja e luzes laranja e rosa.
+Jogo no celular (o Mamadi não tem mesa de sinuca): a turma joga passando o aparelho de mão em mão. Veio da sinuca do Outs Pub (mesma física, mira e regras), com a cara do Mamadi na mesa virtual: pano verde-petróleo com o logo da casa, madeira preta, taco laranja e luzes laranja e rosa.
 
 - 1 × 1 ou 2 × 2 no mesmo celular; cada lado escolhe um personagem do muro (tela de VS ao começar).
 - Encaçapou, joga de novo; bola 8 vale 2; branca na caçapa é falta e as bolas da tacada vão para o outro lado.

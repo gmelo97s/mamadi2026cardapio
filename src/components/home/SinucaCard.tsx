@@ -35,11 +35,11 @@ export function SinucaCard() {
           <b className="desafio__vs">VS</b>
         </span>
         <span className="desafio__txt">
-          <span className="desafio__kicker">Novo no cardápio</span>
+          <span className="desafio__kicker">Jogo no celular</span>
           <strong className="desafio__t" id="desafio-t">
             Sinuca valendo drink
           </strong>
-          <span className="desafio__d">Quem perde paga: a cada 2 bolas, a roleta sorteia um drink do cardápio.</span>
+          <span className="desafio__d">Sinuca no celular: a cada 2 bolas, a roleta sorteia um drink do cardápio e quem perdeu paga.</span>
           <span className="desafio__cta">
             Bora jogar <IcSeta />
           </span>

@@ -541,7 +541,7 @@ export default function Sinuca({ onClose }: { onClose: () => void }) {
         <div className="sn__panel sn__panel--solo">
           <p className="kicker">Sinuca valendo drink</p>
           <h2 className="display sn__h">Quem perdeu paga</h2>
-          <p className="sn__lede">Este aparelho não abriu a mesa em 3D. Joga na mesa da casa e sorteia aqui o que o perdedor paga.</p>
+          <p className="sn__lede">Este aparelho não abriu a mesa em 3D. Decidam no par ou ímpar e a roleta sorteia aqui o drink que quem perdeu paga.</p>
           <div className="sn__seg" role="radiogroup" aria-label="Valendo">
             {CAPS.map((c) => (
               <button key={c.label} role="radio" aria-checked={form.cap === c.cap} className={`sn__opt mono${form.cap === c.cap ? " is-on" : ""}`} onClick={() => setForm((f) => ({ ...f, cap: c.cap }))}>
@@ -565,7 +565,7 @@ export default function Sinuca({ onClose }: { onClose: () => void }) {
         <div className="sn__panel">
           <p className="kicker">Sinuca do Mamadi · valendo drink</p>
           <h2 className="display sn__h">Quem perde paga</h2>
-          <p className="sn__lede">A cada 2 bolas de um lado, a roleta sorteia uma bebida do cardápio e o outro lado paga.</p>
+          <p className="sn__lede">Sinuca no celular, passando de mão em mão na mesa. A cada 2 bolas de um lado, a roleta sorteia uma bebida do cardápio e o outro lado paga.</p>
 
           <p className="sn__label mono">Escolha quem joga por você</p>
           <div className="sn__picks">
