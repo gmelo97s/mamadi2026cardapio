@@ -610,7 +610,7 @@
     4px 4px 0 0 color-mix(in srgb, var(--cor) 70%, #000);
   transform: skewX(-12deg);
   opacity: 0;
-  translate: -34px 0;
+  translate: 34px 0;
   transition:
     opacity 0.3s var(--chegou),
     translate 0.55s var(--chegou) var(--ease-spring);
@@ -620,7 +620,7 @@
 .dono--esq .dono__plate {
   right: auto;
   left: 4%;
-  translate: 34px 0;
+  translate: -34px 0;
 }
 .dono.is-in .dono__plate {
   opacity: 1;
