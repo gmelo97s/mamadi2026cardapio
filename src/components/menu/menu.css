@@ -454,3 +454,66 @@
 button.tag:active {
   transform: scale(0.94);
 }
+
+/* ── Entrada em cena ao rolar (só com JS; ver useRevela) ───── */
+.sec-head.is-armed .sec-head__title {
+  transition:
+    opacity 0.32s ease,
+    transform 0.62s var(--ease-spring);
+}
+.sec-head.is-armed:not(.is-in) .sec-head__title {
+  opacity: 0;
+  transform: translateX(-28px) skewX(-12deg);
+}
+.sec-head--esq.is-armed:not(.is-in) .sec-head__title {
+  transform: translateX(28px) skewX(12deg);
+}
+.sec-head.is-armed .sec-head__note,
+.sec-head.is-armed .kitchen {
+  transition:
+    opacity 0.4s 0.18s ease,
+    translate 0.5s 0.18s var(--ease-out);
+}
+.sec-head.is-armed:not(.is-in) .sec-head__note,
+.sec-head.is-armed:not(.is-in) .kitchen {
+  opacity: 0;
+  translate: 0 10px;
+}
+/* os itens sobem um atrás do outro quando o painel aparece */
+.rows.is-armed > li {
+  transition:
+    opacity 0.42s ease,
+    translate 0.6s var(--ease-out);
+  transition-delay: 0.36s;
+}
+.rows.is-armed:not(.is-in) > li {
+  opacity: 0;
+  translate: 0 18px;
+}
+.rows.is-armed > li:nth-child(1) {
+  transition-delay: 0s;
+}
+.rows.is-armed > li:nth-child(2) {
+  transition-delay: 0.04s;
+}
+.rows.is-armed > li:nth-child(3) {
+  transition-delay: 0.08s;
+}
+.rows.is-armed > li:nth-child(4) {
+  transition-delay: 0.12s;
+}
+.rows.is-armed > li:nth-child(5) {
+  transition-delay: 0.16s;
+}
+.rows.is-armed > li:nth-child(6) {
+  transition-delay: 0.2s;
+}
+.rows.is-armed > li:nth-child(7) {
+  transition-delay: 0.24s;
+}
+.rows.is-armed > li:nth-child(8) {
+  transition-delay: 0.28s;
+}
+.rows.is-armed > li:nth-child(9) {
+  transition-delay: 0.32s;
+}

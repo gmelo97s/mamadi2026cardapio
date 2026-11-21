@@ -3,7 +3,8 @@
  * recortados e recriados. Cada um "manda" numa categoria do cardápio.
  * As posições dos efeitos (fx) são em % da imagem do adesivo.
  */
-import type { SectionId } from "./types";
+import { sections } from "./menu";
+import type { Section, SectionId } from "./types";
 
 export type CrewFx =
   | { k: "espuma"; x: number; y: number } // bolhas subindo da espuma
@@ -34,11 +35,14 @@ export interface Crew {
   fx?: CrewFx[];
   /** ritmo do balanço (s) */
   beat?: number;
+  /** "esqueleto" do boneco (em % da imagem): pescoço e cintura, onde a cabeça e o tronco dobram */
+  rig?: { neck: number; waist: number; nx?: number };
 }
 
 export const CREW: Crew[] = [
   {
     id: "breja",
+    rig: { neck: 50, waist: 78, nx: 42 },
     nome: "Breja",
     manda: "manda no litrão",
     section: "cervejas",
@@ -58,6 +62,7 @@ export const CREW: Crew[] = [
   },
   {
     id: "skatista",
+    rig: { neck: 31, waist: 63, nx: 52 },
     nome: "Skate",
     manda: "manda no copão",
     section: "copao",
@@ -77,6 +82,7 @@ export const CREW: Crew[] = [
   },
   {
     id: "rainha",
+    rig: { neck: 27, waist: 60, nx: 50 },
     nome: "Rainha",
     manda: "manda nas caipis",
     section: "drinks",
@@ -96,6 +102,7 @@ export const CREW: Crew[] = [
   },
   {
     id: "dj",
+    rig: { neck: 44, waist: 70, nx: 48 },
     nome: "DJ Fita",
     manda: "manda nas Divas",
     section: "divas",
@@ -115,6 +122,7 @@ export const CREW: Crew[] = [
   },
   {
     id: "oculos",
+    rig: { neck: 37, waist: 66, nx: 30 },
     nome: "Pista",
     manda: "manda nas doses",
     section: "doses",
@@ -134,6 +142,7 @@ export const CREW: Crew[] = [
   },
   {
     id: "gole",
+    rig: { neck: 70, waist: 92, nx: 78 },
     nome: "Gole",
     manda: "manda nos prontos",
     section: "prontos",
@@ -153,6 +162,7 @@ export const CREW: Crew[] = [
   },
   {
     id: "agachado",
+    rig: { neck: 50, waist: 80, nx: 58 },
     nome: "Na Moral",
     manda: "manda nas porções",
     section: "porcoes",
@@ -172,6 +182,7 @@ export const CREW: Crew[] = [
   },
   {
     id: "brinde",
+    rig: { neck: 40, waist: 76, nx: 50 },
     nome: "Saúde",
     manda: "manda nas tábuas",
     section: "tabuas",
@@ -213,6 +224,38 @@ export const CREW: Crew[] = [
 
 export const crewBySection = new Map<SectionId, Crew>(CREW.map((c) => [c.section, c]));
 export const crewById = new Map(CREW.map((c) => [c.id, c]));
+
+/**
+ * A "vez" de cada seção, na ordem do cardápio: quem manda nela, quem mandava na anterior
+ * (e passa a vez com um toca aqui), de que lado o dono chega e qual é a próxima parada.
+ * Os lados se alternam (direita, esquerda...) para a rolagem ter ritmo; as Divas ficam à direita,
+ * embaixo do globo.
+ */
+export interface Vez {
+  dono?: Crew;
+  prev?: Crew;
+  /** 1: o dono fica à direita e chega pela direita; -1: pela esquerda */
+  lado: 1 | -1;
+  next?: Section;
+  nextDono?: Crew;
+}
+/** cor da luz do muro em cada seção (as seções sem dono usam a cor da arte) */
+const LUZ_SEM_DONO: Partial<Record<SectionId, string>> = { "sem-alcool": "#8cc63f", pratos: "#fa5a0a" };
+
+export const vezes = new Map<SectionId, Vez>();
+{
+  let prev: Crew | undefined;
+  let n = 0;
+  sections.forEach((s, i) => {
+    const dono = crewBySection.get(s.id);
+    const next = sections[i + 1];
+    const lado: 1 | -1 = s.id === "divas" || !dono ? 1 : n++ % 2 === 0 ? 1 : -1;
+    vezes.set(s.id, { dono, prev: dono ? prev : undefined, lado, next, nextDono: next ? crewBySection.get(next.id) : undefined });
+    if (dono) prev = dono;
+  });
+}
+
+export const luzDa = (id: SectionId) => crewBySection.get(id)?.cor ?? LUZ_SEM_DONO[id] ?? "#fa5a0a";
 
 /** cores das garrafinhas pintadas no muro de verdade */
 export const CORES_MURO = ["#43d1dc", "#1ec8a6", "#e7b4c6", "#2b64c9", "#e2cd3b", "#b8708f", "#f3dde2"];

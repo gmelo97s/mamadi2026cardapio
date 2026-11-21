@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { casa } from "../../data/casa";
-import { IcCardapio, IcInsta, IcLupa, IcMic, IcMoto, IcTampinha } from "./icons";
+import { IcBola8, IcCardapio, IcInsta, IcLupa, IcMic, IcMoto, IcTampinha } from "./icons";
 import { haptic, originOf, useUI } from "../../lib/ui";
 import "./chrome.css";
 
-/** Menu inferior (celular): Início, Cardápio, Pesquisa, iFood e Instagram. */
+/** Menu inferior (celular): Início, Cardápio, Sinuca, Pesquisa, iFood e Instagram. */
 export function BottomNav() {
   const ui = useUI();
   const [inMenu, setInMenu] = useState(false);
@@ -51,6 +51,19 @@ export function BottomNav() {
             <IcCardapio />
           </span>
           <span className="nav__label">Cardápio</span>
+        </button>
+        <button
+          className="nav__tab nav__tab--sinuca"
+          aria-label="Sinuca valendo drink (jogo no celular)"
+          onClick={(e) => {
+            haptic(8);
+            ui.openGame(originOf(e.currentTarget));
+          }}
+        >
+          <span className="nav__icon">
+            <IcBola8 />
+          </span>
+          <span className="nav__label">Sinuca</span>
         </button>
         <button
           className="nav__search"

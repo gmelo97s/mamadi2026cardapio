@@ -167,7 +167,8 @@
   max-width: calc(var(--app-w) - 20px);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* a Pesquisa fica no meio; iFood e Instagram mantêm a largura de antes */
+  grid-template-columns: 1fr 1fr 1fr 1.2fr 1.5fr 1.5fr;
   align-items: end;
   height: var(--nav-h);
   padding: 0 4px 6px;
@@ -221,6 +222,29 @@
   font-weight: 600;
   letter-spacing: 0.01em;
   font-stretch: 92%;
+  white-space: nowrap;
+}
+/* as três abas da esquerda são mais estreitas */
+.nav__tab:nth-child(-n + 3) .nav__label {
+  font-size: 11px;
+  font-stretch: 84%;
+  letter-spacing: 0;
+}
+.nav__tab:nth-child(-n + 3) .nav__icon {
+  width: 40px;
+}
+@media (max-width: 350px) {
+  .nav__tab:nth-child(-n + 3) .nav__label {
+    font-size: 10px;
+  }
+  .nav__tab:nth-child(-n + 3) .nav__icon {
+    width: 36px;
+  }
+}
+/* a bola 8 gira um pouco no toque */
+.nav__tab--sinuca:active .nav__icon svg {
+  rotate: -40deg;
+  transition: rotate 0.2s var(--ease-out);
 }
 .nav__tab.is-active {
   color: var(--cream);

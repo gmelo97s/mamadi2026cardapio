@@ -5,6 +5,7 @@ import { haptic, originOf, useUI } from "../../lib/ui";
 import { Art } from "../art/Art";
 import { Price, Tags } from "./bits";
 import { SectionHead } from "./SectionBlock";
+import { Proxima } from "../muro/Proxima";
 import "./menu.css";
 
 function when(it: Item) {
@@ -62,6 +63,7 @@ export function PratosSection() {
         })}
       </ul>
       <p className="pratos__foot hand">Feitas pela Mamadi, de quarta a domingo, das 12h às 19h.</p>
+      <Proxima from="pratos" />
     </section>
   );
 }

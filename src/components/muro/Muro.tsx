@@ -91,6 +91,7 @@ export function Muro() {
   }, []);
   return (
     <div className="muro" ref={box} aria-hidden="true">
+      <div className="muro__luz" />
       <div className="muro__layer muro__layer--far" ref={far}>
         <Garrafas list={FAR} />
       </div>

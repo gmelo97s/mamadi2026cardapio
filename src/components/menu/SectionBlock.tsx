@@ -1,8 +1,10 @@
-import { Fragment } from "react";
+import { Fragment, useRef, type CSSProperties } from "react";
 import { itemsBySection } from "../../data/menu";
 import type { Section } from "../../data/types";
-import { crewBySection, type Crew } from "../../data/crew";
+import { vezes } from "../../data/crew";
+import { useRevela } from "../../lib/revela";
 import { Dono } from "../muro/Dono";
+import { Proxima } from "../muro/Proxima";
 import { ItemRow } from "./ItemRow";
 import "./menu.css";
 
@@ -15,9 +17,19 @@ export function Squiggle({ className = "" }: { className?: string }) {
   );
 }
 
-export function SectionHead({ section, aside, dono }: { section: Section; aside?: React.ReactNode; dono?: Crew }) {
+/**
+ * Cabeçalho da seção. Com dono, vira um palco: o dono da seção anterior passa a vez
+ * e o novo chega andando, do lado dele (que alterna de uma seção para outra).
+ */
+export function SectionHead({ section, aside }: { section: Section; aside?: React.ReactNode }) {
+  const ref = useRef<HTMLElement>(null);
+  useRevela(ref, 0.2);
+  const vez = vezes.get(section.id);
+  const dono = vez?.dono;
+  const lado = vez?.lado ?? 1;
+  const style = dono ? ({ "--hw": dono.h / dono.w, "--cor": dono.cor } as CSSProperties) : undefined;
   return (
-    <header className={`sec-head${dono ? " sec-head--dono" : ""}`}>
+    <header ref={ref} className={`sec-head${dono ? " sec-head--dono" : ""}${dono && lado < 0 ? " sec-head--esq" : ""}`} style={style}>
       <div className="sec-head__titles">
         <h2 className="letreiro sec-head__title" id={`t-${section.id}`}>
           {section.title}
@@ -25,7 +37,7 @@ export function SectionHead({ section, aside, dono }: { section: Section; aside?
         <p className="hand sec-head__note">{section.note}</p>
         {aside}
       </div>
-      {dono && <Dono crew={dono} />}
+      {dono && <Dono crew={dono} prev={vez?.prev} lado={lado} />}
     </header>
   );
 }
@@ -33,11 +45,13 @@ export function SectionHead({ section, aside, dono }: { section: Section; aside?
 export function SectionBlock({ section, highlight }: { section: Section; highlight?: string }) {
   const list = itemsBySection(section.id);
   const blockAt = new Map((section.blocks ?? []).map((b) => [b.from, b.title]));
-  const dono = crewBySection.get(section.id);
+  const dono = vezes.get(section.id)?.dono;
+  const rows = useRef<HTMLUListElement>(null);
+  useRevela(rows, 0.02);
   return (
     <section className={`sec wrap${dono ? " sec--dono" : ""}`} id={`sec-${section.id}`} data-section={section.id} aria-labelledby={`t-${section.id}`}>
-      <SectionHead section={section} dono={dono} />
-      <ul className="rows">
+      <SectionHead section={section} />
+      <ul className="rows" ref={rows}>
         {list.map((it) => (
           <Fragment key={it.id}>
             {blockAt.has(it.id) && (
@@ -49,6 +63,7 @@ export function SectionBlock({ section, highlight }: { section: Section; highlig
           </Fragment>
         ))}
       </ul>
+      <Proxima from={section.id} />
     </section>
   );
 }

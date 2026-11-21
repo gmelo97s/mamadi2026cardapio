@@ -6,7 +6,6 @@ import { FizzLayer, FlyLayer } from "./components/fx/Fx";
 import { useFizz, useFlyover } from "./components/fx/useFx";
 import { ItemSheet } from "./components/sheet/ItemSheet";
 import { Promos } from "./components/home/Cartazes";
-import { SinucaCard } from "./components/home/SinucaCard";
 import { Cardapio } from "./screens/Cardapio";
 import { Muro } from "./components/muro/Muro";
 import { Footer } from "./screens/Footer";
@@ -169,7 +168,6 @@ export default function App() {
           <AppBar />
           <main className="page">
             <Promos />
-            <SinucaCard />
             <Cardapio />
             <Footer />
           </main>

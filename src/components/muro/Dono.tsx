@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Crew, CrewFx } from "../../data/crew";
 import { itemById } from "../../data/menu";
-import { haptic, originOf, useUI } from "../../lib/ui";
-import { Burgao } from "./Burgao";
+import { haptic, originOf, prefersReducedMotion, useUI } from "../../lib/ui";
+import { Boneco } from "./Boneco";
 import "./muro.css";
 
 /** Efeitos que deixam o personagem "vivo": espuma, som, gole, brilho. */
@@ -29,18 +29,7 @@ function Fx({ fx }: { fx: CrewFx }) {
     return (
       <span className="fx-gole">
         {Array.from({ length: 6 }, (_, i) => (
-          <i
-            key={i}
-            style={
-              {
-                "--x1": fx.x1,
-                "--y1": fx.y1,
-                "--x2": fx.x2,
-                "--y2": fx.y2,
-                "--i": i,
-              } as CSSProperties
-            }
-          />
+          <i key={i} style={{ "--x1": fx.x1, "--y1": fx.y1, "--x2": fx.x2, "--y2": fx.y2, "--i": i } as CSSProperties} />
         ))}
       </span>
     );
@@ -76,28 +65,32 @@ export function Stats({ stats }: { stats: [string, number][] }) {
 }
 
 /**
- * O "dono" da categoria: o adesivo do personagem atrás do título, que entra como
- * num jogo de rua dos anos 2000, respira, balança e, ao toque, dá a dica da casa.
+ * O "dono" da categoria, como um boneco animado que chega andando quando a seção aparece.
+ * O dono da seção anterior entra junto e sai andando para o outro lado: os dois batem a mão
+ * no meio do caminho e quem chegou agradece. Depois ele respira, balança a cabeça e, ao toque,
+ * dá a dica da casa.
  */
-export function Dono({ crew, className = "" }: { crew: Crew; className?: string }) {
+export function Dono({ crew, prev, lado = 1, className = "" }: { crew: Crew; prev?: Crew; lado?: 1 | -1; className?: string }) {
   const ui = useUI();
   const ref = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
   const [live, setLive] = useState(false);
   const [talk, setTalk] = useState(false);
   const [jump, setJump] = useState(0);
+  // quem passou a vez sai de cena de vez quando termina de andar
+  const [saiu, setSaiu] = useState(false);
   const pick = itemById.get(crew.pick);
 
-  // entra quando aparece; anima só enquanto está na tela (poupa bateria)
+  // chega quando a seção aparece; anima só enquanto está na tela (poupa bateria)
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(
       ([e]) => {
         setLive(e.isIntersecting);
-        if (e.isIntersecting && e.intersectionRatio > 0.3) setSeen(true);
+        if (e.isIntersecting && e.intersectionRatio > 0.25) setSeen(true);
       },
-      { threshold: [0, 0.3, 0.6], rootMargin: "0px 0px -8% 0px" },
+      { threshold: [0, 0.25, 0.5], rootMargin: "0px 0px -6% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -117,20 +110,47 @@ export function Dono({ crew, className = "" }: { crew: Crew; className?: string 
     };
   }, [talk]);
 
+  const quiet = prefersReducedMotion();
   const style = {
     "--cor": crew.cor,
     "--beat": `${crew.beat ?? 3}s`,
     "--ar": `${crew.w} / ${crew.h}`,
     "--hw": crew.h / crew.w,
+    "--lado": lado,
   } as CSSProperties;
 
   return (
     <div
       ref={ref}
-      className={`dono dono--${crew.id}${seen ? " is-in" : ""}${live ? " is-live" : ""}${talk ? " is-talking" : ""} ${className}`}
+      className={`dono dono--${crew.id}${lado < 0 ? " dono--esq" : ""}${prev && !quiet ? " dono--vez" : ""}${seen ? " is-in" : ""}${live ? " is-live" : ""}${talk ? " is-talking" : ""}${quiet ? " is-quieto" : ""} ${className}`}
       style={style}
     >
       <span className="dono__spray" aria-hidden="true" />
+      {prev && !quiet && !saiu && (
+        <span
+          className="dono__convidado"
+          style={{ "--ar": `${prev.w} / ${prev.h}`, "--hw": prev.h / prev.w, "--beat": `${prev.beat ?? 3}s` } as CSSProperties}
+          aria-hidden="true"
+          onAnimationEnd={(e) => {
+            if (e.animationName === "convidado-sai") setSaiu(true);
+          }}
+        >
+          <span className="dono__passo">
+            <Boneco crew={prev} />
+          </span>
+        </span>
+      )}
+      {prev && !quiet && !saiu && (
+        <span className="dono__toque" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+          <b>PÁ!</b>
+        </span>
+      )}
       <button
         className="dono__fig"
         aria-label={`${crew.nome}, ${crew.manda}. Tocar para ver a dica.`}
@@ -141,14 +161,14 @@ export function Dono({ crew, className = "" }: { crew: Crew; className?: string 
           setTalk((v) => !v);
         }}
       >
-        <span key={jump} className={`dono__hop${jump ? " is-jump" : ""}`}>
-          <span className="dono__body">
-            {crew.id === "burgao" ? (
-              <Burgao className="dono__img" />
-            ) : (
-              <img className="dono__img" src={crew.img} width={crew.w} height={crew.h} alt="" loading="lazy" decoding="async" draggable={false} />
-            )}
-            {live && crew.fx?.map((f, i) => <Fx key={i} fx={f} />)}
+        <span className="dono__anda">
+          <span className="dono__passo">
+            <span key={jump} className={`dono__hop${jump ? " is-jump" : ""}`}>
+              <span className="dono__body">
+                <Boneco crew={crew} className="dono__img" />
+                {live && crew.fx?.map((f, i) => <Fx key={i} fx={f} />)}
+              </span>
+            </span>
           </span>
         </span>
       </button>
@@ -156,6 +176,11 @@ export function Dono({ crew, className = "" }: { crew: Crew; className?: string 
         <b>{crew.nome}</b>
         <small>{crew.manda}</small>
       </span>
+      {seen && !quiet && (
+        <span className="dono__oi" aria-hidden="true">
+          {prev ? `Valeu, ${prev.nome}! Agora é comigo.` : "Bora começar? A primeira é comigo."}
+        </span>
+      )}
       {talk && (
         <div className="fala" role="status">
           <p className="fala__who">

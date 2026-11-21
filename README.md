@@ -12,20 +12,24 @@ No ar: https://mamadi2026cardapio.vercel.app
 - **Frases animadas na abertura** (palavra por palavra, saindo do desfoque, com brilho passando): "Comida de mãe...", "Litrão gelado", "Maior bar LGBT de SP" (em neon com as cores do orgulho) e "Viva a democracia!".
 - **Página única e fluida** (como o Botanikafe): Promoções e Combos → cardápio inteiro com as categorias fixas no topo → informações da casa. No computador ocupa a tela toda, em colunas.
 - **Modo noite (preto e laranja, padrão) e modo dia**, no botão do topo.
-- **Menu inferior (celular)**: Início, Cardápio, Pesquisa, iFood e Instagram.
+- **Menu inferior (celular)**: Início, Cardápio, Sinuca, Pesquisa (no meio), iFood e Instagram.
 - **Promoções e Combos**: cards no formato das Novidades do Botanikafe (foto, selo, nome, descrição, preço e "Ver"), girando em loop contínuo; dá para arrastar e desacelera com o mouse em cima. Os cartazes de dia certo (churrasco no sábado e no domingo, baião no domingo, executivo de quarta a sexta) só aparecem no dia e vão para a frente com "Hoje tem!".
 - **Tags que pesquisam**: tocar em "vegano", "promo", "#queijo", "#maracujá"… (na lista ou na ficha) abre a busca com todos os itens daquela tag.
 - **Ficha do item**: cabe inteira na tela, no celular e no computador, sem precisar rolar para ver as **3 sugestões de "Combina com"**, escolhidas à mão e com o motivo (ex.: Baião de Dois → Caipirinha Viva o Nordeste, "Tudo nordestino, tudo nosso").
 - **Divas Pop**: a seção vira uma pista escura, com cada drink numa capa de disco nas cores da fruta. Na ficha, o vinil sai da capa e gira.
 - **Comidinhas da Mamadi**: mostram o dia em que saem e se a cozinha está aberta agora (quarta a domingo, 12h às 19h, no horário de São Paulo).
 - **Busca inteligente por voz e texto**: entende frases como "O que tem de mais barato do que na Borba?", "O que posso comprar até R$20?", "drink da Anitta", "o que combina com coxinha?", "tem coisa vegana?", "pra dividir com a galera", "sem álcool" ou "me surpreende". Também entende gíria (breja, cerva, rango), erro de digitação e correção na fala ("um litrão de original… na verdade amstel"). A voz usa o reconhecimento do próprio navegador (Chrome/Android, Safari/iPhone). Se a pessoa fica parada sem escolher, aparece "Posso te sugerir algo?".
-- **Transições**: bolhas de cerveja que estouram onde a pessoa toca, e rodelas de limão e gelo que cruzam a tela ao entrar em "Beber". Com "reduzir movimento" ligado no celular, tudo fica parado.
+- **Transições**: bolhas de cerveja que estouram onde a pessoa toca, rodelas de limão e gelo que cruzam a tela ao entrar no cardápio, a troca de dono entre as seções e a luz do muro mudando de cor. Com "reduzir movimento" ligado no celular, tudo fica parado (os personagens aparecem direto no lugar).
 
 
 ## O muro da fachada no cardápio
 
 - **A turma do muro**: os personagens pintados na fachada (arte de @dupont.br) foram recortados à mão das fotos e recriados em estilo pôster (cores chapadas, traço reforçado, borda de adesivo). Ficam em `public/muro/` (versão grande e `-mini`).
-- **Cada um manda numa categoria** (`src/data/crew.ts`): Breja (litrão), Skate (copão), Rainha (caipis), DJ Fita (Divas), Pista (doses), Gole (prontos), Na Moral (porções), Burgão (lanches, desenhado em vetor) e Saúde (tábuas). Entram como num jogo de rua dos anos 2000, respiram e têm efeitos (espuma, som, gole, brilho). Tocar no personagem mostra a fala, as barrinhas de atributo e o pedido da casa.
+- **Cada um manda numa categoria** (`src/data/crew.ts`): Breja (litrão), Skate (copão), Rainha (caipis), DJ Fita (Divas), Pista (doses), Gole (prontos), Na Moral (porções), Burgão (lanches, desenhado em vetor) e Saúde (tábuas). Tocar no personagem mostra a fala, as barrinhas de atributo e o pedido da casa.
+- **Bonecos animados** (`src/components/muro/Boneco.tsx`): cada personagem é a mesma imagem em três camadas (pernas, tronco e cabeça) com as emendas em degradê. O tronco respira e balança, a cabeça olha em volta e a DJ balança na batida. O "esqueleto" (altura do pescoço e da cintura) fica em `rig`, no `crew.ts`.
+- **A troca de dono entre as seções**: o cabeçalho de cada categoria vira um palco. Quem mandava na seção anterior está lá, abre espaço, os dois batem a mão ("PÁ!"), ele sai andando e o novo dono assume, agradecendo ("Valeu, Breja! Agora é comigo."). Os lados alternam (direita, esquerda...) e o dono fica atrás do balcão (o painel dos itens). Quem passa a vez para quem, e de que lado, vem de `vezes` no `crew.ts`.
+- **Próxima parada**: no fim de cada seção, o dono da próxima espia por cima de uma placa que leva até ela; a faixa da placa vai da cor de um dono para a do outro.
+- **Luz do muro**: o fundo pega a cor do dono da seção que está no meio da tela e troca devagar de uma cor para outra. Títulos e itens entram em cena ao rolar.
 - **Fundo de muro** (tema escuro): reboco, emendas das placas e as garrafinhas pintadas a spray flutuando em parallax (uma máscara só, `public/muro/garrafa.webp`, colorida pelo CSS).
 - **Abertura**: a garrafa com olho do muro, redesenhada em vetor (`src/components/intro/garrafa-olho.svg`, gerada por script), com a tampinha 3D no gargalo. O olho pisca, passeia, segue o dedo, olha para a etiqueta quando você puxa e arregala quando a tampa estoura (com as bolhas do muro). A tela de carregamento desenha a mesma garrafa (plugin no `vite.config.ts`), então não pisca.
 - **Rodapé**: a turma lado a lado (toque leva à categoria) e o crédito do artista.
@@ -38,7 +42,7 @@ Jogo no celular (o Mamadi não tem mesa de sinuca): a turma joga passando o apar
 - Encaçapou, joga de novo; bola 8 vale 2; branca na caçapa é falta e as bolas da tacada vão para o outro lado.
 - A cada 2 bolas de um lado, a roleta sorteia uma bebida do cardápio (litrão, copão, caipis, Divas, doses e prontos; as rodadas de 3 ficam de fora) e o outro lado paga. Teto: até R$ 20, até R$ 30 ou qualquer uma.
 - "A conta" guarda os sorteios; dá para fechar o jogo, pedir e voltar com a partida guardada.
-- Onde abre: cartaz "Sinuca valendo drink" na página inicial, link "Sinuca" no topo (computador), busca ("sinuca", "jogo"...) e o endereço `#/sinuca`.
+- Onde abre: botão "Sinuca" (bola 8) no menu de baixo do celular, ao lado de Cardápio (iFood e Instagram continuam do mesmo tamanho), link "Sinuca" no topo (computador), busca ("sinuca", "jogo"...) e o endereço `#/sinuca`.
 - Regras em `src/components/sinuca/match.ts`; mesa e física em `src/pool3d/`.
 
 ## Onde mexer

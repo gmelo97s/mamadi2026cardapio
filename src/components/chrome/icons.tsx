@@ -115,6 +115,17 @@ export const IcGota = (p: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+/** Bola 8 (sinuca) */
+export const IcBola8 = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="12" r="8.8" />
+    <circle cx="12.7" cy="10.9" r="4.6" />
+    <circle cx="12.7" cy="9.4" r="1.2" strokeWidth="1.5" />
+    <circle cx="12.7" cy="12.15" r="1.45" strokeWidth="1.5" />
+    <path d="M6.2 14.6c.6 1.4 1.7 2.5 3.1 3.1" />
+  </svg>
+);
+
 /** Cardápio aberto */
 export const IcCardapio = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}>

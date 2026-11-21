@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { sections } from "../data/menu";
 import type { SectionId } from "../data/types";
+import { luzDa } from "../data/crew";
 import { SectionBlock } from "../components/menu/SectionBlock";
 import { DivasSection } from "../components/menu/Divas";
 import { PratosSection } from "../components/menu/Pratos";
@@ -17,17 +18,31 @@ export function Cardapio() {
   // seção ativa conforme a rolagem
   useEffect(() => {
     let raf = 0;
+    let luz = "";
+    const root = document.documentElement;
     const spy = () => {
       raf = 0;
-      if (performance.now() < lockUntil.current) return;
       const line = (chipsRef.current?.getBoundingClientRect().bottom ?? 120) + 24;
+      // a luz troca quando a seção nova chega no meio da tela (junto com o dono dela)
+      const meio = window.innerHeight * 0.55;
       let current = list[0].id;
+      let lit: SectionId | null = null;
       for (const s of list) {
         const el = document.getElementById(`sec-${s.id}`);
-        if (el && el.getBoundingClientRect().top <= line) current = s.id;
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top;
+        if (top <= line) current = s.id;
+        if (top <= meio) lit = s.id;
       }
       // no fim da página, a última categoria fica ativa (mesmo sendo curta)
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = list[list.length - 1].id;
+      if (window.innerHeight + window.scrollY >= root.scrollHeight - 4) current = lit = list[list.length - 1].id;
+      // a luz do muro pega a cor do dono da seção (antes do cardápio, o laranja da casa)
+      const cor = lit ? luzDa(lit) : "#fa5a0a";
+      if (cor !== luz) {
+        luz = cor;
+        root.style.setProperty("--luz", cor);
+      }
+      if (performance.now() < lockUntil.current) return;
       setActive(current);
     };
     const on = () => {
@@ -47,6 +62,7 @@ export function Cardapio() {
       window.removeEventListener("scrollend", onEnd);
       window.removeEventListener("resize", on);
       if (raf) cancelAnimationFrame(raf);
+      root.style.removeProperty("--luz");
     };
   }, []);
 
